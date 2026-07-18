@@ -1,26 +1,219 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Design tokens — raw CSS custom properties (full naming system) */
+@import "../styles/tokens.css";
+
+/* ─── Tailwind v4 Theme ──────────────────────────────────────────────────────
+   @theme bridges the token system to Tailwind utility classes.
+   Short Tailwind names → reference the full token variables from tokens.css.
+   Breakpoints override Tailwind defaults with the CasaNova 7-tier system.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+
+  /* Breakpoints — 7-tier system (xs → 5xl) */
+  --breakpoint-xs:   320px;
+  --breakpoint-sm:   480px;
+  --breakpoint-md:   768px;
+  --breakpoint-lg:   1024px;
+  --breakpoint-xl:   1280px;
+  --breakpoint-2xl:  1536px;
+  --breakpoint-3xl:  1920px;
+  --breakpoint-4xl:  2560px;
+  --breakpoint-5xl:  3840px;
+
+  /* Font families */
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-body:    var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Colors — primary */
+  --color-primary:       var(--color-primary-base);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark:  var(--color-primary-dark);
+
+  /* Colors — surface */
+  --color-white:          var(--color-surface-white);
+  --color-off-white:      var(--color-surface-off-white);
+  --color-surface:        var(--color-surface-light);
+  --color-surface-muted:  var(--color-surface-muted);
+
+  /* Colors — accent */
+  --color-accent:        var(--color-accent-base);
+  --color-accent-light:  var(--color-accent-light);
+  --color-accent-dark:   var(--color-accent-dark);
+  --color-accent-subtle: var(--color-accent-subtle);
+
+  /* Colors — text */
+  --color-text:          var(--color-text-primary);
+  --color-text-sub:      var(--color-text-secondary);
+  --color-text-muted:    var(--color-text-tertiary);
+  --color-text-disabled: var(--color-text-disabled);
+  --color-text-inverse:  var(--color-text-inverse);
+
+  /* Colors — border */
+  --color-border:        var(--color-border-default);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-border-accent: var(--color-border-accent);
+
+  /* Colors — state */
+  --color-success:       var(--color-success-base);
+  --color-warning:       var(--color-warning-base);
+  --color-error:         var(--color-error-base);
+  --color-info:          var(--color-info-base);
+
+  /* Animation durations */
+  --duration-instant:    50ms;
+  --duration-fast:       150ms;
+  --duration-normal:     250ms;
+  --duration-moderate:   400ms;
+  --duration-slow:       600ms;
+  --duration-deliberate: 900ms;
+  --duration-cinematic:  1200ms;
+
+  /* Animation easings */
+  --ease-architectural: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:        cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Reset & Base ──────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  font-size: var(--type-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-off-white);
+  min-height: 100dvh;
+}
+
+/* ─── Focus ─────────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-border-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── Selection ─────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--color-accent-subtle);
+  color: var(--color-text-primary);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--color-surface-light); }
+::-webkit-scrollbar-thumb  { background: var(--color-border-default); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
+
+/* ─── Typography Defaults ───────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text-primary);
+}
+
+h1 { font-size: var(--type-h1);      line-height: var(--leading-none);  }
+h2 { font-size: var(--type-h2);      line-height: var(--leading-tight); }
+h3 { font-size: var(--type-h3);      line-height: var(--leading-tight); }
+h4 { font-size: var(--type-h4);      line-height: var(--leading-snug);  }
+h5 { font-size: var(--type-h5);      line-height: var(--leading-snug);  }
+h6 { font-size: var(--type-h6);      line-height: var(--leading-snug);  }
+
+p {
+  color: var(--color-text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-base);
+}
+
+a   { color: inherit; text-decoration: none; }
+img, video { display: block; max-width: 100%; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+
+/* ─── Reduced Motion ────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Layout Utilities ──────────────────────────────────────────────────── */
+
+.container-content {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: var(--viewport-margin-md);
+}
+
+.container-narrow {
+  width: 100%;
+  max-width: var(--container-narrow);
+  margin-inline: auto;
+  padding-inline: var(--viewport-margin-md);
+}
+
+.container-wide {
+  width: 100%;
+  max-width: var(--container-wide);
+  margin-inline: auto;
+  padding-inline: var(--viewport-margin-lg);
+}
+
+.container-full {
+  width: 100%;
+  padding-inline: var(--viewport-margin-md);
+}
+
+/* ─── Section Spacing ───────────────────────────────────────────────────── */
+
+.section-sm  { padding-block: var(--section-sm);  }
+.section-md  { padding-block: var(--section-md);  }
+.section-lg  { padding-block: var(--section-lg);  }
+.section-xl  { padding-block: var(--section-xl);  }
+
+/* ─── Accessibility ─────────────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
