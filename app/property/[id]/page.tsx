@@ -101,7 +101,7 @@ export default async function PropertyPage({ params }: Props) {
             <div>
               {/* Gallery */}
               <FadeIn direction="up">
-                <PropertyGallery images={allImages} title={property.title} />
+                <PropertyGallery images={allImages} title={property.title} panorama={property.media.panorama} />
               </FadeIn>
 
               {/* Tagline */}

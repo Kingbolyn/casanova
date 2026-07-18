@@ -1,3 +1,4 @@
+import React from 'react'
 import { cn } from '@/lib/utils/cn'
 
 type SectionSpacing = 'sm' | 'md' | 'lg' | 'xl' | 'none'
@@ -31,7 +32,7 @@ const bgStyle: Record<SectionBg, React.CSSProperties> = {
 }
 
 function Section({
-  as: Tag = 'section',
+  as = 'section',
   spacing = 'lg',
   bg = 'default',
   children,
@@ -39,14 +40,14 @@ function Section({
   id,
   style,
 }: SectionProps) {
-  return (
-    <Tag
-      id={id}
-      className={cn(spacingClass[spacing], className)}
-      style={{ ...bgStyle[bg], ...style }}
-    >
-      {children}
-    </Tag>
+  return React.createElement(
+    as as string,
+    {
+      id,
+      className: cn(spacingClass[spacing], className),
+      style: { ...bgStyle[bg], ...style },
+    },
+    children,
   )
 }
 

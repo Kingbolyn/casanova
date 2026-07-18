@@ -22,12 +22,13 @@ export const properties: Property[] = [
       country:       'Nigeria',
     },
     media: {
-      hero:    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80',
-      gallery: [
+      hero:     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80',
+      gallery:  [
         'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80',
         'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1200&q=80',
         'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80',
       ],
+      panorama: 'https://pannellum.org/images/alma.jpg',
     },
     features: {
       bedrooms:   4,
@@ -61,12 +62,13 @@ export const properties: Property[] = [
       country:       'Nigeria',
     },
     media: {
-      hero:    'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80',
-      gallery: [
+      hero:     'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80',
+      gallery:  [
         'https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=1200&q=80',
         'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&q=80',
         'https://images.unsplash.com/photo-1558882224-dda166733046?w=1200&q=80',
       ],
+      panorama: 'https://pannellum.org/images/cerro-toco-0.jpg',
     },
     features: {
       bedrooms:   6,

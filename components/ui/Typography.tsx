@@ -1,3 +1,4 @@
+import React from 'react'
 import { cn } from '@/lib/utils/cn'
 
 /* ─── Heading ───────────────────────────────────────────── */
@@ -44,23 +45,22 @@ function Heading({
   id,
   style,
 }: HeadingProps) {
-  const Tag = `h${level}` as React.ElementType
   const resolvedSize: HeadingSize = size ?? (`h${level}` as HeadingSize)
 
-  return (
-    <Tag
-      id={id}
-      className={cn('font-display font-light', italic && 'italic', className)}
-      style={{
+  return React.createElement(
+    `h${level}`,
+    {
+      id,
+      className: cn('font-display font-light', italic && 'italic', className),
+      style: {
         ...sizeStyle[resolvedSize],
         color: headingColor[color],
         fontFamily: 'var(--font-display)',
         fontWeight: 'var(--weight-light)',
         ...style,
-      }}
-    >
-      {children}
-    </Tag>
+      },
+    },
+    children,
   )
 }
 
@@ -92,19 +92,19 @@ const bodyColor: Record<BodyColor, string> = {
   accent:    'var(--color-accent-base)',
 }
 
-function Body({ as: Tag = 'p', size = 'base', color = 'secondary', children, className, style }: BodyProps) {
-  return (
-    <Tag
-      className={cn('font-body', className)}
-      style={{
+function Body({ as = 'p', size = 'base', color = 'secondary', children, className, style }: BodyProps) {
+  return React.createElement(
+    as as string,
+    {
+      className: cn('font-body', className),
+      style: {
         ...bodySize[size],
         color: bodyColor[color],
         fontFamily: 'var(--font-body)',
         ...style,
-      }}
-    >
-      {children}
-    </Tag>
+      },
+    },
+    children,
   )
 }
 

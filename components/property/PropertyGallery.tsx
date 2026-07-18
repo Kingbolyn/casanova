@@ -3,15 +3,18 @@
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { PanoramaViewer } from './PanoramaViewer'
 
 interface PropertyGalleryProps {
-  images: string[]
-  title:  string
+  images:    string[]
+  title:     string
+  panorama?: string
 }
 
-function PropertyGallery({ images, title }: PropertyGalleryProps) {
-  const [active, setActive]   = useState(0)
+function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
+  const [active, setActive]     = useState(0)
   const [lightbox, setLightbox] = useState(false)
+  const [immersive, setImmersive] = useState(false)
 
   const prev = useCallback(() => setActive((i) => (i - 1 + images.length) % images.length), [images.length])
   const next = useCallback(() => setActive((i) => (i + 1) % images.length), [images.length])
@@ -107,6 +110,34 @@ function PropertyGallery({ images, title }: PropertyGalleryProps) {
         >
           {active + 1} / {images.length}
         </div>
+
+        {/* Immersive view trigger */}
+        {panorama && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setImmersive(true) }}
+            className="absolute bottom-4 left-4 flex items-center gap-2"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.55)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.18)',
+              cursor: 'pointer',
+              padding: '0.4rem 0.875rem',
+              backdropFilter: 'blur(6px)',
+              fontSize: 'var(--text-xs)',
+              letterSpacing: 'var(--tracking-widest)',
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+            aria-label="Enter 360° immersive view"
+          >
+            {/* 360 icon */}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <ellipse cx="8" cy="8" rx="7" ry="4" stroke="currentColor" strokeWidth="1.2" />
+              <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+              <path d="M8 4v8M4 8h8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
+            </svg>
+            360° VIEW
+          </button>
+        )}
       </div>
 
       {/* Thumbnails */}
@@ -209,6 +240,17 @@ function PropertyGallery({ images, title }: PropertyGalleryProps) {
               </>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Panorama viewer */}
+      <AnimatePresence>
+        {immersive && panorama && (
+          <PanoramaViewer
+            url={panorama}
+            title={title}
+            onClose={() => setImmersive(false)}
+          />
         )}
       </AnimatePresence>
     </>

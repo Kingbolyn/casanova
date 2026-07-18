@@ -1,3 +1,4 @@
+import React from 'react'
 import { cn } from '@/lib/utils/cn'
 
 type ContainerWidth = 'narrow' | 'content' | 'wide' | 'full'
@@ -17,15 +18,15 @@ const widthClass: Record<ContainerWidth, string> = {
 }
 
 function Container({
-  as: Tag = 'div',
+  as = 'div',
   width = 'content',
   children,
   className,
 }: ContainerProps) {
-  return (
-    <Tag className={cn(widthClass[width], className)}>
-      {children}
-    </Tag>
+  return React.createElement(
+    as as string,
+    { className: cn(widthClass[width], className) },
+    children,
   )
 }
 
