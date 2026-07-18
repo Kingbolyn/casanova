@@ -28,7 +28,6 @@ export const properties: Property[] = [
         'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=1200&q=80',
         'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80',
       ],
-      panorama: 'https://pannellum.org/images/alma.jpg',
     },
     features: {
       bedrooms:   4,
@@ -68,7 +67,6 @@ export const properties: Property[] = [
         'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1200&q=80',
         'https://images.unsplash.com/photo-1558882224-dda166733046?w=1200&q=80',
       ],
-      panorama: 'https://pannellum.org/images/cerro-toco-0.jpg',
     },
     features: {
       bedrooms:   6,
