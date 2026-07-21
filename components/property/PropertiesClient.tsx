@@ -2,13 +2,14 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import { PropertyGrid } from '@/components/property/PropertyGrid'
 import { PropertyFilters, DEFAULT_FILTERS, type FilterState } from '@/components/property/PropertyFilters'
+import { FilterModal } from '@/components/property/FilterModal'
+import { LocationDiscovery } from '@/components/sections/LocationDiscovery'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { collections } from '@/lib/data/collections'
 import type { Property } from '@/lib/types'
@@ -40,28 +41,56 @@ function resultsSummary(total: number, filters: FilterState): string {
       : `${total} exceptional residences in ${filters.neighbourhood}.`
   }
 
+  if (filters.query.trim()) {
+    return total === 1
+      ? `1 residence matches your search.`
+      : `${total} residences match your search.`
+  }
+
   const adjectives = ['exceptional', 'remarkable', 'distinguished', 'curated']
   const adj = adjectives[total % adjectives.length]
-
   return total === 1
     ? `Showing 1 ${adj} residence.`
     : `Showing ${total} ${adj} residences.`
 }
 
+/* ─── Active filter count (for mobile badge) ─────────────── */
+
+function activeFilterCount(f: FilterState): number {
+  let n = 0
+  if (f.query)              n++
+  if (f.type !== 'all')     n++
+  if (f.status !== 'all')   n++
+  if (f.neighbourhood !== 'all') n++
+  if (f.collection !== 'all')    n++
+  if (f.bedrooms !== 'all') n++
+  if (f.minPrice > 0 || f.maxPrice < PRICE_MAX) n++
+  return n
+}
+
 /* ─── Component ──────────────────────────────────────────── */
 
 function PropertiesClient({ properties }: PropertiesClientProps) {
-  const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS)
+  const [filters, setFilters]         = useState<FilterState>(DEFAULT_FILTERS)
+  const [filterModalOpen, setModal]   = useState(false)
 
   const neighbourhoods = useMemo(() => {
     const set = new Set(properties.map((p) => p.location.neighbourhood))
     return Array.from(set).sort()
   }, [properties])
 
+  /* Property count per neighbourhood (all properties, no filter applied) */
+  const propertyCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    properties.forEach((p) => {
+      counts[p.location.neighbourhood] = (counts[p.location.neighbourhood] ?? 0) + 1
+    })
+    return counts
+  }, [properties])
+
   const filtered = useMemo(() => {
     let result = [...properties]
 
-    /* Search */
     if (filters.query.trim()) {
       const q = filters.query.toLowerCase()
       result = result.filter(
@@ -78,7 +107,6 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
     if (filters.neighbourhood !== 'all') result = result.filter((p) => p.location.neighbourhood === filters.neighbourhood)
     if (filters.bedrooms !== 'all')      result = result.filter((p) => p.features.bedrooms >= (filters.bedrooms as number))
 
-    /* Collection filter */
     if (filters.collection !== 'all') {
       const col = collections.find((c) => c.slug === filters.collection)
       if (col) result = result.filter((p) => col.properties.includes(p.id))
@@ -88,7 +116,6 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
       (p) => p.price >= filters.minPrice && p.price <= (filters.maxPrice >= PRICE_MAX ? Infinity : filters.maxPrice),
     )
 
-    /* Sort */
     switch (filters.sort) {
       case 'price-asc':   result.sort((a, b) => a.price - b.price); break
       case 'price-desc':  result.sort((a, b) => b.price - a.price); break
@@ -101,7 +128,8 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
     return result
   }, [filters, properties])
 
-  const summary = resultsSummary(filtered.length, filters)
+  const summary      = resultsSummary(filtered.length, filters)
+  const filterCount  = activeFilterCount(filters)
 
   return (
     <>
@@ -124,11 +152,14 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 <button
                   type="button"
                   onClick={() => setFilters((f) => ({ ...f, collection: f.collection === col.slug ? 'all' : col.slug }))}
-                  className="group block relative overflow-hidden w-full text-left"
+                  className="group block relative overflow-hidden w-full"
                   style={{
-                    aspectRatio: '3/2',
-                    outline: filters.collection === col.slug ? '2px solid var(--color-accent-base)' : 'none',
+                    aspectRatio:   '3/2',
+                    outline:       filters.collection === col.slug ? '2px solid var(--color-accent-base)' : 'none',
                     outlineOffset: '2px',
+                    border:        'none',
+                    padding:       0,
+                    cursor:        'pointer',
                   }}
                   aria-pressed={filters.collection === col.slug}
                 >
@@ -136,7 +167,8 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                     src={col.heroImage}
                     alt={col.name}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover"
+                    style={{ transition: 'transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)' }}
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
                   <div
@@ -144,8 +176,8 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                     style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }}
                     aria-hidden="true"
                   />
-                  <div className="absolute bottom-0 left-0 p-4">
-                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-base)', color: '#fff', fontWeight: 300, letterSpacing: 'var(--tracking-snug)' }}>
+                  <div className="absolute bottom-0 left-0 p-3 md:p-4">
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-sm)', color: '#fff', fontWeight: 300, letterSpacing: 'var(--tracking-snug)' }}>
                       {col.name}
                     </p>
                     <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>
@@ -153,7 +185,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                     </p>
                   </div>
                   {filters.collection === col.slug && (
-                    <div className="absolute top-3 right-3" style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--color-accent-base)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="absolute top-3 right-3 flex items-center justify-center" style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--color-accent-base)' }}>
                       <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                     </div>
                   )}
@@ -167,14 +199,90 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
       {/* Discovery section */}
       <Section spacing="lg" bg="default">
         <Container width="wide">
-          <PropertyFilters
-            total={filtered.length}
-            filters={filters}
-            onChange={setFilters}
-            neighbourhoods={neighbourhoods}
-          />
 
-          {/* Conversational results summary */}
+          {/* Location Discovery — above filters */}
+          <div className="mb-10">
+            <LocationDiscovery
+              activeNeighbourhood={filters.neighbourhood}
+              propertyCounts={propertyCounts}
+              onSelect={(name) => setFilters((f) => ({ ...f, neighbourhood: name }))}
+            />
+          </div>
+
+          {/* Desktop filters — hidden on mobile */}
+          <div className="hidden md:block">
+            <PropertyFilters
+              total={filtered.length}
+              filters={filters}
+              onChange={setFilters}
+              neighbourhoods={neighbourhoods}
+            />
+          </div>
+
+          {/* Mobile — search + filter trigger */}
+          <div className="md:hidden mb-4">
+            {/* Search always visible */}
+            <div className="relative mb-3">
+              <svg
+                className="absolute"
+                style={{ left: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
+                width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+              >
+                <circle cx="6.5" cy="6.5" r="5" stroke="var(--color-text-muted)" strokeWidth="1.2" />
+                <path d="M10.5 10.5L14 14" stroke="var(--color-text-muted)" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
+              <input
+                type="search"
+                value={filters.query}
+                onChange={(e) => setFilters((f) => ({ ...f, query: e.target.value }))}
+                placeholder="Search properties..."
+                style={{
+                  width:           '100%',
+                  border:          '1px solid var(--color-border-base)',
+                  borderRadius:    0,
+                  backgroundColor: 'var(--color-surface-primary)',
+                  color:           'var(--color-text-primary)',
+                  fontFamily:      'var(--font-body)',
+                  fontSize:        'var(--text-sm)',
+                  padding:         '0.75rem 1rem 0.75rem 2.75rem',
+                  outline:         'none',
+                }}
+                aria-label="Search properties"
+              />
+            </div>
+
+            {/* Filter trigger button */}
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setModal(true)}
+                className="flex items-center gap-2"
+                style={{
+                  border:          '1px solid var(--color-border-base)',
+                  backgroundColor: filterCount > 0 ? 'var(--color-accent-base)' : 'var(--color-surface-primary)',
+                  color:           filterCount > 0 ? '#fff' : 'var(--color-text-secondary)',
+                  padding:         '0.625rem 1rem',
+                  fontSize:        'var(--text-xs)',
+                  letterSpacing:   'var(--tracking-widest)',
+                  cursor:          'pointer',
+                  fontFamily:      'var(--font-body)',
+                }}
+                aria-label={`Filter properties${filterCount > 0 ? `, ${filterCount} active` : ''}`}
+              >
+                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                  <path d="M1 1h12M3 5h8M5 9h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                </svg>
+                FILTERS {filterCount > 0 && `(${filterCount})`}
+              </button>
+
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
+                <span style={{ color: 'var(--color-text-primary)' }}>{filtered.length}</span>{' '}
+                {filtered.length === 1 ? 'residence' : 'residences'}
+              </p>
+            </div>
+          </div>
+
+          {/* Conversational summary */}
           <AnimatePresence mode="wait">
             {summary && (
               <motion.p
@@ -183,7 +291,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mt-6"
+                className="mt-6 hidden md:block"
                 style={{
                   fontFamily:    'var(--font-display)',
                   fontSize:      'var(--text-lg)',
@@ -198,6 +306,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
             )}
           </AnimatePresence>
 
+          {/* Results */}
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
               <motion.div
@@ -254,6 +363,16 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
           </AnimatePresence>
         </Container>
       </Section>
+
+      {/* Mobile filter modal */}
+      <FilterModal
+        open={filterModalOpen}
+        onClose={() => setModal(false)}
+        filters={filters}
+        onChange={setFilters}
+        neighbourhoods={neighbourhoods}
+        total={filtered.length}
+      />
     </>
   )
 }
