@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useScrolled } from '@/lib/hooks/useScrolled'
+import { useNavScroll } from '@/lib/hooks/useNavScroll'
 import { useLockBodyScroll } from '@/lib/hooks/useLockBodyScroll'
 import { primaryNav } from '@/lib/data/navigation'
 import { Button } from '@/components/ui/Button'
@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils/cn'
 function Navbar() {
   const [mobileOpen, setMobileOpen]   = useState(false)
   const [searchOpen, setSearchOpen]   = useState(false)
-  const scrolled  = useScrolled(60)
+  const { scrolled, hidden } = useNavScroll()
   const pathname  = usePathname()
 
   useLockBodyScroll(mobileOpen)
@@ -25,19 +25,23 @@ function Navbar() {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 transition-all',
+          'fixed top-0 left-0 right-0',
           scrolled ? 'bg-[--color-surface-white] shadow-[--shadow-2]' : 'bg-transparent'
         )}
         style={{
           zIndex: 'var(--z-nav)',
-          transitionDuration: 'var(--duration-moderate)',
-          transitionTimingFunction: 'var(--ease-architectural)',
+          transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+          transition: `
+            transform    var(--dur-standard) var(--ease-standard),
+            background   var(--dur-standard) var(--ease-standard),
+            box-shadow   var(--dur-standard) var(--ease-standard)
+          `.trim(),
         }}
       >
         <div className="container-content">
           <nav
             className="flex items-center justify-between"
-            style={{ height: scrolled ? '72px' : '88px', transition: 'height var(--duration-moderate) var(--ease-architectural)' }}
+            style={{ height: scrolled ? '72px' : '88px', transition: 'height var(--dur-standard) var(--ease-standard)' }}
             aria-label="Primary navigation"
           >
             {/* Logo */}
@@ -47,7 +51,7 @@ function Navbar() {
               style={{
                 fontSize: 'var(--type-h5)',
                 color: isHome && !scrolled ? 'var(--color-text-inverse)' : 'var(--color-text-primary)',
-                transition: 'color var(--duration-normal) var(--ease-architectural)',
+                transition: 'color var(--dur-micro) var(--ease-standard)',
               }}
               aria-label="CasaNova Home"
             >
@@ -67,8 +71,8 @@ function Navbar() {
                         color: isHome && !scrolled
                           ? active ? 'var(--color-text-inverse)' : 'rgba(255,255,255,0.7)'
                           : active ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
-                        transitionDuration: 'var(--duration-normal)',
-                        transitionTimingFunction: 'var(--ease-architectural)',
+                        transitionDuration: 'var(--dur-micro)',
+                        transitionTimingFunction: 'var(--ease-standard)',
                       }}
                       aria-current={active ? 'page' : undefined}
                     >
@@ -78,7 +82,7 @@ function Navbar() {
                           layoutId="nav-underline"
                           className="absolute -bottom-1 left-0 right-0 h-px"
                           style={{ backgroundColor: 'var(--color-accent-base)' }}
-                          transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                          transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
                         />
                       )}
                     </Link>
@@ -145,7 +149,7 @@ function Navbar() {
                       :           { rotate: -45, y: -8, opacity: 1 }
                       : { rotate: 0, y: 0, opacity: 1 }
                   }
-                  transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
                 />
               ))}
             </button>
@@ -179,7 +183,7 @@ function Navbar() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               role="dialog"
               aria-label="Mobile navigation"
               aria-modal="true"
@@ -192,7 +196,7 @@ function Navbar() {
                       key={item.href}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i, duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      transition={{ delay: 0.04 * i, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <Link
                         href={item.href}

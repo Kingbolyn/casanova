@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { DUR, EASE } from '@/lib/motion'
 
 type FadeInDirection = 'up' | 'down' | 'left' | 'right' | 'none'
 
@@ -15,18 +16,18 @@ interface FadeInProps {
 }
 
 const offset: Record<FadeInDirection, { x: number; y: number }> = {
-  up:    { x: 0,  y: 24  },
-  down:  { x: 0,  y: -24 },
-  left:  { x: 24, y: 0   },
-  right: { x: -24, y: 0  },
-  none:  { x: 0,  y: 0   },
+  up:    { x: 0,   y: 20  },
+  down:  { x: 0,   y: -20 },
+  left:  { x: 20,  y: 0   },
+  right: { x: -20, y: 0   },
+  none:  { x: 0,   y: 0   },
 }
 
 function FadeIn({
   children,
   direction = 'up',
   delay = 0,
-  duration = 0.6,
+  duration = DUR.large,
   distance,
   once = true,
   className,
@@ -38,15 +39,13 @@ function FadeIn({
   const variants: Variants = prefersReduced
     ? {
         hidden:  { opacity: 0 },
-        visible: { opacity: 1, transition: { duration: 0.01 } },
+        visible: { opacity: 1, transition: { duration: DUR.standard, ease: EASE.standard } },
       }
     : {
         hidden: { opacity: 0, x: d.x * scale, y: d.y * scale },
         visible: {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          transition: { duration, delay, ease: [0.25, 0.46, 0.45, 0.94] },
+          opacity: 1, x: 0, y: 0,
+          transition: { duration, delay, ease: EASE.entrance },
         },
       }
 

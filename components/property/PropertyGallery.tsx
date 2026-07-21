@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PanoramaViewer } from './PanoramaViewer'
+import { DUR, EASE } from '@/lib/motion'
 
 interface PropertyGalleryProps {
   images:    string[]
@@ -45,7 +46,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            transition={{ duration: DUR.large, ease: EASE.standard }}
           >
             <Image
               src={images[active]}
@@ -206,7 +207,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: DUR.standard, ease: EASE.standard }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <Image

@@ -5,6 +5,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
+import { DUR, EASE } from '@/lib/motion'
 
 /* ─── Sphere scene ──────────────────────────────────────── */
 
@@ -125,7 +126,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+      transition={{ duration: DUR.cinematic, ease: EASE.cinematic }}
       className="fixed inset-0 z-[200]"
       style={{ backgroundColor: '#0a0a0a' }}
       role="dialog"
@@ -138,7 +139,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
         style={{ backgroundColor: '#000', zIndex: 10 }}
         initial={{ opacity: 1 }}
         animate={{ opacity: 0 }}
-        transition={{ duration: 0.75, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+        transition={{ duration: DUR.cinematic, delay: 0.15, ease: EASE.cinematic }}
         aria-hidden="true"
       />
 
@@ -161,7 +162,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
+        transition={{ duration: DUR.large, delay: 1.0, ease: EASE.entrance }}
       >
         {/* Top bar */}
         <div

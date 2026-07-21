@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { PropertyCard } from '@/components/property/PropertyCard'
 import type { Property } from '@/lib/types'
+import { DUR, EASE } from '@/lib/motion'
 
 interface PropertyGridProps {
   properties: Property[]
@@ -25,10 +26,10 @@ function PropertyGrid({ properties, columns = 3 }: PropertyGridProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{
-              layout:   { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
-              opacity:  { duration: 0.35, delay: Math.min(i, 5) * 0.05 },
-              y:        { duration: 0.35, delay: Math.min(i, 5) * 0.05, ease: [0.25, 0.46, 0.45, 0.94] },
-              scale:    { duration: 0.25 },
+              layout:   { duration: DUR.standard, ease: EASE.standard },
+              opacity:  { duration: DUR.standard, delay: Math.min(i, 5) * 0.06, ease: EASE.entrance },
+              y:        { duration: DUR.standard, delay: Math.min(i, 5) * 0.06, ease: EASE.entrance },
+              scale:    { duration: DUR.micro, ease: EASE.exit },
             }}
           >
             <PropertyCard property={property} priority={i < 3} />

@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Label, Caption } from '@/components/ui/Typography'
 import { cn } from '@/lib/utils/cn'
 import type { Property } from '@/lib/types'
+import { DUR, EASE } from '@/lib/motion'
 
 interface PropertyCardProps {
   property:   Property
@@ -14,33 +15,34 @@ interface PropertyCardProps {
   priority?:  boolean
 }
 
-/* ─── Variants ───────────────────────────────────────────────────────────── */
+/* ─── Variants — IB-007 Micro (200ms) ───────────────────────────────────── */
 
-const ease = [0.25, 0.46, 0.45, 0.94] as [number, number, number, number]
+const STD:  [number,number,number,number] = EASE.standard
+const ENT:  [number,number,number,number] = EASE.entrance
 
 const card = {
-  rest:  { y: 0,  transition: { duration: 0.4, ease } },
-  hover: { y: -6, transition: { duration: 0.4, ease } },
+  rest:  { y: 0,  transition: { duration: DUR.micro, ease: STD } },
+  hover: { y: -4, transition: { duration: DUR.micro, ease: ENT } },
 }
 
 const image = {
-  rest:  { scale: 1,    transition: { duration: 0.7, ease } },
-  hover: { scale: 1.06, transition: { duration: 0.7, ease } },
+  rest:  { scale: 1,    transition: { duration: DUR.large,  ease: STD } },
+  hover: { scale: 1.04, transition: { duration: DUR.large,  ease: ENT } },
 }
 
 const overlay = {
-  rest:  { opacity: 0, transition: { duration: 0.4, ease } },
-  hover: { opacity: 1, transition: { duration: 0.4, ease } },
+  rest:  { opacity: 0, transition: { duration: DUR.micro, ease: STD } },
+  hover: { opacity: 1, transition: { duration: DUR.micro, ease: ENT } },
 }
 
 const price = {
-  rest:  { opacity: 0, y: 10, transition: { duration: 0.35, ease } },
-  hover: { opacity: 1, y: 0,  transition: { duration: 0.35, delay: 0.05, ease } },
+  rest:  { opacity: 0, y: 8,  transition: { duration: DUR.standard, ease: STD } },
+  hover: { opacity: 1, y: 0,  transition: { duration: DUR.standard, delay: 0.04, ease: ENT } },
 }
 
 const title = {
-  rest:  { color: 'var(--color-text-primary)',   transition: { duration: 0.3 } },
-  hover: { color: 'var(--color-text-secondary)', transition: { duration: 0.3 } },
+  rest:  { color: 'var(--color-text-primary)',   transition: { duration: DUR.micro, ease: STD } },
+  hover: { color: 'var(--color-text-secondary)', transition: { duration: DUR.micro, ease: STD } },
 }
 
 /* ─── Component ──────────────────────────────────────────────────────────── */
