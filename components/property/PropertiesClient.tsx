@@ -13,14 +13,46 @@ import { FadeIn } from '@/components/motion/FadeIn'
 import { collections } from '@/lib/data/collections'
 import type { Property } from '@/lib/types'
 
+const PRICE_MAX = 25000000
+
 interface PropertiesClientProps {
   properties: Property[]
 }
 
+/* ─── Conversational results summary ─────────────────────── */
+
+function resultsSummary(total: number, filters: FilterState): string {
+  if (total === 0) return ''
+
+  const col = filters.collection !== 'all'
+    ? collections.find((c) => c.slug === filters.collection)
+    : null
+
+  if (col) {
+    return total === 1
+      ? `1 ${col.name.toLowerCase()} residence available.`
+      : `${total} ${col.name.toLowerCase()} homes available.`
+  }
+
+  if (filters.neighbourhood !== 'all') {
+    return total === 1
+      ? `1 exceptional residence in ${filters.neighbourhood}.`
+      : `${total} exceptional residences in ${filters.neighbourhood}.`
+  }
+
+  const adjectives = ['exceptional', 'remarkable', 'distinguished', 'curated']
+  const adj = adjectives[total % adjectives.length]
+
+  return total === 1
+    ? `Showing 1 ${adj} residence.`
+    : `Showing ${total} ${adj} residences.`
+}
+
+/* ─── Component ──────────────────────────────────────────── */
+
 function PropertiesClient({ properties }: PropertiesClientProps) {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS)
 
-  /* Derive unique neighbourhood list from data */
   const neighbourhoods = useMemo(() => {
     const set = new Set(properties.map((p) => p.location.neighbourhood))
     return Array.from(set).sort()
@@ -29,7 +61,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
   const filtered = useMemo(() => {
     let result = [...properties]
 
-    /* Search — name, neighbourhood, city */
+    /* Search */
     if (filters.query.trim()) {
       const q = filters.query.toLowerCase()
       result = result.filter(
@@ -45,14 +77,31 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
     if (filters.status !== 'all')        result = result.filter((p) => p.status === filters.status)
     if (filters.neighbourhood !== 'all') result = result.filter((p) => p.location.neighbourhood === filters.neighbourhood)
     if (filters.bedrooms !== 'all')      result = result.filter((p) => p.features.bedrooms >= (filters.bedrooms as number))
-    result = result.filter((p) => p.price >= filters.minPrice && p.price <= filters.maxPrice)
 
-    if (filters.sort === 'price-asc')  result.sort((a, b) => a.price - b.price)
-    if (filters.sort === 'price-desc') result.sort((a, b) => b.price - a.price)
-    if (filters.sort === 'newest')     result.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    /* Collection filter */
+    if (filters.collection !== 'all') {
+      const col = collections.find((c) => c.slug === filters.collection)
+      if (col) result = result.filter((p) => col.properties.includes(p.id))
+    }
+
+    result = result.filter(
+      (p) => p.price >= filters.minPrice && p.price <= (filters.maxPrice >= PRICE_MAX ? Infinity : filters.maxPrice),
+    )
+
+    /* Sort */
+    switch (filters.sort) {
+      case 'price-asc':   result.sort((a, b) => a.price - b.price); break
+      case 'price-desc':  result.sort((a, b) => b.price - a.price); break
+      case 'largest':     result.sort((a, b) => b.features.squareFeet - a.features.squareFeet); break
+      case 'exclusive':   result.sort((a, b) => b.price - a.price); break
+      case 'newest':      result.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
+      case 'recommended': result.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)); break
+    }
 
     return result
   }, [filters, properties])
+
+  const summary = resultsSummary(filtered.length, filters)
 
   return (
     <>
@@ -70,9 +119,19 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 key={col.id}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.45, delay: i * 0.07, ease: [0.25, 0.46, 0.45, 0.94] as [number,number,number,number] }}
               >
-                <Link href={`/collections/${col.slug}`} className="group block relative overflow-hidden" style={{ aspectRatio: '3/2' }}>
+                <button
+                  type="button"
+                  onClick={() => setFilters((f) => ({ ...f, collection: f.collection === col.slug ? 'all' : col.slug }))}
+                  className="group block relative overflow-hidden w-full text-left"
+                  style={{
+                    aspectRatio: '3/2',
+                    outline: filters.collection === col.slug ? '2px solid var(--color-accent-base)' : 'none',
+                    outlineOffset: '2px',
+                  }}
+                  aria-pressed={filters.collection === col.slug}
+                >
                   <Image
                     src={col.heroImage}
                     alt={col.name}
@@ -82,26 +141,23 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                   />
                   <div
                     className="absolute inset-0"
-                    style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }}
+                    style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }}
                     aria-hidden="true"
                   />
                   <div className="absolute bottom-0 left-0 p-4">
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 'var(--text-base)',
-                        color: '#fff',
-                        fontWeight: 300,
-                        letterSpacing: 'var(--tracking-snug)',
-                      }}
-                    >
+                    <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-base)', color: '#fff', fontWeight: 300, letterSpacing: 'var(--tracking-snug)' }}>
                       {col.name}
                     </p>
                     <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.5)', marginTop: '2px' }}>
                       {col.properties.length} {col.properties.length === 1 ? 'property' : 'properties'}
                     </p>
                   </div>
-                </Link>
+                  {filters.collection === col.slug && (
+                    <div className="absolute top-3 right-3" style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: 'var(--color-accent-base)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </div>
+                  )}
+                </button>
               </motion.div>
             ))}
           </div>
@@ -118,6 +174,30 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
             neighbourhoods={neighbourhoods}
           />
 
+          {/* Conversational results summary */}
+          <AnimatePresence mode="wait">
+            {summary && (
+              <motion.p
+                key={summary}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6"
+                style={{
+                  fontFamily:    'var(--font-display)',
+                  fontSize:      'var(--text-lg)',
+                  fontWeight:    300,
+                  fontStyle:     'italic',
+                  color:         'var(--color-text-secondary)',
+                  letterSpacing: 'var(--tracking-snug)',
+                }}
+              >
+                {summary}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
               <motion.div
@@ -129,11 +209,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 className="flex flex-col items-center text-center py-24"
               >
                 <div
-                  style={{
-                    width: '48px', height: '48px', border: '1px solid var(--color-border-base)',
-                    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '1.5rem',
-                  }}
+                  style={{ width: '48px', height: '48px', border: '1px solid var(--color-border-base)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}
                   aria-hidden="true"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -142,22 +218,22 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                   </svg>
                 </div>
                 <Heading as={3} size="h4" className="mb-3">
-                  No properties found
+                  We could not find a residence matching your current preferences.
                 </Heading>
-                <Body color="secondary" style={{ maxWidth: '36ch' }}>
-                  Try adjusting your search or clearing a filter to see more of our portfolio.
+                <Body color="secondary" style={{ maxWidth: '40ch' }}>
+                  Try broadening your search to discover additional properties within our portfolio.
                 </Body>
                 <button
                   onClick={() => setFilters(DEFAULT_FILTERS)}
-                  className="mt-6"
+                  className="mt-8"
                   style={{
-                    background: 'none',
-                    border: '1px solid var(--color-border-base)',
-                    padding: '0.625rem 1.5rem',
-                    fontSize: 'var(--text-xs)',
+                    background:    'none',
+                    border:        '1px solid var(--color-border-base)',
+                    padding:       '0.625rem 1.75rem',
+                    fontSize:      'var(--text-xs)',
                     letterSpacing: 'var(--tracking-widest)',
-                    color: 'var(--color-text-secondary)',
-                    cursor: 'pointer',
+                    color:         'var(--color-text-secondary)',
+                    cursor:        'pointer',
                   }}
                 >
                   CLEAR ALL FILTERS
@@ -170,7 +246,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="mt-10"
+                className="mt-8"
               >
                 <PropertyGrid properties={filtered} />
               </motion.div>

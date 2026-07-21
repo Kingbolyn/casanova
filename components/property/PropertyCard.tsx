@@ -49,15 +49,17 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
   const { slug, title: name, tagline, priceLabel, location, media, features, status, type } = property
 
   const statusLabel: Record<Property['status'], string> = {
-    'for-sale':   'For Sale',
-    'for-rent':   'For Rent',
-    'sold':       'Sold',
-    'off-market': 'Off Market',
+    'for-sale':    'For Sale',
+    'for-rent':    'For Rent',
+    'coming-soon': 'Coming Soon',
+    'sold':        'Sold',
+    'off-market':  'Off Market',
   }
 
   const statusVariant: Record<Property['status'], 'accent' | 'success' | 'default' | 'outline'> = {
-    'for-sale':   'accent',
-    'for-rent':   'accent',
+    'for-sale':    'accent',
+    'for-rent':    'accent',
+    'coming-soon': 'outline',
     'sold':       'success',
     'off-market': 'outline',
   }

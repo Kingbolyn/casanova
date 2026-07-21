@@ -5,8 +5,8 @@
 
 /* ─── Property ──────────────────────────────────────────── */
 
-export type PropertyStatus = 'for-sale' | 'for-rent' | 'sold' | 'off-market'
-export type PropertyType   = 'house' | 'apartment' | 'villa' | 'penthouse' | 'townhouse' | 'land'
+export type PropertyStatus = 'for-sale' | 'for-rent' | 'coming-soon' | 'sold' | 'off-market'
+export type PropertyType   = 'house' | 'apartment' | 'villa' | 'penthouse' | 'townhouse' | 'mansion' | 'duplex' | 'land'
 
 export interface PropertyLocation {
   address:      string
