@@ -46,7 +46,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
         padding: '2rem',
         backgroundColor: 'var(--color-surface-primary)',
         position: 'sticky',
-        top: '100px',
+        top: '6rem',
       }}
     >
       {/* Price */}
@@ -54,7 +54,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
         <Label style={{ color: 'var(--color-text-muted)', display: 'block', marginBottom: '0.25rem' }}>
           Guide price
         </Label>
-        <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', color: 'var(--color-text-primary)', fontWeight: 300 }}>
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-h4)', color: 'var(--color-text-primary)', fontWeight: 300 }}>
           {priceLabel}
         </p>
       </div>

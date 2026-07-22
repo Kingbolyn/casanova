@@ -25,7 +25,7 @@ function StatsSection() {
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              className="flex flex-col items-center text-center px-6 py-8 relative"
+              className="flex flex-col items-center text-center px-3 py-6 sm:px-6 sm:py-8 relative"
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}

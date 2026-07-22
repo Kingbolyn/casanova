@@ -63,18 +63,6 @@
   --color-error:         var(--color-error-base);
   --color-info:          var(--color-info-base);
 
-  /* Animation durations */
-  --duration-instant:    50ms;
-  --duration-fast:       150ms;
-  --duration-normal:     250ms;
-  --duration-moderate:   400ms;
-  --duration-slow:       600ms;
-  --duration-deliberate: 900ms;
-  --duration-cinematic:  1200ms;
-
-  /* Animation easings */
-  --ease-architectural: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --ease-spring:        cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ─── Reset & Base ──────────────────────────────────────────────────────── */
@@ -204,14 +192,24 @@ input, textarea, select { font-family: inherit; }
 .section-lg  { padding-block: var(--section-lg);  }
 .section-xl  { padding-block: var(--section-xl);  }
 
-/* ─── Reduced Motion ────────────────────────────────────────────────────── */
+/* ─── Touch & Mobile ────────────────────────────────────────────────────── */
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration:   0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration:  0.01ms !important;
-    scroll-behavior:      auto   !important;
+/* Eliminate 300ms tap delay on touch devices */
+a, button, [role="button"], input, select, textarea, label {
+  touch-action: manipulation;
+}
+
+/* Safe area insets — iOS notch / home indicator */
+.navbar-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ─── Responsive Container Overrides ────────────────────────────────────── */
+
+/* At xs (320px), wide containers collapse to the content margin */
+@media (max-width: 479px) {
+  .container-wide {
+    padding-inline: var(--viewport-margin-md);
   }
 }
 

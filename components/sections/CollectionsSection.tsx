@@ -27,7 +27,7 @@ function CollectionsSection() {
         </FadeIn>
 
         <StaggerChildren stagger={0.1}>
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 'var(--grid-gap-md)' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 'var(--grid-gap-md)' }}>
             {collections.map((col) => (
               <StaggerItem key={col.id}>
                 <Link href={`/collections/${col.slug}`} className="group block">

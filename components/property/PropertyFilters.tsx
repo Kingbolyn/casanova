@@ -85,7 +85,8 @@ const selectStyle: React.CSSProperties = {
   fontFamily:         'var(--font-body)',
   fontSize:           'var(--text-xs)',
   letterSpacing:      'var(--tracking-wide)',
-  padding:            '0.625rem 2.25rem 0.625rem 0.875rem',
+  padding:            '0.75rem 2.25rem 0.75rem 0.875rem',
+  minHeight:          '44px',
   cursor:             'pointer',
   backgroundImage:    `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23999' d='M5 7L1 3h8z'/%3E%3C/svg%3E")`,
   backgroundRepeat:   'no-repeat',
@@ -412,7 +413,8 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
               type="button"
               onClick={() => set('type', t.value)}
               style={{
-                padding:         '0.375rem 0.875rem',
+                padding:         '0.5rem 0.875rem',
+                minHeight:       '44px',
                 fontSize:        'var(--text-xs)',
                 letterSpacing:   'var(--tracking-wide)',
                 fontFamily:      'var(--font-body)',
@@ -443,7 +445,8 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
               type="button"
               onClick={() => set('bedrooms', b)}
               style={{
-                padding:         '0.4rem 0.875rem',
+                padding:         '0.5rem 0.875rem',
+                minHeight:       '44px',
                 fontSize:        'var(--text-xs)',
                 letterSpacing:   'var(--tracking-wide)',
                 fontFamily:      'var(--font-body)',

@@ -55,7 +55,7 @@ export default async function PropertyPage({ params }: Props) {
       {/* Hero */}
       <section
         className="relative overflow-hidden"
-        style={{ height: '70vh', minHeight: '500px', paddingTop: '80px', backgroundColor: '#111' }}
+        style={{ height: '70vh', minHeight: '520px', paddingTop: 'clamp(5.5rem, 10vh, 7rem)', backgroundColor: '#111' }}
         aria-label={`Hero image for ${property.title}`}
       >
         <Image
@@ -84,7 +84,7 @@ export default async function PropertyPage({ params }: Props) {
               <Heading as={1} size="h1" color="inverse" className="mb-3">
                 {property.title}
               </Heading>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', color: 'var(--color-accent-base)', fontWeight: 300 }}>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-h4)', color: 'var(--color-accent-base)', fontWeight: 300 }}>
                 {property.priceLabel}
               </p>
             </FadeIn>
@@ -110,7 +110,7 @@ export default async function PropertyPage({ params }: Props) {
                   className="mt-10 mb-6"
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'var(--text-2xl)',
+                    fontSize: 'var(--type-h4)',
                     fontWeight: 300,
                     fontStyle: 'italic',
                     color: 'var(--color-text-secondary)',
