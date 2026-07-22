@@ -10,7 +10,19 @@ import { properties } from '@/lib/data/properties'
 
 export const metadata: Metadata = {
   title: 'Collections',
-  description: 'Explore curated property collections, grouped by lifestyle and environment.',
+  description: 'Explore curated property collections, each defined by a distinct lifestyle, environment, and architectural character.',
+  alternates: { canonical: '/collections' },
+  openGraph: {
+    title: 'Property Collections | CasaNova',
+    description: 'Curated portfolios defined by lifestyle, environment, and architectural character.',
+    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova Collections' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Property Collections | CasaNova',
+    description: 'Curated portfolios defined by lifestyle, environment, and architectural character.',
+    images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80'],
+  },
 }
 
 export default function CollectionsPage() {

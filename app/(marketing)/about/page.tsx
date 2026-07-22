@@ -8,9 +8,17 @@ import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildre
 export const metadata: Metadata = {
   title: 'About',
   description: 'CasaNova was built on a single belief: property discovery begins with emotion, not transaction.',
+  alternates: { canonical: '/about' },
   openGraph: {
     title: 'About CasaNova',
     description: 'We believe the right home is one that fits your life: your rhythm, your future, your story.',
+    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About CasaNova',
+    description: 'Property discovery begins with emotion, not transaction.',
+    images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80'],
   },
 }
 

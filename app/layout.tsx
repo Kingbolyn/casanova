@@ -4,6 +4,8 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { SkipToContent } from '@/components/layout/SkipToContent'
 import { ToastProvider } from '@/components/ui/Toast'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { organizationSchema, websiteSchema, BASE_URL } from '@/lib/seo'
 import './globals.css'
 
 /* ─── Fonts ─────────────────────────────────────────────── */
@@ -37,7 +39,8 @@ export const metadata: Metadata = {
   keywords: ['luxury real estate', 'property discovery', 'homes', 'CasaNova'],
   authors: [{ name: 'Apex Code Studio' }],
   creator: 'Apex Code Studio',
-  metadataBase: new URL('https://casanova.vercel.app'),
+  metadataBase: new URL(BASE_URL),
+  alternates: { canonical: BASE_URL },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -85,6 +88,8 @@ export default function RootLayout({
     >
       <body>
         <ToastProvider>
+          <JsonLd data={organizationSchema} />
+          <JsonLd data={websiteSchema} />
           <SkipToContent />
           <Navbar />
           <main id="main-content">{children}</main>

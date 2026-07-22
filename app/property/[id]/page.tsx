@@ -8,6 +8,8 @@ import { PropertyGallery } from '@/components/property/PropertyGallery'
 import { EnquiryForm } from '@/components/property/EnquiryForm'
 import { RelatedProperties } from '@/components/property/RelatedProperties'
 import { FadeIn } from '@/components/motion/FadeIn'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { BASE_URL, canonical } from '@/lib/seo'
 import { properties } from '@/lib/data/properties'
 
 interface Props {
@@ -21,10 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title:       property.title,
     description: property.tagline,
+    alternates:  { canonical: canonical(`/property/${property.slug}`) },
     openGraph: {
       title:       property.title,
       description: property.tagline,
       images:      [{ url: property.media.hero, width: 1200, height: 800, alt: property.title }],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       property.title,
+      description: property.tagline,
+      images:      [property.media.hero],
     },
   }
 }
@@ -49,9 +58,49 @@ export default async function PropertyPage({ params }: Props) {
 
   const allImages = [property.media.hero, ...property.media.gallery]
   const { features, location } = property
+  const propertyUrl = canonical(`/property/${property.slug}`)
+
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',       item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Properties', item: `${BASE_URL}/properties` },
+      { '@type': 'ListItem', position: 3, name: property.title, item: propertyUrl },
+    ],
+  }
+
+  const listing = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: property.title,
+    description: property.description,
+    url: propertyUrl,
+    image: allImages,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress:   location.address,
+      addressLocality: location.city,
+      addressRegion:   location.state,
+      addressCountry:  'NG',
+    },
+    numberOfBedrooms:  features.bedrooms,
+    numberOfBathroomsTotal: features.bathrooms,
+    ...(features.squareFeet && {
+      floorSize: {
+        '@type': 'QuantitativeValue',
+        value:    features.squareFeet,
+        unitCode: 'SqFt',
+      },
+    }),
+    accommodationCategory: property.type,
+  }
 
   return (
     <>
+      <JsonLd data={breadcrumb} />
+      <JsonLd data={listing} />
+
       {/* Hero */}
       <section
         className="relative overflow-hidden"

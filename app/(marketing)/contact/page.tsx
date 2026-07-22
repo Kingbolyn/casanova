@@ -8,7 +8,19 @@ import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with our team. We\'d love to help you find your next home.',
+  description: "Speak with our team about a property, a viewing, or anything else. We're here to help you find the home that fits your life.",
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    title: 'Contact CasaNova',
+    description: "Speak with our team about a property, a viewing, or anything else.",
+    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact CasaNova',
+    description: "Speak with our team about a property or viewing.",
+    images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80'],
+  },
 }
 
 export default function ContactPage() {

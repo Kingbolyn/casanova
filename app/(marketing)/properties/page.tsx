@@ -9,9 +9,17 @@ import { properties } from '@/lib/data/properties'
 export const metadata: Metadata = {
   title: 'Properties',
   description: 'Browse our curated portfolio of exceptional properties: penthouses, villas, and estates chosen for architectural distinction and lasting value.',
+  alternates: { canonical: '/properties' },
   openGraph: {
     title: 'Exceptional Properties | CasaNova',
     description: 'Every property in our portfolio is chosen for its architectural distinction, location quality, and lasting value.',
+    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova Properties' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Exceptional Properties | CasaNova',
+    description: 'Penthouses, villas, and estates chosen for architectural distinction and lasting value.',
+    images: ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80'],
   },
 }
 

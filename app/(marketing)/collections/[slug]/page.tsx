@@ -8,6 +8,8 @@ import { PropertyGrid } from '@/components/property/PropertyGrid'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { collections, getPropertiesInCollection } from '@/lib/data/collections'
 import { properties } from '@/lib/data/properties'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { BASE_URL, canonical } from '@/lib/seo'
 import type { Property } from '@/lib/types'
 
 interface Props {
@@ -21,10 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title:       col.name,
     description: col.description,
+    alternates:  { canonical: canonical(`/collections/${col.slug}`) },
     openGraph: {
       title:       col.name,
       description: col.description,
       images:      [{ url: col.heroImage, width: 1400, height: 800, alt: col.name }],
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       col.name,
+      description: col.description,
+      images:      [col.heroImage],
     },
   }
 }
@@ -40,8 +49,20 @@ export default async function CollectionDetailPage({ params }: Props) {
 
   const collectionProperties = getPropertiesInCollection(slug, properties) as Property[]
 
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',        item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Collections', item: `${BASE_URL}/collections` },
+      { '@type': 'ListItem', position: 3, name: collection.name, item: canonical(`/collections/${collection.slug}`) },
+    ],
+  }
+
   return (
     <>
+      <JsonLd data={breadcrumb} />
+
       {/* Hero */}
       <section
         className="relative overflow-hidden"
