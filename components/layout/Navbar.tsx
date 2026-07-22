@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavScroll } from '@/lib/hooks/useNavScroll'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 import { useLockBodyScroll } from '@/lib/hooks/useLockBodyScroll'
 import { primaryNav } from '@/lib/data/navigation'
 import { Button } from '@/components/ui/Button'
@@ -17,7 +18,20 @@ function Navbar() {
   const { scrolled, hidden } = useNavScroll()
   const pathname  = usePathname()
 
+  const hamburgerRef  = useRef<HTMLButtonElement>(null)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+
   useLockBodyScroll(mobileOpen)
+  useFocusTrap(mobileMenuRef, mobileOpen)
+
+  useEffect(() => {
+    if (mobileOpen) {
+      const firstLink = mobileMenuRef.current?.querySelector<HTMLElement>('a, button')
+      setTimeout(() => firstLink?.focus(), 80)
+    } else {
+      hamburgerRef.current?.focus()
+    }
+  }, [mobileOpen])
 
   const isHome = pathname === '/'
 
@@ -131,6 +145,7 @@ function Navbar() {
 
             {/* Mobile search + toggle */}
             <button
+              ref={hamburgerRef}
               className="flex md:hidden flex-col justify-center items-center gap-1.5 w-10 h-10"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
@@ -173,6 +188,7 @@ function Navbar() {
             />
 
             <motion.div
+              ref={mobileMenuRef}
               id="mobile-menu"
               className="fixed top-0 right-0 bottom-0 w-[300px] md:hidden flex flex-col"
               style={{

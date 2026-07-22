@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { properties } from '@/lib/data/properties'
 import type { Property } from '@/lib/types'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 interface SearchOverlayProps {
   isOpen:  boolean
@@ -26,16 +27,23 @@ function highlight(text: string, query: string): React.ReactNode {
 function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [query, setQuery]     = useState('')
   const [results, setResults] = useState<Property[]>([])
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef    = useRef<HTMLInputElement>(null)
+  const dialogRef   = useRef<HTMLDivElement>(null)
+  const returnFocus = useRef<Element | null>(null)
+
+  useFocusTrap(dialogRef, isOpen)
 
   useEffect(() => {
     if (isOpen) {
+      returnFocus.current = document.activeElement
       setQuery('')
       setResults([])
       document.body.style.overflow = 'hidden'
       setTimeout(() => inputRef.current?.focus(), 80)
     } else {
       document.body.style.overflow = ''
+      if (returnFocus.current instanceof HTMLElement) returnFocus.current.focus()
+      returnFocus.current = null
     }
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
@@ -83,8 +91,12 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             exit={{ opacity: 0 }}
           />
 
-          {/* Panel */}
+          {/* Panel — dialog container */}
           <motion.div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Search properties"
             className="absolute left-0 right-0"
             style={{ top: '80px', maxHeight: 'calc(100vh - 120px)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
             initial={{ y: -16, opacity: 0 }}
@@ -135,6 +147,15 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 </button>
               </div>
 
+              {/* Live region — announces result count to screen readers */}
+              <div aria-live="polite" aria-atomic="true" className="sr-only">
+                {query.trim()
+                  ? results.length === 0
+                    ? 'No properties found'
+                    : `${results.length} ${results.length === 1 ? 'property' : 'properties'} found`
+                  : ''}
+              </div>
+
               {/* Results */}
               <div style={{ overflowY: 'auto', backgroundColor: 'var(--color-surface-primary)' }}>
                 {query.trim() && results.length === 0 && (
@@ -144,9 +165,9 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 )}
 
                 {results.length > 0 && (
-                  <ul role="listbox" aria-label="Search results" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  <ul role="list" aria-label="Search results" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                     {results.map((p) => (
-                      <li key={p.id} role="option" aria-selected="false">
+                      <li key={p.id}>
                         <Link
                           href={`/property/${p.slug}`}
                           onClick={onClose}

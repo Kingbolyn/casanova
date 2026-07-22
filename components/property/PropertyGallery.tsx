@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PanoramaViewer } from './PanoramaViewer'
 import { DUR, EASE } from '@/lib/motion'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 interface PropertyGalleryProps {
   images:    string[]
@@ -13,9 +14,26 @@ interface PropertyGalleryProps {
 }
 
 function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
-  const [active, setActive]     = useState(0)
-  const [lightbox, setLightbox] = useState(false)
+  const [active, setActive]       = useState(0)
+  const [lightbox, setLightbox]   = useState(false)
   const [immersive, setImmersive] = useState(false)
+
+  const lightboxRef    = useRef<HTMLDivElement>(null)
+  const closeBtnRef    = useRef<HTMLButtonElement>(null)
+  const galleryTrigger = useRef<HTMLDivElement>(null)
+  const returnFocus    = useRef<Element | null>(null)
+
+  useFocusTrap(lightboxRef, lightbox)
+
+  useEffect(() => {
+    if (lightbox) {
+      returnFocus.current = document.activeElement
+      setTimeout(() => closeBtnRef.current?.focus(), 50)
+    } else {
+      if (returnFocus.current instanceof HTMLElement) returnFocus.current.focus()
+      returnFocus.current = null
+    }
+  }, [lightbox])
 
   const prev = useCallback(() => setActive((i) => (i - 1 + images.length) % images.length), [images.length])
   const next = useCallback(() => setActive((i) => (i + 1) % images.length), [images.length])
@@ -178,6 +196,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
       <AnimatePresence>
         {lightbox && (
           <motion.div
+            ref={lightboxRef}
             className="fixed inset-0 flex items-center justify-center"
             style={{ zIndex: 'var(--z-modal)', backgroundColor: 'rgba(0,0,0,0.92)' }}
             initial={{ opacity: 0 }}
@@ -185,12 +204,12 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
             exit={{ opacity: 0 }}
             onClick={() => setLightbox(false)}
             onKeyDown={handleKey}
-            tabIndex={-1}
             role="dialog"
-            aria-label="Image lightbox"
+            aria-label={`Image gallery for ${title}`}
             aria-modal="true"
           >
             <button
+              ref={closeBtnRef}
               onClick={() => setLightbox(false)}
               className="absolute top-6 right-6"
               style={{ color: '#fff', background: 'none', border: 'none', fontSize: '2rem', cursor: 'pointer', lineHeight: 1 }}

@@ -68,6 +68,8 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
           {state === 'success' ? (
             <motion.div
               key="success"
+              role="status"
+              aria-live="polite"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-8"

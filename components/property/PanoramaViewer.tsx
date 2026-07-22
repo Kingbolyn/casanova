@@ -1,11 +1,12 @@
 'use client'
 
-import { useRef, useEffect, Suspense } from 'react'
+import { useRef, useEffect, useCallback, Suspense } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DUR, EASE } from '@/lib/motion'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 /* ─── Sphere scene ──────────────────────────────────────── */
 
@@ -107,12 +108,22 @@ interface PanoramaViewerProps {
 }
 
 export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const closeBtnRef  = useRef<HTMLButtonElement>(null)
+
+  useFocusTrap(containerRef, true)
+
   /* Close on Escape */
+  const onKey = useCallback((e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }, [onClose])
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
+  }, [onKey])
+
+  /* Auto-focus close button */
+  useEffect(() => {
+    setTimeout(() => closeBtnRef.current?.focus(), 1050)
+  }, [])
 
   /* Lock body scroll */
   useEffect(() => {
@@ -123,6 +134,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -131,7 +143,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       style={{ backgroundColor: '#0a0a0a' }}
       role="dialog"
       aria-modal="true"
-      aria-label={`360° view of ${title}`}
+      aria-label={`360° immersive view of ${title}`}
     >
       {/* Threshold veil — fades out after entry */}
       <motion.div
@@ -189,6 +201,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
 
         {/* Close button */}
         <button
+          ref={closeBtnRef}
           onClick={onClose}
           className="absolute top-5 right-5"
           style={{
