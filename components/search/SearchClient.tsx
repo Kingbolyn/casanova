@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { PropertyGrid } from '@/components/property/PropertyGrid'
 import type { Property } from '@/lib/types'
+import { DUR, EASE } from '@/lib/motion'
 
 interface SearchClientProps {
   properties:   Property[]
@@ -78,7 +80,46 @@ function SearchClient({ properties, initialQuery }: SearchClientProps) {
 
       <Section spacing="lg" bg="default">
         <Container width="wide">
-          <PropertyGrid properties={results} columns={3} />
+          <AnimatePresence mode="wait">
+            {results.length === 0 ? (
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.standard, ease: EASE.entrance }}
+                style={{ textAlign: 'center', paddingBlock: '6rem' }}
+              >
+                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-h3)', fontWeight: 300, color: 'var(--color-text-secondary)', marginBottom: '0.75rem' }}>
+                  No residences found
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)', letterSpacing: 'var(--tracking-wide)', marginBottom: '2rem' }}>
+                  Try adjusting your search to discover additional properties.
+                </p>
+                <button
+                  onClick={() => setQuery('')}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 500,
+                    letterSpacing: 'var(--tracking-widest)',
+                    color: 'var(--color-text-primary)',
+                    background: 'none',
+                    border: '1px solid var(--color-border-default)',
+                    padding: '0.625rem 1.5rem',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Clear search
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: DUR.micro }}>
+                <PropertyGrid properties={results} columns={3} />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Container>
       </Section>
     </>

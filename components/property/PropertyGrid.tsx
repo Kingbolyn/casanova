@@ -15,6 +15,24 @@ function PropertyGrid({ properties, columns = 3 }: PropertyGridProps) {
     ? 'grid-cols-1 md:grid-cols-2'
     : 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3'
 
+  if (properties.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: DUR.standard, ease: EASE.entrance }}
+        style={{ textAlign: 'center', paddingBlock: '5rem' }}
+      >
+        <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-h4)', fontWeight: 300, color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
+          No properties available
+        </p>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)', letterSpacing: 'var(--tracking-wide)' }}>
+          Check back soon as new residences are added to this collection.
+        </p>
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div layout className={`grid ${gridCols} gap-8`}>
       <AnimatePresence mode="popLayout">

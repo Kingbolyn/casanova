@@ -20,6 +20,7 @@ const base = [
   'border transition-all select-none',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-border-accent] focus-visible:ring-offset-2',
   'disabled:pointer-events-none disabled:opacity-40',
+  'active:scale-[0.97]',
 ].join(' ')
 
 const variants: Record<ButtonVariant, string> = {
@@ -76,7 +77,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     <button
       ref={ref}
       disabled={disabled || loading}
-      style={{ transitionDuration: 'var(--duration-normal)', transitionTimingFunction: 'var(--ease-architectural)' }}
+      style={{ transitionDuration: 'var(--dur-standard)', transitionTimingFunction: 'var(--ease-standard)' }}
       className={cn(base, variants[variant], sizes[size], className)}
       {...props}
     >
