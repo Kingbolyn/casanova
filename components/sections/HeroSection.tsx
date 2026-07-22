@@ -38,7 +38,7 @@ function HeroSection() {
       >
         <motion.div
           className="absolute inset-0"
-          /* Drift: very slow 40-second ambient translation */
+          style={{ willChange: 'transform' }}
           animate={{ x: ['0%', '-1.5%', '0%'] }}
           transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
         >

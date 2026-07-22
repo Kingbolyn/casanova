@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
     qualities: [75, 80, 85, 90],
     deviceSizes: [375, 480, 640, 750, 828, 1080, 1200, 1920, 2560],
     imageSizes:  [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 2678400,
   },
 
   async headers() {

@@ -65,6 +65,7 @@ export default async function PropertyPage({ params }: Props) {
           className="object-cover"
           priority
           sizes="100vw"
+          quality={80}
           style={{ opacity: 0.65 }}
         />
         <div
