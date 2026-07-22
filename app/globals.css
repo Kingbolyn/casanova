@@ -213,6 +213,22 @@ a, button, [role="button"], input, select, textarea, label {
   }
 }
 
+/* ─── Footer Link Hover ─────────────────────────────────────────────────── */
+
+.footer-link-nav {
+  font-size: var(--type-small);
+  color: rgba(255,255,255,0.6);
+  transition: color var(--dur-micro) var(--ease-standard);
+}
+.footer-link-nav:hover { color: rgba(255,255,255,1); }
+
+.footer-link-legal {
+  font-size: var(--type-caption);
+  color: rgba(255,255,255,0.35);
+  transition: color var(--dur-micro) var(--ease-standard);
+}
+.footer-link-legal:hover { color: rgba(255,255,255,0.7); }
+
 /* ─── Accessibility ─────────────────────────────────────────────────────── */
 
 .sr-only {

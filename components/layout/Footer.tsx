@@ -67,15 +67,7 @@ function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="font-body transition-colors"
-                    style={{
-                      fontSize: 'var(--type-small)',
-                      color: 'rgba(255,255,255,0.6)',
-                      transitionDuration: 'var(--duration-normal)',
-                      transitionTimingFunction: 'var(--ease-architectural)',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = '#fff' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
+                    className="font-body footer-link-nav"
                   >
                     {item.label}
                   </Link>
@@ -113,21 +105,14 @@ function Footer() {
             style={{ paddingBlock: 'var(--space-6)' }}
           >
             <Caption style={{ color: 'rgba(255,255,255,0.35)' }}>
-              © {new Date().getFullYear()} CasaNova. All rights reserved.
+              © 2026 CasaNova. All rights reserved.
             </Caption>
             <ul className="flex items-center gap-6 list-none" role="list">
               {legalLinks.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="font-body transition-colors"
-                    style={{
-                      fontSize: 'var(--type-caption)',
-                      color: 'rgba(255,255,255,0.35)',
-                      transitionDuration: 'var(--duration-normal)',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.7)' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
+                    className="font-body footer-link-legal"
                   >
                     {item.label}
                   </Link>
