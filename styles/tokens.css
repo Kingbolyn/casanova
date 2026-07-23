@@ -34,7 +34,7 @@
      ---------------------------------------------------------- */
   --color-text-primary:        #1A1A1A;   /* headings, primary body             */
   --color-text-secondary:      #4A4A4A;   /* subheadings, descriptions          */
-  --color-text-tertiary:       #767676;   /* captions, meta, labels             */
+  --color-text-tertiary:       #737373;   /* captions, meta, labels (WCAG AA)   */
   --color-text-disabled:       #ABABAB;   /* disabled states                    */
   --color-text-inverse:        #FFFFFF;   /* on dark backgrounds                */
   --color-text-accent:         #C9A96E;   /* accent-colored text                */

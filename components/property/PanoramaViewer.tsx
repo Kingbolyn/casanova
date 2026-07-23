@@ -1,103 +1,10 @@
 'use client'
 
-import { useRef, useEffect, useCallback, Suspense } from 'react'
-import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { useTexture } from '@react-three/drei'
+import { useRef, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { DUR, EASE } from '@/lib/motion'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
-
-/* ─── Sphere scene ──────────────────────────────────────── */
-
-function PanoramaSphere({ url }: { url: string }) {
-  const texture = useTexture(url)
-  texture.colorSpace = THREE.SRGBColorSpace
-
-  return (
-    <mesh scale={[-1, 1, 1]}>
-      <sphereGeometry args={[500, 60, 40]} />
-      <meshBasicMaterial map={texture} side={THREE.BackSide} />
-    </mesh>
-  )
-}
-
-/* ─── Drag-to-look controls ─────────────────────────────── */
-
-function DragControls() {
-  const { camera, gl } = useThree()
-  const isDragging = useRef(false)
-  const prev = useRef({ x: 0, y: 0 })
-  const euler = useRef(new THREE.Euler(0, 0, 0, 'YXZ'))
-  const autoRotate = useRef(true)
-
-  useEffect(() => {
-    const canvas = gl.domElement
-
-    const onDown = (e: PointerEvent) => {
-      isDragging.current = true
-      autoRotate.current = false
-      prev.current = { x: e.clientX, y: e.clientY }
-      canvas.setPointerCapture(e.pointerId)
-    }
-    const onMove = (e: PointerEvent) => {
-      if (!isDragging.current) return
-      const dx = (e.clientX - prev.current.x) * 0.003
-      const dy = (e.clientY - prev.current.y) * 0.003
-      euler.current.y -= dx
-      euler.current.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, euler.current.x - dy))
-      camera.quaternion.setFromEuler(euler.current)
-      prev.current = { x: e.clientX, y: e.clientY }
-    }
-    const onUp = () => { isDragging.current = false }
-
-    canvas.addEventListener('pointerdown', onDown)
-    canvas.addEventListener('pointermove', onMove)
-    canvas.addEventListener('pointerup', onUp)
-    return () => {
-      canvas.removeEventListener('pointerdown', onDown)
-      canvas.removeEventListener('pointermove', onMove)
-      canvas.removeEventListener('pointerup', onUp)
-    }
-  }, [gl, camera])
-
-  useFrame((_, delta) => {
-    if (autoRotate.current) {
-      euler.current.y -= delta * 0.06
-      camera.quaternion.setFromEuler(euler.current)
-    }
-  })
-
-  return null
-}
-
-/* ─── Loading fallback ──────────────────────────────────── */
-
-function PanoramaLoading() {
-  return (
-    <div
-      className="absolute inset-0 flex items-center justify-center"
-      style={{ backgroundColor: '#0a0a0a' }}
-    >
-      <div className="flex flex-col items-center gap-4">
-        <div
-          style={{
-            width: '32px',
-            height: '32px',
-            border: '1px solid rgba(201,169,110,0.3)',
-            borderTopColor: 'var(--color-accent-base)',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-          }}
-        />
-        <p style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-widest)', color: 'rgba(255,255,255,0.35)' }}>
-          ENTERING SPACE
-        </p>
-      </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
-    </div>
-  )
-}
 
 /* ─── Public component ──────────────────────────────────── */
 
@@ -109,6 +16,7 @@ interface PanoramaViewerProps {
 
 export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef    = useRef<HTMLDivElement>(null)
   const closeBtnRef  = useRef<HTMLButtonElement>(null)
 
   useFocusTrap(containerRef, true)
@@ -131,6 +39,103 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = prev }
   }, [])
+
+  /* Native Three.js scene */
+  useEffect(() => {
+    const container = canvasRef.current
+    if (!container) return
+
+    const width  = container.clientWidth
+    const height = container.clientHeight
+
+    const scene    = new THREE.Scene()
+    const camera   = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    const renderer = new THREE.WebGLRenderer({ antialias: false })
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    container.appendChild(renderer.domElement)
+
+    /* Sphere */
+    const geometry = new THREE.SphereGeometry(500, 60, 40)
+    const texture  = new THREE.TextureLoader().load(url)
+    texture.colorSpace = THREE.SRGBColorSpace
+    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide })
+    const sphere   = new THREE.Mesh(geometry, material)
+    sphere.scale.set(-1, 1, 1)
+    scene.add(sphere)
+
+    /* Drag controls */
+    const euler      = new THREE.Euler(0, 0, 0, 'YXZ')
+    let isDragging   = false
+    let autoRotate   = true
+    let prevX        = 0
+    let prevY        = 0
+
+    const onDown = (e: PointerEvent) => {
+      isDragging = true
+      autoRotate = false
+      prevX = e.clientX
+      prevY = e.clientY
+      renderer.domElement.setPointerCapture(e.pointerId)
+    }
+    const onMove = (e: PointerEvent) => {
+      if (!isDragging) return
+      const dx = (e.clientX - prevX) * 0.003
+      const dy = (e.clientY - prevY) * 0.003
+      euler.y -= dx
+      euler.x  = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, euler.x - dy))
+      camera.quaternion.setFromEuler(euler)
+      prevX = e.clientX
+      prevY = e.clientY
+    }
+    const onUp = () => { isDragging = false }
+
+    renderer.domElement.addEventListener('pointerdown', onDown)
+    renderer.domElement.addEventListener('pointermove', onMove)
+    renderer.domElement.addEventListener('pointerup',   onUp)
+
+    /* Render loop */
+    let frameId  = 0
+    let lastTime = 0
+
+    const animate = (time: number) => {
+      frameId = requestAnimationFrame(animate)
+      const delta = (time - lastTime) / 1000
+      lastTime = time
+      if (autoRotate) {
+        euler.y -= delta * 0.06
+        camera.quaternion.setFromEuler(euler)
+      }
+      renderer.render(scene, camera)
+    }
+    frameId = requestAnimationFrame(animate)
+
+    /* Resize handler */
+    const onResize = () => {
+      const w = container.clientWidth
+      const h = container.clientHeight
+      camera.aspect = w / h
+      camera.updateProjectionMatrix()
+      renderer.setSize(w, h)
+    }
+    window.addEventListener('resize', onResize)
+
+    /* Cleanup */
+    return () => {
+      cancelAnimationFrame(frameId)
+      renderer.domElement.removeEventListener('pointerdown', onDown)
+      renderer.domElement.removeEventListener('pointermove', onMove)
+      renderer.domElement.removeEventListener('pointerup',   onUp)
+      window.removeEventListener('resize', onResize)
+      geometry.dispose()
+      material.dispose()
+      texture.dispose()
+      renderer.dispose()
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement)
+      }
+    }
+  }, [url])
 
   return (
     <motion.div
@@ -155,23 +160,18 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
         aria-hidden="true"
       />
 
-      {/* Canvas */}
-      <Canvas
-        camera={{ fov: 75, near: 0.1, far: 1000 }}
-        style={{ position: 'absolute', inset: 0 }}
-        gl={{ antialias: false }}
-      >
-        <Suspense fallback={null}>
-          <PanoramaSphere url={url} />
-          <DragControls />
-        </Suspense>
-      </Canvas>
-
-      <Suspense fallback={<PanoramaLoading />} />
+      {/* Canvas mount point */}
+      <div
+        ref={canvasRef}
+        className="absolute inset-0"
+        style={{ zIndex: 1 }}
+        aria-hidden="true"
+      />
 
       {/* UI overlay */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
+        style={{ zIndex: 20 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: DUR.large, delay: 1.0, ease: EASE.entrance }}

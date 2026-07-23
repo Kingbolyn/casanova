@@ -17,10 +17,10 @@ export default function NotFound() {
           404: Page Not Found
         </Label>
         <Heading as={1} size="h2" className="mb-6">
-          This page doesn't exist.
+          This page doesn&apos;t exist.
         </Heading>
         <Body size="lg" color="secondary" className="mb-10">
-          The property or page you're looking for may have moved, or the link may be incorrect.
+          The property or page you&apos;re looking for may have moved, or the link may be incorrect.
         </Body>
         <Link href="/">
           <Button variant="primary" size="lg">

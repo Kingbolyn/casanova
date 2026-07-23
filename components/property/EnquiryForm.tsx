@@ -82,7 +82,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
               </div>
               <Heading as={4} size="h5" className="mb-2">Enquiry sent</Heading>
               <Body size="sm" color="secondary">
-                We'll be in touch within 24 hours to arrange a viewing.
+                We&apos;ll be in touch within 24 hours to arrange a viewing.
               </Body>
             </motion.div>
           ) : (

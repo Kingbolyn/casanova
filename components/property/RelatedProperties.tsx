@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Heading, Body, Label } from '@/components/ui/Typography'
+import { Heading, Label } from '@/components/ui/Typography'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
 import type { Property } from '@/lib/types'

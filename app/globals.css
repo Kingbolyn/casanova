@@ -224,7 +224,7 @@ a, button, [role="button"], input, select, textarea, label {
 
 .footer-link-legal {
   font-size: var(--type-caption);
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.55);
   transition: color var(--dur-micro) var(--ease-standard);
 }
 .footer-link-legal:hover { color: rgba(255,255,255,0.7); }

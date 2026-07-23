@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/'],
       },
     ],
-    sitemap: 'https://casanova.vercel.app/sitemap.xml',
+    sitemap: 'https://casanova-pied.vercel.app/sitemap.xml',
   }
 }

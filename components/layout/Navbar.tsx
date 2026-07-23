@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavScroll } from '@/lib/hooks/useNavScroll'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
@@ -16,7 +16,8 @@ function Navbar() {
   const [mobileOpen, setMobileOpen]   = useState(false)
   const [searchOpen, setSearchOpen]   = useState(false)
   const { scrolled, hidden } = useNavScroll()
-  const pathname  = usePathname()
+  const pathname = usePathname()
+  const router   = useRouter()
 
   const hamburgerRef  = useRef<HTMLButtonElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
@@ -83,8 +84,8 @@ function Navbar() {
                       className="relative font-body font-medium tracking-widest uppercase text-[11px] transition-colors"
                       style={{
                         color: isHome && !scrolled
-                          ? active ? 'var(--color-text-inverse)' : 'rgba(255,255,255,0.7)'
-                          : active ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
+                          ? active ? 'var(--color-text-inverse)' : 'rgba(255,255,255,0.85)'
+                          : active ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
                         transitionDuration: 'var(--dur-micro)',
                         transitionTimingFunction: 'var(--ease-standard)',
                       }}
@@ -129,6 +130,7 @@ function Navbar() {
               <Button
                 variant={isHome && !scrolled ? 'secondary' : 'primary'}
                 size="sm"
+                onClick={() => router.push('/contact')}
                 style={
                   isHome && !scrolled
                     ? {
@@ -233,7 +235,12 @@ function Navbar() {
               </nav>
 
               <div className="mt-auto px-8 pb-12">
-                <Button variant="primary" size="md" className="w-full">
+                <Button
+                  variant="primary"
+                  size="md"
+                  className="w-full"
+                  onClick={() => { router.push('/contact'); setMobileOpen(false) }}
+                >
                   Book a Viewing
                 </Button>
               </div>

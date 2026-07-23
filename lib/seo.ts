@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://casanova.vercel.app'
+export const BASE_URL = 'https://casanova-pied.vercel.app'
 export const SITE_NAME = 'CasaNova'
 
 export function canonical(path: string): string {

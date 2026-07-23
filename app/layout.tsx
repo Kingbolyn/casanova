@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://casanova.vercel.app',
+    url: BASE_URL,
     siteName: 'CasaNova',
     title: 'CasaNova: Exceptional Properties',
     description:

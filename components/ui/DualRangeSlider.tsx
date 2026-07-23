@@ -17,27 +17,29 @@ export function DualRangeSlider({
   value,
   onChange,
   step = 1,
-  format = (v) => String(v),
+  format: _format = (v) => String(v),
 }: DualRangeSliderProps) {
   const [localMin, setLocalMin] = useState(String(value[0]))
   const [localMax, setLocalMax] = useState(value[1] >= max ? '' : String(value[1]))
   const trackRef = useRef<HTMLDivElement>(null)
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setLocalMin(String(value[0]))
     setLocalMax(value[1] >= max ? '' : String(value[1]))
   }, [value, max])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const pct = (v: number) => ((v - min) / (max - min)) * 100
 
-  const clamp = (v: number) => Math.max(min, Math.min(max, v))
-  const snap  = (v: number) => Math.round(v / step) * step
+  const clamp = useCallback((v: number) => Math.max(min, Math.min(max, v)), [min, max])
+  const snap  = useCallback((v: number) => Math.round(v / step) * step, [step])
 
   const fromTrack = useCallback((clientX: number): number => {
     const rect = trackRef.current?.getBoundingClientRect()
     if (!rect) return min
     return snap(clamp(min + ((clientX - rect.left) / rect.width) * (max - min)))
-  }, [min, max, snap, clamp]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [min, max, snap, clamp])
 
   /* Drag logic for thumb */
   const dragThumb = (which: 'min' | 'max') => (e: React.PointerEvent) => {

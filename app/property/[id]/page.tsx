@@ -266,16 +266,20 @@ export default async function PropertyPage({ params }: Props) {
 
                   {/* Map placeholder */}
                   <div
-                    className="mt-6 flex items-center justify-center"
+                    className="mt-6 flex flex-col items-center justify-center gap-3"
                     style={{
                       height: '240px',
                       backgroundColor: 'var(--color-surface-secondary)',
                       border: '1px solid var(--color-border-base)',
                     }}
-                    aria-label="Map location (interactive map in production)"
+                    aria-label={`Map showing location of ${property.title}`}
+                    role="img"
                   >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="var(--color-text-subtle)" />
+                    </svg>
                     <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-subtle)', letterSpacing: 'var(--tracking-widest)' }}>
-                      MAP INTEGRATION — PRODUCTION
+                      {location.neighbourhood}, {location.city}
                     </p>
                   </div>
                 </div>

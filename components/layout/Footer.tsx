@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { primaryNav } from '@/lib/data/navigation'
-import { Divider } from '@/components/ui/Divider'
 import { Label, Caption } from '@/components/ui/Typography'
 
 const legalLinks = [
@@ -104,7 +103,7 @@ function Footer() {
             className="flex flex-col sm:flex-row items-center justify-between gap-4"
             style={{ paddingBlock: 'var(--space-6)' }}
           >
-            <Caption style={{ color: 'rgba(255,255,255,0.35)' }}>
+            <Caption style={{ color: 'rgba(255,255,255,0.55)' }}>
               © 2026 CasaNova. All rights reserved.
             </Caption>
             <ul className="flex items-center gap-6 list-none" role="list">

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
-import { Heading, Body, Label, Caption } from '@/components/ui/Typography'
+import { Heading, Label, Caption } from '@/components/ui/Typography'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { testimonials } from '@/lib/data/testimonials'
 
@@ -62,7 +62,7 @@ function TestimonialsSection() {
                   >
                     {current.name}
                   </p>
-                  <Caption color="tertiary">{current.role}</Caption>
+                  <Caption color="secondary">{current.role}</Caption>
                 </footer>
               </blockquote>
             </motion.div>
@@ -78,18 +78,32 @@ function TestimonialsSection() {
               aria-selected={i === active}
               aria-label={`Testimonial from ${t.name}`}
               onClick={() => setActive(i)}
-              className="transition-all"
               style={{
-                width: i === active ? '28px' : '8px',
-                height: '8px',
-                borderRadius: 'var(--radius-full)',
-                backgroundColor: i === active ? 'var(--color-accent-base)' : 'var(--color-border-default)',
+                minWidth: '24px',
+                minHeight: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                transitionDuration: 'var(--duration-normal)',
-                transitionTimingFunction: 'var(--ease-architectural)',
+                padding: 0,
               }}
-            />
+            >
+              <span
+                className="transition-all pointer-events-none"
+                aria-hidden="true"
+                style={{
+                  display: 'block',
+                  width: i === active ? '28px' : '8px',
+                  height: '8px',
+                  borderRadius: 'var(--radius-full)',
+                  backgroundColor: i === active ? 'var(--color-accent-base)' : 'var(--color-border-default)',
+                  transitionDuration: 'var(--duration-normal)',
+                  transitionTimingFunction: 'var(--ease-architectural)',
+                }}
+              />
+            </button>
           ))}
         </div>
       </Container>

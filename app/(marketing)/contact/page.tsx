@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
+import { ContactForm } from './ContactForm'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body } from '@/components/ui/Typography'
-import { Input } from '@/components/ui/Input'
-import { Textarea } from '@/components/ui/Textarea'
-import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -44,25 +42,7 @@ export default function ContactPage() {
 
       <Section spacing="xl" bg="white">
         <Container width="narrow">
-          <form
-            action="#"
-            aria-label="Contact form"
-            noValidate
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <Input label="Full Name"     placeholder="Your name"          name="name"    required />
-              <Input label="Email Address" placeholder="your@email.com"     name="email"   type="email" required />
-            </div>
-            <div className="mb-8">
-              <Input label="Subject" placeholder="How can we help?" name="subject" required />
-            </div>
-            <div className="mb-10">
-              <Textarea label="Message" placeholder="Tell us about the property you're looking for…" name="message" rows={6} required />
-            </div>
-            <Button type="submit" variant="primary" size="lg">
-              Send Message
-            </Button>
-          </form>
+          <ContactForm />
         </Container>
       </Section>
     </>

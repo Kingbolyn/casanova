@@ -25,7 +25,6 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
 
   const lightboxRef    = useRef<HTMLDivElement>(null)
   const closeBtnRef    = useRef<HTMLButtonElement>(null)
-  const galleryTrigger = useRef<HTMLDivElement>(null)
   const returnFocus    = useRef<Element | null>(null)
 
   useFocusTrap(lightboxRef, lightbox)

@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import { FadeIn } from '@/components/motion/FadeIn'

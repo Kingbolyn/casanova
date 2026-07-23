@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { properties } from '@/lib/data/properties'
-import type { Property } from '@/lib/types'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 interface SearchOverlayProps {
@@ -25,8 +24,7 @@ function highlight(text: string, query: string): React.ReactNode {
 }
 
 function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
-  const [query, setQuery]     = useState('')
-  const [results, setResults] = useState<Property[]>([])
+  const [query, setQuery] = useState('')
   const inputRef    = useRef<HTMLInputElement>(null)
   const dialogRef   = useRef<HTMLDivElement>(null)
   const returnFocus = useRef<Element | null>(null)
@@ -36,8 +34,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   useEffect(() => {
     if (isOpen) {
       returnFocus.current = document.activeElement
-      setQuery('')
-      setResults([])
+      setQuery('') // eslint-disable-line react-hooks/set-state-in-effect
       document.body.style.overflow = 'hidden'
       setTimeout(() => inputRef.current?.focus(), 80)
     } else {
@@ -48,17 +45,16 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  useEffect(() => {
+  const results = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) { setResults([]); return }
-    const found = properties.filter((p) =>
+    if (!q) return []
+    return properties.filter((p) =>
       p.title.toLowerCase().includes(q) ||
       p.location.neighbourhood.toLowerCase().includes(q) ||
       p.location.city.toLowerCase().includes(q) ||
       p.type.toLowerCase().includes(q) ||
       p.tagline.toLowerCase().includes(q)
     )
-    setResults(found)
   }, [query])
 
   const handleKey = useCallback((e: KeyboardEvent) => {
@@ -160,7 +156,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
               <div style={{ overflowY: 'auto', backgroundColor: 'var(--color-surface-primary)' }}>
                 {query.trim() && results.length === 0 && (
                   <div style={{ padding: '2rem 1.5rem', color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
-                    No properties found for "{query}"
+                    No properties found for &quot;{query}&quot;
                   </div>
                 )}
 

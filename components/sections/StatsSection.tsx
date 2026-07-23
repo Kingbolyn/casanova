@@ -4,8 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
-import { Heading, Label, Caption } from '@/components/ui/Typography'
-import { Divider } from '@/components/ui/Divider'
+import { Label, Caption } from '@/components/ui/Typography'
 
 const stats = [
   { value: '340+',  label: 'Properties Placed',    note: 'across 12 cities'       },
