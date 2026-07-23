@@ -85,7 +85,7 @@ function HeroSection() {
           <motion.h1
             className="font-display font-light mb-8"
             style={{
-              fontSize: 'clamp(2.8rem, 6vw, 6.5rem)',
+              fontSize: 'var(--type-h1-hero)',
               lineHeight: '1.02',
               letterSpacing: 'var(--tracking-tight)',
               color: 'var(--color-text-inverse)',

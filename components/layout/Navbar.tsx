@@ -81,8 +81,10 @@ function Navbar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="relative font-body font-medium tracking-widest uppercase text-[11px] transition-colors"
+                      className="relative inline-block font-body font-medium tracking-widest uppercase text-[11px] transition-colors"
                       style={{
+                        paddingTop: '5px',
+                        paddingBottom: '5px',
                         color: isHome && !scrolled
                           ? active ? 'var(--color-text-inverse)' : 'rgba(255,255,255,0.85)'
                           : active ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',

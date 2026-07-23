@@ -219,6 +219,8 @@ a, button, [role="button"], input, select, textarea, label {
   font-size: var(--type-small);
   color: rgba(255,255,255,0.6);
   transition: color var(--dur-micro) var(--ease-standard);
+  display: inline-block;
+  padding-block: 3px;
 }
 .footer-link-nav:hover { color: rgba(255,255,255,1); }
 
@@ -226,6 +228,8 @@ a, button, [role="button"], input, select, textarea, label {
   font-size: var(--type-caption);
   color: rgba(255,255,255,0.55);
   transition: color var(--dur-micro) var(--ease-standard);
+  display: inline-block;
+  padding-block: 4px;
 }
 .footer-link-legal:hover { color: rgba(255,255,255,0.7); }
 
