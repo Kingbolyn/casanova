@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { DualRangeSlider } from '@/components/ui/DualRangeSlider'
 import type { PropertyType, PropertyStatus } from '@/lib/types'
 
@@ -144,7 +144,7 @@ function NeighbourhoodSelect({
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -229,7 +229,7 @@ function NeighbourhoodSelect({
                 </button>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
@@ -287,7 +287,7 @@ function PricePanel({
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -312,7 +312,7 @@ function PricePanel({
               onChange={([lo, hi]) => onChange(lo, hi)}
               format={(v) => `$${(v / 1000000).toFixed(1)}M`}
             />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
@@ -537,7 +537,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
       {/* Active filter chips */}
       <AnimatePresence>
         {activeChips.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -545,7 +545,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
             className="flex flex-wrap gap-2 pt-4 overflow-hidden"
           >
             {activeChips.map((chip) => (
-              <motion.span
+              <m.span
                 key={chip.label}
                 layout
                 initial={{ opacity: 0, scale: 0.92 }}
@@ -570,9 +570,9 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
                 >
                   ×
                 </button>
-              </motion.span>
+              </m.span>
             ))}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

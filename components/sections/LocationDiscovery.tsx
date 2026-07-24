@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Label } from '@/components/ui/Typography'
 import { neighbourhoods } from '@/lib/data/neighbourhoods'
 
@@ -28,7 +28,7 @@ export function LocationDiscovery({ activeNeighbourhood, propertyCounts, onSelec
           if (count === 0) return null
 
           return (
-            <motion.button
+            <m.button
               key={n.slug}
               type="button"
               onClick={() => onSelect(active ? 'all' : n.name)}
@@ -138,7 +138,7 @@ export function LocationDiscovery({ activeNeighbourhood, propertyCounts, onSelec
                   </p>
                 </div>
               </div>
-            </motion.button>
+            </m.button>
           )
         })}
       </div>

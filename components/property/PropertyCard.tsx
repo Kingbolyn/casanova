@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Badge } from '@/components/ui/Badge'
 import { Label, Caption } from '@/components/ui/Typography'
 import { cn } from '@/lib/utils/cn'
@@ -68,7 +68,7 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
 
   return (
     <Link href={`/property/${slug}`} className={cn('block', className)}>
-      <motion.article
+      <m.article
         initial="rest"
         whileHover="hover"
         animate="rest"
@@ -80,7 +80,7 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
           style={{ aspectRatio: '4 / 3' }}
         >
           {/* Parallax zoom on hover */}
-          <motion.div
+          <m.div
             className="absolute inset-0"
             style={{ position: 'absolute' }}
             variants={image}
@@ -93,10 +93,10 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
               className="object-cover"
               priority={priority}
             />
-          </motion.div>
+          </m.div>
 
           {/* Dark overlay — reveals on hover */}
-          <motion.div
+          <m.div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }}
             variants={overlay}
@@ -110,7 +110,7 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
           </div>
 
           {/* Price + location — slides up on hover */}
-          <motion.div
+          <m.div
             className="absolute bottom-0 left-0 right-0 p-5"
             style={{ zIndex: 2 }}
             variants={price}
@@ -136,12 +136,12 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
             >
               {location.neighbourhood}, {location.city}
             </p>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* ── Info ── */}
         <div className="mt-5 space-y-2">
-          <motion.h3
+          <m.h3
             className="font-display font-light leading-snug"
             style={{
               fontSize: 'var(--type-h5)',
@@ -150,7 +150,7 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
             variants={title}
           >
             {name}
-          </motion.h3>
+          </m.h3>
 
           <Caption color="tertiary">
             {location.neighbourhood}, {location.city}
@@ -180,7 +180,7 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
             </Label>
           </div>
         </div>
-      </motion.article>
+      </m.article>
     </Link>
   )
 }

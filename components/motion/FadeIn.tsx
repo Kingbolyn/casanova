@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { m, useReducedMotion, type Variants } from 'framer-motion'
 import { DUR, EASE } from '@/lib/motion'
 
 type FadeInDirection = 'up' | 'down' | 'left' | 'right' | 'none'
@@ -50,7 +50,7 @@ function FadeIn({
       }
 
   return (
-    <motion.div
+    <m.div
       className={className}
       initial="hidden"
       whileInView="visible"
@@ -58,7 +58,7 @@ function FadeIn({
       variants={variants}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 

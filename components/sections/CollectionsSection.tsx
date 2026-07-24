@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label, Caption } from '@/components/ui/Typography'
@@ -37,7 +37,7 @@ function CollectionsSection() {
                       className="relative overflow-hidden rounded-[--radius-lg] mb-6"
                       style={{ aspectRatio: '3 / 4' }}
                     >
-                      <motion.div
+                      <m.div
                         className="absolute inset-0"
                         style={{ position: 'absolute' }}
                         whileHover={{ scale: 1.05 }}
@@ -50,7 +50,7 @@ function CollectionsSection() {
                           sizes="(max-width: 768px) 100vw, 33vw"
                           className="object-cover"
                         />
-                      </motion.div>
+                      </m.div>
 
                       {/* Gradient overlay */}
                       <div

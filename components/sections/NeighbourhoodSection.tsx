@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label, Caption } from '@/components/ui/Typography'
@@ -63,7 +63,7 @@ function NeighbourhoodSection() {
                       className="relative overflow-hidden rounded-[--radius-lg] mb-5"
                       style={{ aspectRatio: '4 / 3' }}
                     >
-                      <motion.div
+                      <m.div
                         className="absolute inset-0"
                         style={{ position: 'absolute' }}
                         whileHover={{ scale: 1.04 }}
@@ -76,7 +76,7 @@ function NeighbourhoodSection() {
                           sizes="(max-width: 768px) 100vw, 33vw"
                           className="object-cover"
                         />
-                      </motion.div>
+                      </m.div>
                       <div
                         className="absolute inset-0"
                         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 50%)' }}

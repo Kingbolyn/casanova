@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { useNavScroll } from '@/lib/hooks/useNavScroll'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 import { useLockBodyScroll } from '@/lib/hooks/useLockBodyScroll'
@@ -95,7 +95,7 @@ function Navbar() {
                     >
                       {item.label}
                       {active && (
-                        <motion.span
+                        <m.span
                           layoutId="nav-underline"
                           className="absolute -bottom-1 left-0 right-0 h-px"
                           style={{ backgroundColor: 'var(--color-accent-base)' }}
@@ -157,7 +157,7 @@ function Navbar() {
               aria-controls="mobile-menu"
             >
               {[0, 1, 2].map((i) => (
-                <motion.span
+                <m.span
                   key={i}
                   className="block w-6 h-px origin-center"
                   style={{ backgroundColor: isHome && !scrolled ? 'var(--color-text-inverse)' : 'var(--color-text-primary)' }}
@@ -180,7 +180,7 @@ function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <>
-            <motion.div
+            <m.div
               className="fixed inset-0 md:hidden"
               style={{ backgroundColor: 'var(--color-overlay-dark)', zIndex: 'calc(var(--z-nav) - 1)' }}
               initial={{ opacity: 0 }}
@@ -191,7 +191,7 @@ function Navbar() {
               aria-hidden="true"
             />
 
-            <motion.div
+            <m.div
               ref={mobileMenuRef}
               id="mobile-menu"
               className="fixed top-0 right-0 bottom-0 w-[300px] md:hidden flex flex-col"
@@ -212,7 +212,7 @@ function Navbar() {
                 {primaryNav.map((item, i) => {
                   const active = pathname.startsWith(item.href)
                   return (
-                    <motion.div
+                    <m.div
                       key={item.href}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -231,7 +231,7 @@ function Navbar() {
                       >
                         {item.label}
                       </Link>
-                    </motion.div>
+                    </m.div>
                   )
                 })}
               </nav>
@@ -246,7 +246,7 @@ function Navbar() {
                   Book a Viewing
                 </Button>
               </div>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils/cn'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
@@ -56,7 +56,7 @@ function Modal({
       {open && (
         <>
           {/* Overlay */}
-          <motion.div
+          <m.div
             className="fixed inset-0"
             style={{
               backgroundColor: 'var(--color-overlay-dark)',
@@ -78,7 +78,7 @@ function Modal({
             aria-modal="true"
             aria-labelledby={title ? 'modal-title' : undefined}
           >
-            <motion.div
+            <m.div
               className={cn(
                 'relative w-full rounded-[--radius-lg] overflow-hidden',
                 'shadow-[--shadow-6]',
@@ -122,7 +122,7 @@ function Modal({
 
               {/* Body */}
               <div className="p-8">{children}</div>
-            </motion.div>
+            </m.div>
           </div>
         </>
       )}

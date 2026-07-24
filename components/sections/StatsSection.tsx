@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { m, useInView } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Label, Caption } from '@/components/ui/Typography'
@@ -22,7 +22,7 @@ function StatsSection() {
       <Container>
         <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-0)' }}>
           {stats.map((stat, i) => (
-            <motion.div
+            <m.div
               key={stat.label}
               className="flex flex-col items-center text-center px-3 py-6 sm:px-6 sm:py-8 relative"
               initial={{ opacity: 0, y: 24 }}
@@ -57,7 +57,7 @@ function StatsSection() {
               <Caption style={{ color: 'rgba(255,255,255,0.4)' }}>
                 {stat.note}
               </Caption>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </Container>

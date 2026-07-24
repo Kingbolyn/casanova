@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { PropertyGrid } from '@/components/property/PropertyGrid'
@@ -82,7 +82,7 @@ function SearchClient({ properties, initialQuery }: SearchClientProps) {
         <Container width="wide">
           <AnimatePresence mode="wait">
             {results.length === 0 ? (
-              <motion.div
+              <m.div
                 key="empty"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -113,11 +113,11 @@ function SearchClient({ properties, initialQuery }: SearchClientProps) {
                 >
                   Clear search
                 </button>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: DUR.micro }}>
+              <m.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: DUR.micro }}>
                 <PropertyGrid properties={results} columns={3} />
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </Container>

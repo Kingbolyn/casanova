@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { m, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Label } from '@/components/ui/Typography'
@@ -32,11 +32,11 @@ function HeroSection() {
       aria-label="Hero"
     >
       {/* Parallax + ambient drift image */}
-      <motion.div
+      <m.div
         className="absolute inset-0"
         style={{ y: imageY, position: 'absolute' }}
       >
-        <motion.div
+        <m.div
           className="absolute inset-0"
           style={{ willChange: 'transform' }}
           animate={{ x: ['0%', '-1.5%', '0%'] }}
@@ -51,7 +51,7 @@ function HeroSection() {
             sizes="100vw"
             quality={85}
           />
-        </motion.div>
+        </m.div>
 
         {/* Scrim */}
         <div
@@ -59,17 +59,17 @@ function HeroSection() {
           style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.68) 100%)' }}
           aria-hidden="true"
         />
-      </motion.div>
+      </m.div>
 
       {/* Content — fades on scroll */}
-      <motion.div
+      <m.div
         className="relative h-full flex flex-col justify-end"
         style={{ opacity }}
       >
         <div className="container-content pb-20 md:pb-28">
 
           {/* Eyebrow */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...C, delay: 0.45 }}
@@ -79,10 +79,10 @@ function HeroSection() {
             <Label style={{ color: 'rgba(255,255,255,0.65)', letterSpacing: 'var(--tracking-widest)' }}>
               Exceptional Properties
             </Label>
-          </motion.div>
+          </m.div>
 
           {/* Headline */}
-          <motion.h1
+          <m.h1
             className="font-display font-light mb-8"
             style={{
               fontSize: 'var(--type-h1-hero)',
@@ -97,10 +97,10 @@ function HeroSection() {
           >
             Find the home<br />
             <em style={{ fontStyle: 'italic', color: 'var(--color-accent-light)' }}>you imagined.</em>
-          </motion.h1>
+          </m.h1>
 
           {/* Sub */}
-          <motion.p
+          <m.p
             className="font-body mb-12"
             style={{
               fontSize: 'var(--type-body-lg)',
@@ -113,10 +113,10 @@ function HeroSection() {
             transition={{ ...C, delay: 0.85 }}
           >
             Property discovery begins with emotion, not transaction. We help you experience a home before you evaluate it.
-          </motion.p>
+          </m.p>
 
           {/* Actions */}
-          <motion.div
+          <m.div
             className="flex flex-col sm:flex-row gap-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,25 +140,25 @@ function HeroSection() {
                 View Collections
               </Button>
             </Link>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Scroll cue */}
-        <motion.div
+        <m.div
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: DUR.large, delay: 1.5, ease: EASE.entrance }}
           aria-hidden="true"
         >
-          <motion.span
+          <m.span
             className="block"
             style={{ width: '1px', height: '48px', backgroundColor: 'rgba(255,255,255,0.3)' }}
             animate={{ scaleY: [1, 0.3, 1], opacity: [0.3, 1, 0.3] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   )
 }

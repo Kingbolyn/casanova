@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 
@@ -66,7 +66,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
 
         <AnimatePresence mode="wait">
           {state === 'success' ? (
-            <motion.div
+            <m.div
               key="success"
               role="status"
               aria-live="polite"
@@ -84,9 +84,9 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
               <Body size="sm" color="secondary">
                 We&apos;ll be in touch within 24 hours to arrange a viewing.
               </Body>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.form
+            <m.form
               key="form"
               onSubmit={handleSubmit}
               className="flex flex-col gap-4"
@@ -184,7 +184,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-subtle)', textAlign: 'center', lineHeight: 1.5 }}>
                 By submitting you agree to our privacy policy. We will not share your details with third parties.
               </p>
-            </motion.form>
+            </m.form>
           )}
         </AnimatePresence>
       </div>

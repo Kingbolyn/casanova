@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { properties } from '@/lib/data/properties'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
@@ -69,7 +69,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <m.div
           className="fixed inset-0"
           style={{ zIndex: 'var(--z-modal)' }}
           initial={{ opacity: 0 }}
@@ -78,7 +78,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           transition={{ duration: 0.2 }}
         >
           {/* Backdrop */}
-          <motion.div
+          <m.div
             className="absolute inset-0"
             style={{ backgroundColor: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(8px)' }}
             onClick={onClose}
@@ -88,7 +88,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           />
 
           {/* Panel — dialog container */}
-          <motion.div
+          <m.div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
@@ -198,8 +198,8 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 )}
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

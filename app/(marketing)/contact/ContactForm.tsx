@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { Button } from '@/components/ui/Button'
@@ -22,7 +22,7 @@ export function ContactForm() {
   return (
     <AnimatePresence mode="wait">
       {status === 'success' ? (
-        <motion.div
+        <m.div
           key="success"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,9 +53,9 @@ export function ContactForm() {
           <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', maxWidth: '40ch', lineHeight: 1.7 }}>
             We&apos;ll be in touch within 24 hours.
           </p>
-        </motion.div>
+        </m.div>
       ) : (
-        <motion.form
+        <m.form
           key="form"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -91,7 +91,7 @@ export function ContactForm() {
           <p style={{ fontSize: 'var(--type-caption)', color: 'var(--color-text-muted)', marginTop: '1rem', lineHeight: 'var(--leading-normal)' }}>
             We typically respond within 24 hours. Your details are kept strictly private.
           </p>
-        </motion.form>
+        </m.form>
       )}
     </AnimatePresence>
   )

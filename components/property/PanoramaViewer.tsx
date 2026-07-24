@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { DUR, EASE } from '@/lib/motion'
 import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
@@ -138,7 +138,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
   }, [url])
 
   return (
-    <motion.div
+    <m.div
       ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -151,7 +151,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       aria-label={`360° immersive view of ${title}`}
     >
       {/* Threshold veil — fades out after entry */}
-      <motion.div
+      <m.div
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundColor: '#000', zIndex: 10 }}
         initial={{ opacity: 1 }}
@@ -169,7 +169,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       />
 
       {/* UI overlay */}
-      <motion.div
+      <m.div
         className="absolute inset-0 pointer-events-none"
         style={{ zIndex: 20 }}
         initial={{ opacity: 0 }}
@@ -239,7 +239,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
           style={{ transform: 'translateX(-50%)', width: '32px', height: '1px', backgroundColor: 'var(--color-accent-base)', opacity: 0.5 }}
           aria-hidden="true"
         />
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Label, Caption } from '@/components/ui/Typography'
@@ -27,7 +27,7 @@ function TestimonialsSection() {
         {/* Quote */}
         <div className="relative text-center" style={{ minHeight: '200px' }}>
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={current.id}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ function TestimonialsSection() {
                   <Caption color="secondary">{current.role}</Caption>
                 </footer>
               </blockquote>
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
 

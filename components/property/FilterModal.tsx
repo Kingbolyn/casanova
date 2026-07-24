@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { PropertyFilters, type FilterState } from './PropertyFilters'
 
 interface FilterModalProps {
@@ -34,7 +34,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
       {open && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             className="fixed inset-0"
             style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 150 }}
             initial={{ opacity: 0 }}
@@ -46,7 +46,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
           />
 
           {/* Panel — slides up from bottom */}
-          <motion.div
+          <m.div
             className="fixed bottom-0 left-0 right-0"
             style={{
               zIndex:          151,
@@ -147,7 +147,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
                 VIEW {total} {total === 1 ? 'RESIDENCE' : 'RESIDENCES'}
               </button>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

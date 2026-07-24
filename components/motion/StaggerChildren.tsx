@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { m, useReducedMotion, type Variants } from 'framer-motion'
 import { DUR, EASE } from '@/lib/motion'
 
 interface StaggerChildrenProps {
@@ -40,7 +40,7 @@ function StaggerChildren({
   const prefersReduced = useReducedMotion()
 
   return (
-    <motion.div
+    <m.div
       className={className}
       initial="hidden"
       whileInView="visible"
@@ -50,7 +50,7 @@ function StaggerChildren({
       transition={{ delayChildren: prefersReduced ? 0 : delay }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -64,9 +64,9 @@ function StaggerItem({
 }) {
   const prefersReduced = useReducedMotion()
   return (
-    <motion.div className={className} variants={prefersReduced ? itemVariantsReduced : itemVariants}>
+    <m.div className={className} variants={prefersReduced ? itemVariantsReduced : itemVariants}>
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 

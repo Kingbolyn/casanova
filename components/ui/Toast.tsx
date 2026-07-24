@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -94,7 +94,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
       >
         <AnimatePresence initial={false}>
           {toasts.map((t) => (
-            <motion.div
+            <m.div
               key={t.id}
               role="alert"
               initial={{ opacity: 0, y: 12, scale: 0.97 }}
@@ -147,7 +147,7 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
                   </svg>
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

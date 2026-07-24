@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { m, useScroll, useTransform } from 'framer-motion'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import { FadeIn } from '@/components/motion/FadeIn'
@@ -15,7 +15,7 @@ function ImmersiveMedia() {
   return (
     <section ref={ref} className="relative overflow-hidden" style={{ minHeight: '80vh' }} id="immersive">
       {/* Full-bleed parallax image */}
-      <motion.div className="absolute inset-0" style={{ y: imageY, position: 'absolute' }}>
+      <m.div className="absolute inset-0" style={{ y: imageY, position: 'absolute' }}>
         <Image
           src="https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?w=2000&q=80"
           alt="Immersive interior view of an exceptional property"
@@ -27,7 +27,7 @@ function ImmersiveMedia() {
           className="absolute inset-0"
           style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.2) 100%)' }}
         />
-      </motion.div>
+      </m.div>
 
       {/* Content */}
       <div className="relative h-full flex items-center" style={{ minHeight: '80vh' }}>

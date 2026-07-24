@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { PropertyCard } from '@/components/property/PropertyCard'
 import type { Property } from '@/lib/types'
 import { DUR, EASE } from '@/lib/motion'
@@ -17,7 +17,7 @@ function PropertyGrid({ properties, columns = 3 }: PropertyGridProps) {
 
   if (properties.length === 0) {
     return (
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: DUR.standard, ease: EASE.entrance }}
@@ -29,15 +29,15 @@ function PropertyGrid({ properties, columns = 3 }: PropertyGridProps) {
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)', letterSpacing: 'var(--tracking-wide)' }}>
           Check back soon as new residences are added to this collection.
         </p>
-      </motion.div>
+      </m.div>
     )
   }
 
   return (
-    <motion.div layout className={`grid ${gridCols} gap-8`}>
+    <m.div layout className={`grid ${gridCols} gap-8`}>
       <AnimatePresence mode="popLayout">
         {properties.map((property, i) => (
-          <motion.div
+          <m.div
             key={property.id}
             layout
             initial={{ opacity: 0, y: 16 }}
@@ -51,10 +51,10 @@ function PropertyGrid({ properties, columns = 3 }: PropertyGridProps) {
             }}
           >
             <PropertyCard property={property} priority={i < 3} />
-          </motion.div>
+          </m.div>
         ))}
       </AnimatePresence>
-    </motion.div>
+    </m.div>
   )
 }
 

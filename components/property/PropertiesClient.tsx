@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
@@ -143,7 +143,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
           </FadeIn>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {collections.map((col, i) => (
-              <motion.div
+              <m.div
                 key={col.id}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -190,7 +190,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                     </div>
                   )}
                 </button>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </Container>
@@ -285,7 +285,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
           {/* Conversational summary */}
           <AnimatePresence mode="wait">
             {summary && (
-              <motion.p
+              <m.p
                 key={summary}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -302,14 +302,14 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 }}
               >
                 {summary}
-              </motion.p>
+              </m.p>
             )}
           </AnimatePresence>
 
           {/* Results */}
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
-              <motion.div
+              <m.div
                 key="empty"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -347,9 +347,9 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 >
                   CLEAR ALL FILTERS
                 </button>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="results"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -358,7 +358,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 className="mt-8"
               >
                 <PropertyGrid properties={filtered} />
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </Container>

@@ -4,6 +4,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { SkipToContent } from '@/components/layout/SkipToContent'
 import { ToastProvider } from '@/components/ui/Toast'
+import { MotionProvider } from '@/components/motion/MotionProvider'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { organizationSchema, websiteSchema, BASE_URL } from '@/lib/seo'
 import './globals.css'
@@ -87,6 +88,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
+        <MotionProvider>
         <ToastProvider>
           <JsonLd data={organizationSchema} />
           <JsonLd data={websiteSchema} />
@@ -95,6 +97,7 @@ export default function RootLayout({
           <main id="main-content">{children}</main>
           <Footer />
         </ToastProvider>
+        </MotionProvider>
       </body>
     </html>
   )

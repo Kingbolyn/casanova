@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import type { Collection } from '@/lib/types'
 
@@ -17,13 +17,13 @@ function CollectionCard({ collection, propertyCount, variant = 'default' }: Coll
 
   return (
     <Link href={`/collections/${collection.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <motion.article
+      <m.article
         className="group relative overflow-hidden"
         style={{ aspectRatio: isFeatured ? '16/9' : '3/4', backgroundColor: 'var(--color-surface-secondary)' }}
         whileHover="hover"
       >
         {/* Image */}
-        <motion.div
+        <m.div
           className="absolute inset-0"
           variants={{ hover: { scale: 1.04 } }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -35,7 +35,7 @@ function CollectionCard({ collection, propertyCount, variant = 'default' }: Coll
             className="object-cover"
             sizes={isFeatured ? '100vw' : '(max-width: 768px) 100vw, 33vw'}
           />
-        </motion.div>
+        </m.div>
 
         {/* Gradient overlay */}
         <div
@@ -60,7 +60,7 @@ function CollectionCard({ collection, propertyCount, variant = 'default' }: Coll
           >
             {collection.name}
           </Heading>
-          <motion.div
+          <m.div
             style={{ overflow: 'hidden' }}
             variants={{ hover: { height: 'auto' } }}
             initial={{ height: 0 }}
@@ -72,17 +72,17 @@ function CollectionCard({ collection, propertyCount, variant = 'default' }: Coll
             >
               {collection.description}
             </Body>
-          </motion.div>
+          </m.div>
 
           {/* Underline reveal */}
-          <motion.div
+          <m.div
             style={{ height: '1px', backgroundColor: 'var(--color-accent-base)', marginTop: '1rem', originX: 0 }}
             variants={{ hover: { scaleX: 1 } }}
             initial={{ scaleX: 0 }}
             transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
         </div>
-      </motion.article>
+      </m.article>
     </Link>
   )
 }

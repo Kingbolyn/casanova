@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 
 const PanoramaViewer = dynamic(
@@ -62,7 +62,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
         onKeyDown={handleKey}
       >
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={active}
             className="absolute inset-0"
             initial={{ opacity: 0 }}
@@ -78,7 +78,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
               sizes="(max-width: 768px) 100vw, 60vw"
               priority={active === 0}
             />
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {/* Navigation arrows */}
@@ -199,7 +199,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
       {/* Lightbox */}
       <AnimatePresence>
         {lightbox && (
-          <motion.div
+          <m.div
             ref={lightboxRef}
             className="fixed inset-0 flex items-center justify-center"
             style={{ zIndex: 'var(--z-modal)', backgroundColor: 'rgba(0,0,0,0.92)' }}
@@ -223,7 +223,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
             </button>
 
             <AnimatePresence mode="wait">
-              <motion.div
+              <m.div
                 key={active}
                 className="relative"
                 style={{ width: '90vw', maxWidth: '1200px', maxHeight: '85vh', aspectRatio: '16/9' }}
@@ -240,7 +240,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                   className="object-contain"
                   sizes="90vw"
                 />
-              </motion.div>
+              </m.div>
             </AnimatePresence>
 
             {images.length > 1 && (
@@ -263,7 +263,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                 </button>
               </>
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
