@@ -88,6 +88,9 @@ export function ContactForm() {
           >
             {status === 'submitting' ? 'Sending…' : 'Send Message'}
           </Button>
+          <p style={{ fontSize: 'var(--type-caption)', color: 'var(--color-text-muted)', marginTop: '1rem', lineHeight: 'var(--leading-normal)' }}>
+            We typically respond within 24 hours. Your details are kept strictly private.
+          </p>
         </motion.form>
       )}
     </AnimatePresence>

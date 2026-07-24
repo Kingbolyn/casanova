@@ -37,6 +37,13 @@ export default function ContactPage() {
           <Heading as={1} size="h1" color="inverse">
             Contact Us
           </Heading>
+          <Body
+            size="lg"
+            className="mt-4"
+            style={{ color: 'rgba(255,255,255,0.55)', maxWidth: '48ch' }}
+          >
+            We respond to every enquiry personally. Tell us what you are looking for and we will connect you with the right advisor.
+          </Body>
         </Container>
       </Section>
 
