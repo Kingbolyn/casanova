@@ -95,7 +95,7 @@ function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...C, delay: 0.65 }}
           >
-            Find the home<br />
+            Find the home{' '}<br />
             <em style={{ fontStyle: 'italic', color: 'var(--color-accent-light)' }}>you imagined.</em>
           </m.h1>
 
