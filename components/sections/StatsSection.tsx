@@ -7,10 +7,10 @@ import { Container } from '@/components/layout/Container'
 import { Label, Caption } from '@/components/ui/Typography'
 
 const stats = [
-  { value: '340+',  label: 'Properties Placed',    note: 'across 12 cities'       },
-  { value: '$2.4B', label: 'Portfolio Value',       note: 'under management'       },
-  { value: '97%',   label: 'Client Satisfaction',  note: 'verified post-placement' },
-  { value: '8 yrs', label: 'Market Experience',    note: 'in premium real estate'  },
+  { value: '340+',  ariaValue: '340 plus',              label: 'Properties Placed',    note: 'across 12 cities'       },
+  { value: '$2.4B', ariaValue: '2.4 billion dollars',   label: 'Portfolio Value',       note: 'under management'       },
+  { value: '97%',   ariaValue: '97 percent',            label: 'Client Satisfaction',  note: 'verified post-placement' },
+  { value: '8 yrs', ariaValue: '8 years',               label: 'Market Experience',    note: 'in premium real estate'  },
 ]
 
 function StatsSection() {
@@ -20,10 +20,11 @@ function StatsSection() {
   return (
     <Section spacing="xl" bg="primary" id="stats">
       <Container>
-        <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-0)' }}>
+        <div ref={ref} role="list" className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-0)' }}>
           {stats.map((stat, i) => (
             <m.div
               key={stat.label}
+              role="listitem"
               className="flex flex-col items-center text-center px-3 py-6 sm:px-6 sm:py-8 relative"
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -32,12 +33,14 @@ function StatsSection() {
               {/* Vertical divider between items */}
               {i > 0 && (
                 <span
+                  aria-hidden="true"
                   className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2"
                   style={{ width: '1px', height: '60px', backgroundColor: 'rgba(255,255,255,0.1)' }}
                 />
               )}
 
               <p
+                aria-label={stat.ariaValue}
                 className="font-display font-light mb-2"
                 style={{
                   fontSize: 'clamp(2.5rem, 4vw, 4rem)',
