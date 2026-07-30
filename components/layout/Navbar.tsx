@@ -34,6 +34,7 @@ function Navbar() {
     }
   }, [mobileOpen])
 
+
   const isHome = pathname === '/'
 
   return (
@@ -45,7 +46,7 @@ function Navbar() {
         )}
         style={{
           zIndex: 'var(--z-nav)',
-          transform: hidden ? 'translateY(-100%)' : 'translateY(0)',
+          transform: (hidden && !mobileOpen) ? 'translateY(-100%)' : 'translateY(0)',
           transition: `
             transform    var(--dur-standard) var(--ease-standard),
             background   var(--dur-standard) var(--ease-standard),
@@ -176,79 +177,226 @@ function Navbar() {
         </div>
       </header>
 
+      {/* Mobile backdrop */}
+      <AnimatePresence>
+        {mobileOpen ? (
+          <m.div
+            key="mobile-backdrop"
+            className="fixed inset-0 md:hidden"
+            style={{ backgroundColor: 'rgba(10,10,10,0.55)', zIndex: 'calc(var(--z-nav) - 1)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+        ) : null}
+      </AnimatePresence>
+
       {/* Mobile drawer */}
       <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <m.div
-              className="fixed inset-0 md:hidden"
-              style={{ backgroundColor: 'var(--color-overlay-dark)', zIndex: 'calc(var(--z-nav) - 1)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setMobileOpen(false)}
-              aria-hidden="true"
-            />
+        {mobileOpen ? (
+          <m.div
+            key="mobile-drawer"
+            ref={mobileMenuRef}
+            id="mobile-menu"
+            className="fixed top-0 right-0 bottom-0 md:hidden flex flex-col overflow-y-auto"
+            style={{
+              width: 'min(90vw, 420px)',
+              backgroundColor: '#F7F4EF',
+              zIndex: 'var(--z-nav)',
+            }}
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            role="dialog"
+            aria-label="Mobile navigation"
+            aria-modal="true"
+          >
+              {/* Close button */}
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="absolute top-5 right-5 flex items-center justify-center"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  color: 'var(--color-text-muted)',
+                  zIndex: 10,
+                }}
+                aria-label="Close menu"
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
 
-            <m.div
-              ref={mobileMenuRef}
-              id="mobile-menu"
-              className="fixed top-0 right-0 bottom-0 w-[300px] md:hidden flex flex-col"
-              style={{
-                backgroundColor: 'var(--color-surface-white)',
-                zIndex: 'var(--z-nav)',
-                paddingTop: '100px',
-              }}
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              role="dialog"
-              aria-label="Mobile navigation"
-              aria-modal="true"
-            >
-              <nav className="flex flex-col px-8 gap-1">
-                {primaryNav.map((item, i) => {
-                  const active = pathname.startsWith(item.href)
-                  return (
-                    <m.div
-                      key={item.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.04 * i, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <Link
-                        href={item.href}
-                        className="block py-4 font-display font-light border-b"
-                        style={{
-                          fontSize: 'var(--type-h5)',
-                          borderColor: 'var(--color-border-subtle)',
-                          color: active ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
-                        }}
-                        onClick={() => setMobileOpen(false)}
-                        aria-current={active ? 'page' : undefined}
+              {/* ── Header ── */}
+              <m.div
+                style={{ padding: '56px 32px 36px' }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '22px',
+                    fontWeight: 300,
+                    letterSpacing: '-0.01em',
+                    color: 'var(--color-text-primary)',
+                    lineHeight: 1,
+                  }}
+                >
+                  CasaNova
+                </div>
+                <div
+                  style={{
+                    fontSize: '10px',
+                    letterSpacing: '0.18em',
+                    color: 'var(--color-text-muted)',
+                    marginTop: '8px',
+                    fontWeight: 500,
+                    lineHeight: 1.8,
+                  }}
+                >
+                  LUXURY REAL ESTATE<br />
+                  LAGOS · ABUJA
+                </div>
+              </m.div>
+
+              {/* ── Navigation ── */}
+              <nav aria-label="Mobile navigation links" style={{ flex: 1 }}>
+                <div style={{ borderTop: '1px solid var(--color-border-subtle)' }}>
+                  {primaryNav.map((item, i) => {
+                    const active = pathname.startsWith(item.href)
+                    return (
+                      <m.div
+                        key={item.href}
+                        style={{ position: 'relative' }}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.18 + 0.06 * i, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                       >
-                        {item.label}
-                      </Link>
-                    </m.div>
-                  )
-                })}
+                        {/* Active indicator */}
+                        {active && (
+                          <m.span
+                            layoutId="mobile-nav-bar"
+                            style={{
+                              position: 'absolute',
+                              left: 0,
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              width: '2px',
+                              height: '28px',
+                              backgroundColor: 'var(--color-accent-base)',
+                            }}
+                            transition={{ duration: 0.2 }}
+                          />
+                        )}
+                        <Link
+                          href={item.href}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '0 32px',
+                            minHeight: '76px',
+                            fontFamily: 'var(--font-display)',
+                            fontSize: '2.125rem',
+                            fontWeight: 300,
+                            lineHeight: 1,
+                            color: active ? 'var(--color-text-primary)' : 'var(--color-text-tertiary)',
+                            textDecoration: 'none',
+                            borderBottom: '1px solid var(--color-border-subtle)',
+                            transition: 'color 0.2s',
+                          }}
+                          onClick={() => setMobileOpen(false)}
+                          aria-current={active ? 'page' : undefined}
+                        >
+                          {item.label}
+                        </Link>
+                      </m.div>
+                    )
+                  })}
+                </div>
               </nav>
 
-              <div className="mt-auto px-8 pb-12">
-                <Button
-                  variant="primary"
-                  size="md"
-                  className="w-full"
+              {/* ── CTA ── */}
+              <m.div
+                style={{ padding: '32px 32px 0' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.18 + 0.06 * primaryNav.length, duration: 0.35 }}
+              >
+                <button
                   onClick={() => { router.push('/contact'); setMobileOpen(false) }}
+                  style={{
+                    width: '100%',
+                    padding: '17px 24px',
+                    backgroundColor: 'var(--color-text-primary)',
+                    color: 'var(--color-text-inverse)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.18em',
+                    transition: 'background 0.2s',
+                  }}
                 >
-                  Book a Viewing
-                </Button>
-              </div>
-            </m.div>
-          </>
-        )}
+                  BOOK A VIEWING
+                </button>
+              </m.div>
+
+              {/* ── Footer ── */}
+              <m.div
+                style={{ padding: '28px 32px 44px' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.18 + 0.06 * primaryNav.length + 0.1, duration: 0.35 }}
+              >
+                <div
+                  style={{
+                    fontSize: '10px',
+                    letterSpacing: '0.08em',
+                    color: 'var(--color-text-muted)',
+                    lineHeight: 2.2,
+                  }}
+                >
+                  <div>hello@casanova.ng</div>
+                  <div>+234 (0) 800 123 4567</div>
+                </div>
+                <div style={{ display: 'flex', gap: '16px', marginTop: '18px' }}>
+                  <a
+                    href="#"
+                    aria-label="CasaNova on Instagram"
+                    style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="2" y="2" width="20" height="20" rx="5" />
+                      <circle cx="12" cy="12" r="4" />
+                      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                    </svg>
+                  </a>
+                  <a
+                    href="#"
+                    aria-label="CasaNova on LinkedIn"
+                    style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="2" y="2" width="20" height="20" rx="3" />
+                      <path d="M7 10v7M7 7.01V7M11 17v-4c0-1.5 1-3 3-3s3 1.5 3 3v4M11 10v7" />
+                    </svg>
+                  </a>
+                </div>
+              </m.div>
+
+          </m.div>
+        ) : null}
       </AnimatePresence>
 
       {/* Search overlay */}
