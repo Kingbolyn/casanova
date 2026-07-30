@@ -6,6 +6,7 @@ import { SkipToContent } from '@/components/layout/SkipToContent'
 import { ToastProvider } from '@/components/ui/Toast'
 import { MotionProvider } from '@/components/motion/MotionProvider'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { CookieConsent } from '@/components/ui/CookieConsent'
 import { organizationSchema, websiteSchema, BASE_URL } from '@/lib/seo'
 import './globals.css'
 
@@ -96,6 +97,7 @@ export default function RootLayout({
           <Navbar />
           <main id="main-content">{children}</main>
           <Footer />
+          <CookieConsent />
         </ToastProvider>
         </MotionProvider>
       </body>
