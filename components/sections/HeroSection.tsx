@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
@@ -23,7 +23,7 @@ function HeroSection() {
   const imageY  = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0])
 
-  /* Ambient drift — very slow horizontal translate on the image */
+  /* Ambient drift - very slow horizontal translate on the image */
   return (
     <section
       ref={ref}
@@ -61,7 +61,7 @@ function HeroSection() {
         />
       </m.div>
 
-      {/* Content — fades on scroll */}
+      {/* Content - fades on scroll */}
       <m.div
         className="relative h-full flex flex-col justify-end"
         style={{ opacity }}

@@ -1,15 +1,15 @@
-/* ============================================================
-   CasaNova — Motion System Constants (IB-007)
+﻿/* ============================================================
+   CasaNova - Motion System Constants (IB-007)
    Single source of truth for all animation values.
    ============================================================ */
 
 /* ─── Duration (seconds, for Framer Motion) ─────────────── */
 export const DUR = {
-  instant:   0.12,   /* 120ms — input focus, button press, selection */
-  micro:     0.2,    /* 200ms — hover states, overlays, micro interactions */
-  standard:  0.35,   /* 350ms — cards, navigation, content, filters (default) */
-  large:     0.6,    /* 600ms — section reveals, gallery transitions */
-  cinematic: 0.9,    /* 900ms — hero, page transitions, panorama entry */
+  instant:   0.12,   /* 120ms - input focus, button press, selection */
+  micro:     0.2,    /* 200ms - hover states, overlays, micro interactions */
+  standard:  0.35,   /* 350ms - cards, navigation, content, filters (default) */
+  large:     0.6,    /* 600ms - section reveals, gallery transitions */
+  cinematic: 0.9,    /* 900ms - hero, page transitions, panorama entry */
 } as const
 
 /* ─── Easing (Framer Motion array syntax) ───────────────── */

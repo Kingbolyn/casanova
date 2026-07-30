@@ -142,7 +142,7 @@ export default async function PropertyPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Body — two column */}
+      {/* Body - two column */}
       <Section spacing="lg" bg="default">
         <Container width="wide">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 xl:gap-16">
@@ -286,7 +286,7 @@ export default async function PropertyPage({ params }: Props) {
               </FadeIn>
             </div>
 
-            {/* Right column — sticky enquiry */}
+            {/* Right column - sticky enquiry */}
             <div>
               <FadeIn direction="up" delay={0.2}>
                 <EnquiryForm

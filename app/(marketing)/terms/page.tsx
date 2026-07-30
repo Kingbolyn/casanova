@@ -85,7 +85,7 @@ export default function TermsPage() {
 
             <LegalSection title="4. Intellectual property">
               <p>
-                All content on the Platform — including photography, copy, design, and code — is the
+                All content on the Platform (including photography, copy, design, and code) is the
                 property of CasaNova or its licensors. You may not reproduce, distribute, or create
                 derivative works without express written consent.
               </p>

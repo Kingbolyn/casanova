@@ -60,15 +60,15 @@ export default function PrivacyPage() {
               <p>We collect information in three ways:</p>
               <ul>
                 <li>
-                  <strong>Information you provide directly</strong> — name, email address, phone number,
+                  <strong>Information you provide directly:</strong> name, email address, phone number,
                   and message content when you submit an enquiry or contact form.
                 </li>
                 <li>
-                  <strong>Information collected automatically</strong> — pages visited, time on site,
+                  <strong>Information collected automatically:</strong> pages visited, time on site,
                   referring URL, browser type, and device type via analytics tools (Google Analytics 4).
                 </li>
                 <li>
-                  <strong>Cookies</strong> — see our{' '}
+                  <strong>Cookies:</strong> see our{' '}
                   <a href="/cookies" style={{ color: 'var(--color-accent-base)' }}>Cookie Policy</a>{' '}
                   for full details on what we set and why.
                 </li>
@@ -106,9 +106,9 @@ export default function PrivacyPage() {
             <LegalSection title="6. Third-party services">
               <p>We use the following third-party services that may process data on your behalf:</p>
               <ul>
-                <li><strong>Vercel</strong> — hosting and edge infrastructure (USA)</li>
-                <li><strong>Google Analytics 4</strong> — anonymised usage analytics (USA)</li>
-                <li><strong>Resend</strong> — transactional email delivery (USA)</li>
+                <li><strong>Vercel:</strong> hosting and edge infrastructure (USA)</li>
+                <li><strong>Google Analytics 4:</strong> anonymised usage analytics (USA)</li>
+                <li><strong>Resend:</strong> transactional email delivery (USA)</li>
               </ul>
               <p>
                 Each of these providers maintains their own privacy policies and data processing agreements.

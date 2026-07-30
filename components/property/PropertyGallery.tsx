@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
@@ -298,7 +298,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
               <CloseIcon />
             </button>
 
-            {/* Image container — arrows anchored inside, swipe gestures here */}
+            {/* Image container - arrows anchored inside, swipe gestures here */}
             <AnimatePresence mode="wait">
               <m.div
                 key={active}
@@ -326,7 +326,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                   priority
                 />
 
-                {/* Prev arrow — anchored inside the image container */}
+                {/* Prev arrow - anchored inside the image container */}
                 {images.length > 1 && (
                   <button
                     onClick={(e) => { e.stopPropagation(); prev() }}
@@ -338,7 +338,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                   </button>
                 )}
 
-                {/* Next arrow — anchored inside the image container */}
+                {/* Next arrow - anchored inside the image container */}
                 {images.length > 1 && (
                   <button
                     onClick={(e) => { e.stopPropagation(); next() }}
@@ -352,7 +352,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
               </m.div>
             </AnimatePresence>
 
-            {/* Counter + thumbnails — beneath the image */}
+            {/* Counter + thumbnails - beneath the image */}
             <m.div
               className="flex flex-col items-center"
               style={{ gap: '0.875rem', marginTop: '1.125rem', zIndex: 10 }}

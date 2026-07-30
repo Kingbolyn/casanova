@@ -1,6 +1,6 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
-/* Design tokens — raw CSS custom properties (full naming system) */
+/* Design tokens - raw CSS custom properties (full naming system) */
 @import "../styles/tokens.css";
 
 /* ─── Tailwind v4 Theme ──────────────────────────────────────────────────────
@@ -11,7 +11,7 @@
 
 @theme {
 
-  /* Breakpoints — 7-tier system (xs → 5xl) */
+  /* Breakpoints - 7-tier system (xs → 5xl) */
   --breakpoint-xs:   320px;
   --breakpoint-sm:   480px;
   --breakpoint-md:   768px;
@@ -27,37 +27,37 @@
   --font-body:    var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Colors — primary */
+  /* Colors - primary */
   --color-primary:       var(--color-primary-base);
   --color-primary-light: var(--color-primary-light);
   --color-primary-dark:  var(--color-primary-dark);
 
-  /* Colors — surface */
+  /* Colors - surface */
   --color-white:          var(--color-surface-white);
   --color-off-white:      var(--color-surface-off-white);
   --color-surface:        var(--color-surface-light);
   --color-surface-muted:  var(--color-surface-muted);
 
-  /* Colors — accent */
+  /* Colors - accent */
   --color-accent:        var(--color-accent-base);
   --color-accent-light:  var(--color-accent-light);
   --color-accent-dark:   var(--color-accent-dark);
   --color-accent-subtle: var(--color-accent-subtle);
 
-  /* Colors — text */
+  /* Colors - text */
   --color-text:          var(--color-text-primary);
   --color-text-sub:      var(--color-text-secondary);
   --color-text-muted:    var(--color-text-tertiary);
   --color-text-disabled: var(--color-text-disabled);
   --color-text-inverse:  var(--color-text-inverse);
 
-  /* Colors — border */
+  /* Colors - border */
   --color-border:        var(--color-border-default);
   --color-border-subtle: var(--color-border-subtle);
   --color-border-strong: var(--color-border-strong);
   --color-border-accent: var(--color-border-accent);
 
-  /* Colors — state */
+  /* Colors - state */
   --color-success:       var(--color-success-base);
   --color-warning:       var(--color-warning-base);
   --color-error:         var(--color-error-base);
@@ -234,7 +234,7 @@ a, button, [role="button"], input, select, textarea, label {
   touch-action: manipulation;
 }
 
-/* Safe area insets — iOS notch / home indicator */
+/* Safe area insets - iOS notch / home indicator */
 .navbar-safe {
   padding-top: env(safe-area-inset-top);
 }

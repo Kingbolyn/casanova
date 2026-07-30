@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import Link from 'next/link'
@@ -87,7 +87,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
             exit={{ opacity: 0 }}
           />
 
-          {/* Panel — dialog container */}
+          {/* Panel - dialog container */}
           <m.div
             ref={dialogRef}
             role="dialog"
@@ -143,7 +143,7 @@ function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 </button>
               </div>
 
-              {/* Live region — announces result count to screen readers */}
+              {/* Live region - announces result count to screen readers */}
               <div aria-live="polite" aria-atomic="true" className="sr-only">
                 {query.trim()
                   ? results.length === 0

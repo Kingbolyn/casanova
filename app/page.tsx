@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { HeroSection }         from '@/components/sections/HeroSection'
 import { FeaturedProperties }  from '@/components/sections/FeaturedProperties'
 import { CollectionsSection }  from '@/components/sections/CollectionsSection'
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'CasaNova: Exceptional Properties',
     description:
       'Discover exceptional properties through an immersive experience designed to help you find not just a house, but a home that fits your life.',
-    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova — Exceptional Properties' }],
+    images: [{ url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80', width: 1200, height: 800, alt: 'CasaNova - Exceptional Properties' }],
   },
   twitter: {
     card: 'summary_large_image',

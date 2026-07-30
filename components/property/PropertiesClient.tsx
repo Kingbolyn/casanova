@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
@@ -200,7 +200,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
       <Section spacing="lg" bg="default">
         <Container width="wide">
 
-          {/* Location Discovery — above filters */}
+          {/* Location Discovery - above filters */}
           <div className="mb-10">
             <LocationDiscovery
               activeNeighbourhood={filters.neighbourhood}
@@ -209,7 +209,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
             />
           </div>
 
-          {/* Desktop filters — hidden on mobile */}
+          {/* Desktop filters - hidden on mobile */}
           <div className="hidden md:block">
             <PropertyFilters
               total={filtered.length}
@@ -219,7 +219,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
             />
           </div>
 
-          {/* Mobile — search + filter trigger */}
+          {/* Mobile - search + filter trigger */}
           <div className="md:hidden mb-4">
             {/* Search always visible */}
             <div className="relative mb-3">

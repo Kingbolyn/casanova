@@ -1,4 +1,4 @@
-/* Class name utility — merge Tailwind classes safely */
+﻿/* Class name utility - merge Tailwind classes safely */
 
 type ClassValue = string | undefined | null | false | ClassValue[]
 

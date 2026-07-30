@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { forwardRef, useId } from 'react'
 import { cn } from '@/lib/utils/cn'
@@ -46,7 +46,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
             style={{ transitionDuration: 'var(--duration-fast)', transitionTimingFunction: 'var(--ease-architectural)' }}
             aria-hidden="true"
           >
-            {/* Checkmark — always rendered; opacity controlled by peer-checked */}
+            {/* Checkmark - always rendered; opacity controlled by peer-checked */}
             <svg
               width="10"
               height="8"

@@ -1,4 +1,4 @@
-/* Marketing route group — inherits root layout (Navbar + Footer already there).
+﻿/* Marketing route group - inherits root layout (Navbar + Footer already there).
    This layout exists as a clean seam for future marketing-specific providers
    (analytics, A/B testing, campaign context) without touching the root shell. */
 

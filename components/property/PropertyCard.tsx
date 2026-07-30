@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,7 +15,7 @@ interface PropertyCardProps {
   priority?:  boolean
 }
 
-/* ─── Variants — IB-007 Micro (200ms) ───────────────────────────────────── */
+/* ─── Variants - IB-007 Micro (200ms) ───────────────────────────────────── */
 
 const STD:  [number,number,number,number] = EASE.standard
 const ENT:  [number,number,number,number] = EASE.entrance
@@ -95,21 +95,21 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
             />
           </m.div>
 
-          {/* Dark overlay — reveals on hover */}
+          {/* Dark overlay - reveals on hover */}
           <m.div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }}
             variants={overlay}
           />
 
-          {/* Status badge — always visible */}
+          {/* Status badge - always visible */}
           <div className="absolute top-4 left-4" style={{ zIndex: 2 }}>
             <Badge variant={statusVariant[status]}>
               {statusLabel[status]}
             </Badge>
           </div>
 
-          {/* Price + location — slides up on hover */}
+          {/* Price + location - slides up on hover */}
           <m.div
             className="absolute bottom-0 left-0 right-0 p-5"
             style={{ zIndex: 2 }}

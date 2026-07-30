@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useRef, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -265,7 +265,7 @@ function PricePanel({
       ? `Under $${(maxPrice / 1000000).toFixed(0)}M`
       : maxPrice >= PRICE_MAX
       ? `$${(minPrice / 1000000).toFixed(0)}M+`
-      : `$${(minPrice / 1000000).toFixed(0)}M — $${(maxPrice / 1000000).toFixed(0)}M`
+      : `$${(minPrice / 1000000).toFixed(0)}M to $${(maxPrice / 1000000).toFixed(0)}M`
 
   return (
     <div ref={ref} style={{ position: 'relative', minWidth: '150px' }}>
@@ -353,7 +353,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
     const label =
       filters.minPrice === 0 ? `Under $${(filters.maxPrice / 1000000).toFixed(0)}M`
       : filters.maxPrice >= PRICE_MAX ? `$${(filters.minPrice / 1000000).toFixed(0)}M+`
-      : `$${(filters.minPrice / 1000000).toFixed(0)}M — $${(filters.maxPrice / 1000000).toFixed(0)}M`
+      : `$${(filters.minPrice / 1000000).toFixed(0)}M to $${(filters.maxPrice / 1000000).toFixed(0)}M`
     activeChips.push({ label, onRemove: () => onChange({ ...filters, minPrice: 0, maxPrice: PRICE_MAX }) })
   }
 
@@ -401,7 +401,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
         </div>
       </div>
 
-      {/* Property Type — pill strip */}
+      {/* Property Type - pill strip */}
       <div className="mb-6" style={{ borderBottom: '1px solid var(--color-border-base)', paddingBottom: '1.5rem' }}>
         <p style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-widest)', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
           PROPERTY TYPE
@@ -433,7 +433,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
         </div>
       </div>
 
-      {/* Bedrooms — segmented control */}
+      {/* Bedrooms - segmented control */}
       <div className="mb-6" style={{ borderBottom: '1px solid var(--color-border-base)', paddingBottom: '1.5rem' }}>
         <p style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-widest)', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
           BEDROOMS
@@ -465,7 +465,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
         </div>
       </div>
 
-      {/* Second row — dropdowns */}
+      {/* Second row - dropdowns */}
       <div
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5"
         style={{ borderBottom: '1px solid var(--color-border-base)' }}

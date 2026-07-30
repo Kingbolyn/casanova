@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+﻿import type { Metadata } from 'next'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
@@ -64,7 +64,7 @@ export default function CollectionsPage() {
       <Section spacing="lg" bg="default">
         <Container width="wide">
           <FadeIn direction="up">
-            {/* Featured — full width */}
+            {/* Featured - full width */}
             <div className="mb-6">
               <CollectionCard
                 collection={featured}
@@ -73,7 +73,7 @@ export default function CollectionsPage() {
               />
             </div>
 
-            {/* Remaining — side by side */}
+            {/* Remaining - side by side */}
             {rest.length > 0 && (
               <StaggerChildren
                 className={`grid gap-6 ${rest.length >= 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}

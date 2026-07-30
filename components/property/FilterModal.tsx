@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
@@ -45,7 +45,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
             aria-hidden="true"
           />
 
-          {/* Panel — slides up from bottom */}
+          {/* Panel - slides up from bottom */}
           <m.div
             className="fixed bottom-0 left-0 right-0"
             style={{
@@ -122,7 +122,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
               />
             </div>
 
-            {/* Footer — show results */}
+            {/* Footer - show results */}
             <div
               style={{
                 padding:      '1rem 1.25rem',

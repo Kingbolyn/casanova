@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useRef, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
@@ -150,7 +150,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       aria-modal="true"
       aria-label={`360° immersive view of ${title}`}
     >
-      {/* Threshold veil — fades out after entry */}
+      {/* Threshold veil - fades out after entry */}
       <m.div
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundColor: '#000', zIndex: 10 }}

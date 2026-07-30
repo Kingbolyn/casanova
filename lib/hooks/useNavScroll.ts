@@ -1,10 +1,10 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 
 interface NavScrollState {
-  scrolled: boolean  /* true when scrollY > 60 — drives bg / height */
-  hidden:   boolean  /* true when scrolling down past 180px — hides navbar */
+  scrolled: boolean  /* true when scrollY > 60 - drives bg / height */
+  hidden:   boolean  /* true when scrolling down past 180px - hides navbar */
 }
 
 export function useNavScroll(): NavScrollState {

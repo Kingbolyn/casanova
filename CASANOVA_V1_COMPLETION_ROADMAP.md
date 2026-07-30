@@ -1,4 +1,4 @@
-# CasaNova Version 1.0 — Definitive Completion Roadmap
+﻿# CasaNova Version 1.0 â€” Definitive Completion Roadmap
 ## Comprehensive Product, Engineering & Execution Assessment
 
 ---
@@ -8,7 +8,7 @@
 **Version:** 1.0  
 **Date:** 2026-07-24  
 **Prepared by:** King (Apex Code Studio) + Claude Code (Sonnet 4.6)  
-**Status:** ACTIVE — All remaining work derives from this document
+**Status:** ACTIVE â€” All remaining work derives from this document
 
 ---
 
@@ -24,25 +24,25 @@ This roadmap is the authoritative record of everything that stands between the c
 
 ## Current State Inventory
 
-### What Is Complete (Phase 1–8)
+### What Is Complete (Phase 1â€“8)
 
-- Full design token system (CN-017) — single source of truth
-- Component library — Typography, Button, Input, Textarea, Section, Container, Heading, Body, Tag, Card
-- Motion language system — page transitions, section reveals, component animations, stagger sequences
-- Photography-first visual language — all Unsplash hero and property images integrated
-- Navigation system — Navbar with scroll-aware behaviour, mobile drawer, search overlay, focus management
-- Homepage — hero, statistics block, featured properties, philosophy section, trust section, collection teasers, testimonials, CTA
-- Properties page — 12 properties, real-time search, 7 filter dimensions, 6 sort modes, grid/list toggle, mobile filter modal
-- Individual property detail pages — gallery (lightbox + carousel), PanoramaViewer (Three.js 360°), description, specs, amenities, location placeholder, sticky enquiry form
-- Collections page — 4 curated collections with property grids
-- About page — philosophy, team, values
-- Contact page — hero with supporting copy, trust signal, success state
-- Footer — navigation, legal links, neighbourhood links (links to filtered views, not dedicated pages)
-- 404 page — styled with brand language
-- SEO — metadata on all pages, Open Graph, Twitter Card, Schema.org structured data (RealEstateListing, BreadcrumbList, Organization, WebSite), robots.ts, sitemap.ts
-- Accessibility — WCAG 2.2 AA, keyboard navigation, focus management, ARIA, skip link
-- Performance — desktop Lighthouse 95/96/100/100
-- Deployment — Vercel production, GitHub CI/CD, HTTPS
+- Full design token system (CN-017) â€” single source of truth
+- Component library â€” Typography, Button, Input, Textarea, Section, Container, Heading, Body, Tag, Card
+- Motion language system â€” page transitions, section reveals, component animations, stagger sequences
+- Photography-first visual language â€” all Unsplash hero and property images integrated
+- Navigation system â€” Navbar with scroll-aware behaviour, mobile drawer, search overlay, focus management
+- Homepage â€” hero, statistics block, featured properties, philosophy section, trust section, collection teasers, testimonials, CTA
+- Properties page â€” 12 properties, real-time search, 7 filter dimensions, 6 sort modes, grid/list toggle, mobile filter modal
+- Individual property detail pages â€” gallery (lightbox + carousel), PanoramaViewer (Three.js 360Â°), description, specs, amenities, location placeholder, sticky enquiry form
+- Collections page â€” 4 curated collections with property grids
+- About page â€” philosophy, team, values
+- Contact page â€” hero with supporting copy, trust signal, success state
+- Footer â€” navigation, legal links, neighbourhood links (links to filtered views, not dedicated pages)
+- 404 page â€” styled with brand language
+- SEO â€” metadata on all pages, Open Graph, Twitter Card, Schema.org structured data (RealEstateListing, BreadcrumbList, Organization, WebSite), robots.ts, sitemap.ts
+- Accessibility â€” WCAG 2.2 AA, keyboard navigation, focus management, ARIA, skip link
+- Performance â€” desktop Lighthouse 95/96/100/100
+- Deployment â€” Vercel production, GitHub CI/CD, HTTPS
 
 ---
 
@@ -52,19 +52,19 @@ The following 19 tasks constitute the remaining Version 1.0 work. They are organ
 
 ---
 
-## Phase 9A — Performance & Correctness
+## Phase 9A â€” Performance & Correctness
 
 *Fix the two formally accepted conditions from PB-006 and correct three data accuracy issues.*
 
 ---
 
-### TASK-001 — LazyMotion Bundle Optimization
+### TASK-001 â€” LazyMotion Bundle Optimization
 
 **Title:** Replace full Framer Motion bundle with LazyMotion + dynamic features
 
 **Description:** In `app/layout.tsx`, replace all `import { motion }` with `import { m }` from `framer-motion`, then wrap the root layout's `<body>` in `<LazyMotion features={loadFeatures} strict>` where `loadFeatures` is a dynamic import of `domAnimation` from `framer-motion/features`. Update all component files to use `m.div`, `m.section`, etc. in place of `motion.div`, `motion.section`. The AnimatePresence import remains unchanged.
 
-**Why it matters:** The current Framer Motion bundle is 130KB. Under Lighthouse 4x CPU throttle (simulated mid-range mobile), it takes 4,529ms to parse. This is the sole reason mobile Performance is 52. LazyMotion with dynamic features reduces the bundle to approximately 18–45KB. Projected mobile Performance score post-fix: 75–85. This is the single largest quality gap remaining in the product and is documented as AC-001 in PB-006.
+**Why it matters:** The current Framer Motion bundle is 130KB. Under Lighthouse 4x CPU throttle (simulated mid-range mobile), it takes 4,529ms to parse. This is the sole reason mobile Performance is 52. LazyMotion with dynamic features reduces the bundle to approximately 18â€“45KB. Projected mobile Performance score post-fix: 75â€“85. This is the single largest quality gap remaining in the product and is documented as AC-001 in PB-006.
 
 **Dependencies:** None. This is the first task.
 
@@ -73,14 +73,14 @@ The following 19 tasks constitute the remaining Version 1.0 work. They are organ
 **Phase:** 9A
 
 **Files affected:**
-- `app/layout.tsx` — add LazyMotion wrapper
-- Every component that imports `motion` from `framer-motion` — swap to `m` import
+- `app/layout.tsx` â€” add LazyMotion wrapper
+- Every component that imports `motion` from `framer-motion` â€” swap to `m` import
 
-**Estimated effort:** 4–6 hours
+**Estimated effort:** 4â€“6 hours
 
 ---
 
-### TASK-002 — Hero H1 Screen Reader Text Fix
+### TASK-002 â€” Hero H1 Screen Reader Text Fix
 
 **Title:** Add space before `<br><em>` in HeroSection headline
 
@@ -90,13 +90,13 @@ The following 19 tasks constitute the remaining Version 1.0 work. They are organ
 Find the home<br /><em>you imagined.</em>
 ```
 
-`<br>` does not produce a space in `textContent`. Screen readers concatenate "Find the homeyou imagined." — a real speech defect. Fix: insert `{' '}` before the `<br />`.
+`<br>` does not produce a space in `textContent`. Screen readers concatenate "Find the homeyou imagined." â€” a real speech defect. Fix: insert `{' '}` before the `<br />`.
 
 ```tsx
 Find the home{' '}<br /><em>you imagined.</em>
 ```
 
-**Why it matters:** This is a speech accessibility defect, not a cosmetic one. A visitor using a screen reader hears a malformed sentence at the first moment of brand contact. The product's governing emotion is "Seen. Heard. Understood." — failure at the h1 contradicts this directly.
+**Why it matters:** This is a speech accessibility defect, not a cosmetic one. A visitor using a screen reader hears a malformed sentence at the first moment of brand contact. The product's governing emotion is "Seen. Heard. Understood." â€” failure at the h1 contradicts this directly.
 
 **Dependencies:** None.
 
@@ -110,7 +110,7 @@ Find the home{' '}<br /><em>you imagined.</em>
 
 ---
 
-### TASK-003 — Sitemap Canonical Domain Fix
+### TASK-003 â€” Sitemap Canonical Domain Fix
 
 **Title:** Replace hardcoded Vercel URL in sitemap.ts with BASE_URL constant
 
@@ -139,7 +139,7 @@ const BASE = BASE_URL
 
 ---
 
-### TASK-004 — Property Statistics DOM Audit and Fix
+### TASK-004 â€” Property Statistics DOM Audit and Fix
 
 **Title:** Verify property detail spec numbers render in accessible markup
 
@@ -155,17 +155,17 @@ const BASE = BASE_URL
 
 **Files affected:** `app/property/[id]/page.tsx`, `components/property/PropertySpecs.tsx` (if exists)
 
-**Estimated effort:** 1–2 hours
+**Estimated effort:** 1â€“2 hours
 
 ---
 
-## Phase 9B — Legal & Compliance
+## Phase 9B â€” Legal & Compliance
 
 *Before any marketing push or real users, the product must have its legal pages and GDPR compliance in place.*
 
 ---
 
-### TASK-005 — Privacy Policy Page
+### TASK-005 â€” Privacy Policy Page
 
 **Title:** Create `/privacy` page with CasaNova Privacy Policy
 
@@ -183,11 +183,11 @@ Page must use the standard `Section` + `Container` layout system, `Heading` and 
 
 **Files affected:** `app/(marketing)/privacy/page.tsx` (new)
 
-**Estimated effort:** 3–4 hours (including content writing)
+**Estimated effort:** 3â€“4 hours (including content writing)
 
 ---
 
-### TASK-006 — Terms of Service Page
+### TASK-006 â€” Terms of Service Page
 
 **Title:** Create `/terms` page with CasaNova Terms of Service
 
@@ -203,11 +203,11 @@ Page must use the standard `Section` + `Container` layout system, `Heading` and 
 
 **Files affected:** `app/(marketing)/terms/page.tsx` (new)
 
-**Estimated effort:** 2–3 hours
+**Estimated effort:** 2â€“3 hours
 
 ---
 
-### TASK-007 — Cookie Policy Page
+### TASK-007 â€” Cookie Policy Page
 
 **Title:** Create `/cookies` page with cookie usage disclosure
 
@@ -223,17 +223,17 @@ Page must use the standard `Section` + `Container` layout system, `Heading` and 
 
 **Files affected:** `app/(marketing)/cookies/page.tsx` (new)
 
-**Estimated effort:** 1–2 hours
+**Estimated effort:** 1â€“2 hours
 
 ---
 
-### TASK-008 — Cookie Consent Banner
+### TASK-008 â€” Cookie Consent Banner
 
 **Title:** Implement GDPR-compliant cookie consent system
 
-**Description:** Add a cookie consent banner that appears on first visit for users in GDPR/PECR jurisdictions. Banner must: show on first load at the bottom of the viewport; offer Accept All and Decline Non-Essential buttons; persist the choice in localStorage (key: `casanova_consent`); suppress analytics loading until consent is given; provide a link to the Cookie Policy (TASK-007). The banner must match the visual language — stone background, minimal typography, no harsh borders. On scroll lock or lightbox open, banner must remain visible (z-index above overlay but below modal).
+**Description:** Add a cookie consent banner that appears on first visit for users in GDPR/PECR jurisdictions. Banner must: show on first load at the bottom of the viewport; offer Accept All and Decline Non-Essential buttons; persist the choice in localStorage (key: `casanova_consent`); suppress analytics loading until consent is given; provide a link to the Cookie Policy (TASK-007). The banner must match the visual language â€” stone background, minimal typography, no harsh borders. On scroll lock or lightbox open, banner must remain visible (z-index above overlay but below modal).
 
-Use a client component `components/ui/CookieConsent.tsx` rendered in `app/layout.tsx`. No external cookie consent library is required — this is implementable with ~80 lines of React.
+Use a client component `components/ui/CookieConsent.tsx` rendered in `app/layout.tsx`. No external cookie consent library is required â€” this is implementable with ~80 lines of React.
 
 **Why it matters:** Any product that sets cookies for analytics (TASK-011) on European users requires prior informed consent under GDPR Article 6 and the UK PECR. Absent consent management, analytics tags must not fire. This is a legal requirement, not a preference. It also applies to any future retargeting or third-party embeds.
 
@@ -245,19 +245,19 @@ Use a client component `components/ui/CookieConsent.tsx` rendered in `app/layout
 
 **Files affected:**  
 - `components/ui/CookieConsent.tsx` (new)  
-- `app/layout.tsx` — add `<CookieConsent />` after `<Footer />`
+- `app/layout.tsx` â€” add `<CookieConsent />` after `<Footer />`
 
-**Estimated effort:** 4–6 hours
+**Estimated effort:** 4â€“6 hours
 
 ---
 
-## Phase 9C — Product Completeness
+## Phase 9C â€” Product Completeness
 
 *Two major product features are architecturally present but have no user-facing pages.*
 
 ---
 
-### TASK-009 — Neighbourhood Pages
+### TASK-009 â€” Neighbourhood Pages
 
 **Title:** Build 6 individual neighbourhood destination pages
 
@@ -283,7 +283,7 @@ A neighbourhood index page listing all 6 neighbourhoods in a grid with hero imag
 
 Generate static params for all 6 slugs.
 
-**Why it matters:** Neighbourhood discovery is a primary search behaviour for luxury property buyers — they choose a lifestyle before they choose a specific unit. The information architecture specification (CN-010) identifies neighbourhood as a first-level navigation concept. Having neighbourhood data without neighbourhood pages means a significant portion of the product's SEO potential is unrealised, and the "local expertise" brand claim has no supporting content.
+**Why it matters:** Neighbourhood discovery is a primary search behaviour for luxury property buyers â€” they choose a lifestyle before they choose a specific unit. The information architecture specification (CN-010) identifies neighbourhood as a first-level navigation concept. Having neighbourhood data without neighbourhood pages means a significant portion of the product's SEO potential is unrealised, and the "local expertise" brand claim has no supporting content.
 
 **Dependencies:** `lib/data/neighbourhoods.ts` (exists), property data associations (exists).
 
@@ -294,17 +294,17 @@ Generate static params for all 6 slugs.
 **Files affected:**  
 - `app/(marketing)/neighbourhoods/page.tsx` (new)  
 - `app/(marketing)/neighbourhoods/[slug]/page.tsx` (new)  
-- `app/sitemap.ts` — add neighbourhood URLs
+- `app/sitemap.ts` â€” add neighbourhood URLs
 
-**Estimated effort:** 1–2 days
+**Estimated effort:** 1â€“2 days
 
 ---
 
-### TASK-010 — Analytics Integration
+### TASK-010 â€” Analytics Integration
 
 **Title:** Implement privacy-respecting analytics via Google Analytics 4
 
-**Description:** Add Google Analytics 4 via Next.js `<Script>` in `app/layout.tsx`. The script tag must be conditional on consent state from TASK-008 — it must not fire until `casanova_consent === 'accepted'` in localStorage. Use `next/script` with `strategy="afterInteractive"`. Add a `gtag` event for property detail views and enquiry form submissions. Store the GA4 Measurement ID in `NEXT_PUBLIC_GA_MEASUREMENT_ID` environment variable. Document the variable in `.env.example`.
+**Description:** Add Google Analytics 4 via Next.js `<Script>` in `app/layout.tsx`. The script tag must be conditional on consent state from TASK-008 â€” it must not fire until `casanova_consent === 'accepted'` in localStorage. Use `next/script` with `strategy="afterInteractive"`. Add a `gtag` event for property detail views and enquiry form submissions. Store the GA4 Measurement ID in `NEXT_PUBLIC_GA_MEASUREMENT_ID` environment variable. Document the variable in `.env.example`.
 
 **Why it matters:** Without analytics, there is no way to know how users navigate the product, which properties attract the most interest, where visitors drop off in the enquiry funnel, or whether marketing efforts are working. As a commercial asset, the ability to demonstrate user engagement data is a meaningful component of valuation.
 
@@ -319,11 +319,11 @@ Generate static params for all 6 slugs.
 - `.env.example` (new or update)  
 - `.env.local` (user must create)
 
-**Estimated effort:** 2–4 hours
+**Estimated effort:** 2â€“4 hours
 
 ---
 
-### TASK-011 — Enquiry Form Backend Integration
+### TASK-011 â€” Enquiry Form Backend Integration
 
 **Title:** Replace form stubs with real email delivery via Resend
 
@@ -358,20 +358,20 @@ Store `RESEND_API_KEY` in environment variables. Document in `.env.example`.
 
 ---
 
-## Phase 9D — Geographic Accuracy & Localization
+## Phase 9D â€” Geographic Accuracy & Localization
 
 *CasaNova lists properties in Nigeria. Current data and UI reflect no Nigerian context.*
 
 ---
 
-### TASK-012 — Nigerian Naira Pricing
+### TASK-012 â€” Nigerian Naira Pricing
 
-**Title:** Convert property pricing display from USD to NGN (₦)
+**Title:** Convert property pricing display from USD to NGN (â‚¦)
 
 **Description:** Property data currently stores prices as USD integers (e.g., `price: 4500000`). Property cards and detail pages display these with a dollar sign or generic formatting. Update to Nigerian Naira:
 
-1. In `lib/data/properties.ts`, audit all price values — determine if they are already in NGN or USD and update accordingly to realistic NGN luxury property values (approx ₦800M–₦10B range for the featured tier).
-2. Create a utility function `lib/utils/formatPrice.ts` that formats as `₦1.2B` or `₦850M` for card display and `₦1,200,000,000` for detail page.
+1. In `lib/data/properties.ts`, audit all price values â€” determine if they are already in NGN or USD and update accordingly to realistic NGN luxury property values (approx â‚¦800Mâ€“â‚¦10B range for the featured tier).
+2. Create a utility function `lib/utils/formatPrice.ts` that formats as `â‚¦1.2B` or `â‚¦850M` for card display and `â‚¦1,200,000,000` for detail page.
 3. Update all price rendering locations: property card, property detail page header, filter range if applicable.
 
 **Why it matters:** A Nigerian luxury property platform displaying USD prices is a factual inaccuracy that undermines credibility with the target market (HNWI in Lagos and Abuja). It signals that the product was not built with the market in mind. Any prospective client, investor, or acquirer reviewing the product will note this immediately.
@@ -388,11 +388,11 @@ Store `RESEND_API_KEY` in environment variables. Document in `.env.example`.
 - Property card component  
 - `app/property/[id]/page.tsx`
 
-**Estimated effort:** 3–5 hours
+**Estimated effort:** 3â€“5 hours
 
 ---
 
-### TASK-013 — Nigerian Phone Number Format on Contact Form
+### TASK-013 â€” Nigerian Phone Number Format on Contact Form
 
 **Title:** Add Nigerian phone number format hint to contact and enquiry forms
 
@@ -414,19 +414,19 @@ Store `RESEND_API_KEY` in environment variables. Document in `.env.example`.
 
 ---
 
-### TASK-014 — Map Integration (Property Location)
+### TASK-014 â€” Map Integration (Property Location)
 
 **Title:** Replace map placeholder with embedded map on property detail pages
 
 **Description:** `app/property/[id]/page.tsx` renders a `<div role="img">` with an SVG pin icon and text as the "Location" section. This is a placeholder. Integrate an actual map using one of:
 
-**Option A (Recommended):** Mapbox GL JS embedded via the free tier (50,000 map loads/month). Add `NEXT_PUBLIC_MAPBOX_TOKEN` env variable. Create `components/property/PropertyMap.tsx` as a `dynamic` import with `ssr: false`. Render a dark-style Mapbox map centred on the property's lat/long coordinates. Style must match the product's restrained aesthetic — dark basemap, single pin.
+**Option A (Recommended):** Mapbox GL JS embedded via the free tier (50,000 map loads/month). Add `NEXT_PUBLIC_MAPBOX_TOKEN` env variable. Create `components/property/PropertyMap.tsx` as a `dynamic` import with `ssr: false`. Render a dark-style Mapbox map centred on the property's lat/long coordinates. Style must match the product's restrained aesthetic â€” dark basemap, single pin.
 
 **Option B:** Google Maps embed (no API key required for basic embed, but lacks styling control).
 
 Each property record in `lib/data/properties.ts` must have `lat` and `lng` coordinates added.
 
-**Why it matters:** The property detail page's location section is currently a visual lie — it shows a pin icon implying geographic context while providing none. For a luxury property platform, location is the second most important attribute after price. Buyers consult maps to assess proximity to schools, business districts, and airports. The current placeholder fails this expectation completely.
+**Why it matters:** The property detail page's location section is currently a visual lie â€” it shows a pin icon implying geographic context while providing none. For a luxury property platform, location is the second most important attribute after price. Buyers consult maps to assess proximity to schools, business districts, and airports. The current placeholder fails this expectation completely.
 
 **Dependencies:** None for setup. Coordinates must be added to property data.
 
@@ -435,28 +435,28 @@ Each property record in `lib/data/properties.ts` must have `lat` and `lng` coord
 **Phase:** 9D
 
 **Files affected:**  
-- `lib/data/properties.ts` — add lat/lng to each property  
+- `lib/data/properties.ts` â€” add lat/lng to each property  
 - `components/property/PropertyMap.tsx` (new)  
-- `app/property/[id]/page.tsx` — replace placeholder  
+- `app/property/[id]/page.tsx` â€” replace placeholder  
 - `.env.example`
 
-**Estimated effort:** 1–1.5 days
+**Estimated effort:** 1â€“1.5 days
 
 ---
 
-## Phase 9E — Polish & Experience Refinement
+## Phase 9E â€” Polish & Experience Refinement
 
 *Final-mile improvements that elevate the product from complete to distinguished.*
 
 ---
 
-### TASK-015 — PanoramaViewer Mobile Touch Gestures
+### TASK-015 â€” PanoramaViewer Mobile Touch Gestures
 
-**Title:** Add pinch-to-zoom and touch drag to the 360° PanoramaViewer
+**Title:** Add pinch-to-zoom and touch drag to the 360Â° PanoramaViewer
 
-**Description:** `components/property/PanoramaViewer.tsx` currently handles navigation via pointer events only (`pointerdown`, `pointermove`, `pointerup`). On mobile, touch drag works because browsers translate touch to pointer events. However, pinch-to-zoom (two-finger spread) is not implemented. Add a `touchstart`/`touchmove` handler that detects two-touch events and adjusts the camera's field of view proportionally (zoom in on pinch-in, zoom out on pinch-out). Clamp FOV between 40° and 100°.
+**Description:** `components/property/PanoramaViewer.tsx` currently handles navigation via pointer events only (`pointerdown`, `pointermove`, `pointerup`). On mobile, touch drag works because browsers translate touch to pointer events. However, pinch-to-zoom (two-finger spread) is not implemented. Add a `touchstart`/`touchmove` handler that detects two-touch events and adjusts the camera's field of view proportionally (zoom in on pinch-in, zoom out on pinch-out). Clamp FOV between 40Â° and 100Â°.
 
-**Why it matters:** The PanoramaViewer is the product's single most distinctive experiential feature. It represents the "Immersion" stage of the 5-stage visitor journey. On mobile, which accounts for the majority of real-estate browsing traffic in Nigeria, an inability to zoom within a 360° tour is a significant UX gap. The feature is architecturally present but physically incomplete for the primary viewing device.
+**Why it matters:** The PanoramaViewer is the product's single most distinctive experiential feature. It represents the "Immersion" stage of the 5-stage visitor journey. On mobile, which accounts for the majority of real-estate browsing traffic in Nigeria, an inability to zoom within a 360Â° tour is a significant UX gap. The feature is architecturally present but physically incomplete for the primary viewing device.
 
 **Dependencies:** None.
 
@@ -466,11 +466,11 @@ Each property record in `lib/data/properties.ts` must have `lat` and `lng` coord
 
 **Files affected:** `components/property/PanoramaViewer.tsx`
 
-**Estimated effort:** 3–4 hours
+**Estimated effort:** 3â€“4 hours
 
 ---
 
-### TASK-016 — Contact Page Two-Column Desktop Layout
+### TASK-016 â€” Contact Page Two-Column Desktop Layout
 
 **Title:** Add contact details column alongside the contact form on desktop
 
@@ -478,7 +478,7 @@ Each property record in `lib/data/properties.ts` must have `lat` and `lng` coord
 - Phone number: `+234 (0) 800 123 4567`
 - Email: `hello@casanova.ng`
 - Physical address: Lagos office placeholder
-- Office hours: Monday–Friday, 9am–6pm WAT
+- Office hours: Mondayâ€“Friday, 9amâ€“6pm WAT
 
 This removes the dependency on the footer for all contact information and provides context that builds trust at the decision stage.
 
@@ -494,7 +494,7 @@ This removes the dependency on the footer for all contact information and provid
 
 ---
 
-### TASK-017 — Neighbourhood Links in Footer
+### TASK-017 â€” Neighbourhood Links in Footer
 
 **Title:** Update footer neighbourhood links to navigate to dedicated neighbourhood pages
 
@@ -512,7 +512,7 @@ This removes the dependency on the footer for all contact information and provid
 
 ---
 
-### TASK-018 — Sitemap — Add Neighbourhood and Legal Pages
+### TASK-018 â€” Sitemap â€” Add Neighbourhood and Legal Pages
 
 **Title:** Add all new pages to sitemap.ts
 
@@ -542,7 +542,7 @@ Use `changeFrequency: 'yearly'` for legal pages and `changeFrequency: 'monthly'`
 
 ---
 
-### TASK-019 — Production Environment Variables Audit
+### TASK-019 â€” Production Environment Variables Audit
 
 **Title:** Audit and document all required environment variables
 
@@ -556,7 +556,7 @@ NEXT_PUBLIC_SITE_URL=
 
 Verify Vercel production environment has all required variables set before Phase 9C/9D features go live. Document in the project README that `.env.local` must be populated before local development of backend features.
 
-**Why it matters:** Environment variable gaps cause silent failures at deployment. The form stub currently masks this — once real integration is live, a missing `RESEND_API_KEY` results in no enquiries being delivered with no visible error to the user.
+**Why it matters:** Environment variable gaps cause silent failures at deployment. The form stub currently masks this â€” once real integration is live, a missing `RESEND_API_KEY` results in no enquiries being delivered with no visible error to the user.
 
 **Dependencies:** TASK-010, TASK-011, TASK-014.
 
@@ -575,39 +575,39 @@ Verify Vercel production environment has all required variables set before Phase
 Tasks should be executed in this exact sequence to respect dependencies and minimise rework:
 
 ```
-Phase 9A — Performance & Correctness
-  1. TASK-001  LazyMotion optimization              Critical  Medium   4–6h
+Phase 9A â€” Performance & Correctness
+  1. TASK-001  LazyMotion optimization              Critical  Medium   4â€“6h
   2. TASK-002  Hero H1 screen reader fix            High      Small    0.2h
   3. TASK-003  Sitemap canonical URL                High      Small    0.3h
   4. TASK-004  Property stats DOM audit             Medium    Small    2h
-  → Deploy Phase 9A. Verify mobile Lighthouse score.
+  â†’ Deploy Phase 9A. Verify mobile Lighthouse score.
 
-Phase 9B — Legal & Compliance
+Phase 9B â€” Legal & Compliance
   5. TASK-005  Privacy Policy page                  Critical  Medium   4h
   6. TASK-006  Terms of Service page                Critical  Medium   3h
   7. TASK-007  Cookie Policy page                   High      Small    2h
   8. TASK-008  Cookie Consent banner                Critical  Medium   6h
-  → Deploy Phase 9B. Verify legal pages live and consent banner fires.
+  â†’ Deploy Phase 9B. Verify legal pages live and consent banner fires.
 
-Phase 9C — Product Completeness
+Phase 9C â€” Product Completeness
   9. TASK-011  Enquiry form backend (Resend)        Critical  Large    8h
   10. TASK-010  Analytics GA4                       High      Small    4h
   11. TASK-009  Neighbourhood pages (6)             Critical  Large    12h
-  → Deploy Phase 9C. Test form delivery end-to-end. Verify neighbourhood routes.
+  â†’ Deploy Phase 9C. Test form delivery end-to-end. Verify neighbourhood routes.
 
-Phase 9D — Geographic Accuracy
+Phase 9D â€” Geographic Accuracy
   12. TASK-012  NGN pricing                         High      Small    5h
   13. TASK-014  Map integration (Mapbox)            High      Large    10h
   14. TASK-013  Phone number format                 Low       Small    0.5h
-  → Deploy Phase 9D. Verify map renders with real coordinates.
+  â†’ Deploy Phase 9D. Verify map renders with real coordinates.
 
-Phase 9E — Polish & Completion
+Phase 9E â€” Polish & Completion
   15. TASK-015  PanoramaViewer touch gestures       Medium    Small    4h
   16. TASK-016  Contact page two-column layout      Low       Small    2h
   17. TASK-017  Footer neighbourhood links          Medium    Small    0.5h
-  18. TASK-018  Sitemap — add all new pages         High      Small    0.5h
+  18. TASK-018  Sitemap â€” add all new pages         High      Small    0.5h
   19. TASK-019  Environment variables audit         High      Small    1h
-  → Deploy Phase 9E. Run full PB-001 through PB-006 re-audit.
+  â†’ Deploy Phase 9E. Run full PB-001 through PB-006 re-audit.
 ```
 
 ---
@@ -616,12 +616,12 @@ Phase 9E — Polish & Completion
 
 | Phase | Tasks | Estimated Hours | Estimated Days |
 |---|---|---|---|
-| 9A — Performance & Correctness | 4 | 8–10h | 1–1.5 days |
-| 9B — Legal & Compliance | 4 | 14–16h | 2 days |
-| 9C — Product Completeness | 3 | 24–26h | 3–3.5 days |
-| 9D — Geographic Accuracy | 3 | 15–16h | 2 days |
-| 9E — Polish & Completion | 5 | 8–9h | 1 day |
-| **Total** | **19** | **69–77h** | **9.5–11 days** |
+| 9A â€” Performance & Correctness | 4 | 8â€“10h | 1â€“1.5 days |
+| 9B â€” Legal & Compliance | 4 | 14â€“16h | 2 days |
+| 9C â€” Product Completeness | 3 | 24â€“26h | 3â€“3.5 days |
+| 9D â€” Geographic Accuracy | 3 | 15â€“16h | 2 days |
+| 9E â€” Polish & Completion | 5 | 8â€“9h | 1 day |
+| **Total** | **19** | **69â€“77h** | **9.5â€“11 days** |
 
 ---
 
@@ -650,38 +650,38 @@ Phase 9E — Polish & Completion
 
 ## Highest-Risk Remaining Work
 
-Risks are ranked by likelihood × consequence.
+Risks are ranked by likelihood Ã- consequence.
 
-**Risk 1 — TASK-011 Form Backend** (Critical Risk)  
+**Risk 1 â€” TASK-011 Form Backend** (Critical Risk)  
 Forms are currently delivering zero enquiries. Every test submission by a potential client, investor, or acquirer goes nowhere. If the product is demonstrated before this is fixed, one form submission exposes the stub. This is the highest consequence gap.
 
-**Risk 2 — TASK-009 Neighbourhood Pages** (High Risk)  
-This is the largest single implementation task. 8 route pages (index + 6 neighbourhoods + error state), with content, layout, SEO metadata, and property associations. Scope creep risk is real — content quality matters more here than on structured pages.
+**Risk 2 â€” TASK-009 Neighbourhood Pages** (High Risk)  
+This is the largest single implementation task. 8 route pages (index + 6 neighbourhoods + error state), with content, layout, SEO metadata, and property associations. Scope creep risk is real â€” content quality matters more here than on structured pages.
 
-**Risk 3 — TASK-014 Map Integration** (High Risk)  
+**Risk 3 â€” TASK-014 Map Integration** (High Risk)  
 Mapbox GL JS adds a third-party JavaScript dependency and requires coordinate data for all 12 properties. If coordinates are inaccurate, the map actively misleads buyers. If the Mapbox bundle is large, it could introduce a new performance regression. Must be lazy-loaded and size-audited before deployment.
 
-**Risk 4 — TASK-008 Cookie Consent** (Medium Risk)  
+**Risk 4 â€” TASK-008 Cookie Consent** (Medium Risk)  
 Cookie consent UI is deceptively simple to build and easy to get wrong. A banner that fires on every page load despite accepted consent, or one that fails to block analytics until consent is given, creates a worse experience than no banner. State persistence and the consent-gating logic require careful testing.
 
-**Risk 5 — TASK-001 LazyMotion** (Medium Risk)  
+**Risk 5 â€” TASK-001 LazyMotion** (Medium Risk)  
 The LazyMotion swap touches every component that uses Framer Motion. A missed `motion.` import that is not converted to `m.` will fail silently in development (Framer Motion degrades gracefully) but will re-inflate the bundle in production. A systematic find-and-replace with post-build bundle analysis is required.
 
 ---
 
-## Top 5 Tasks — Highest Immediate Impact
+## Top 5 Tasks â€” Highest Immediate Impact
 
 In order of impact on real-world product readiness:
 
-1. **TASK-011 — Enquiry Form Backend** — Converts the product from a demonstrator into a functional lead-generation system. Without this, nothing real happens when a visitor takes action.
+1. **TASK-011 â€” Enquiry Form Backend** â€” Converts the product from a demonstrator into a functional lead-generation system. Without this, nothing real happens when a visitor takes action.
 
-2. **TASK-001 — LazyMotion Optimization** — Resolves the only significant technical quality gap (mobile Performance 52). Directly affects every mobile visitor's experience.
+2. **TASK-001 â€” LazyMotion Optimization** â€” Resolves the only significant technical quality gap (mobile Performance 52). Directly affects every mobile visitor's experience.
 
-3. **TASK-009 — Neighbourhood Pages** — Adds the product's most SEO-significant content surface. Luxury buyers search by neighbourhood. These pages have the highest organic acquisition potential of any remaining work.
+3. **TASK-009 â€” Neighbourhood Pages** â€” Adds the product's most SEO-significant content surface. Luxury buyers search by neighbourhood. These pages have the highest organic acquisition potential of any remaining work.
 
-4. **TASK-005 + TASK-006 + TASK-007 — Legal Pages** — Three tasks but one deliverable. Without legal pages, the product cannot be used commercially or shared with clients without legal exposure.
+4. **TASK-005 + TASK-006 + TASK-007 â€” Legal Pages** â€” Three tasks but one deliverable. Without legal pages, the product cannot be used commercially or shared with clients without legal exposure.
 
-5. **TASK-008 — Cookie Consent Banner** — Required before analytics (TASK-010) can be activated. Blocks the analytics data needed to understand user behaviour.
+5. **TASK-008 â€” Cookie Consent Banner** â€” Required before analytics (TASK-010) can be activated. Blocks the analytics data needed to understand user behaviour.
 
 ---
 
@@ -689,11 +689,11 @@ In order of impact on real-world product readiness:
 
 **Phase 8 is complete and should not be reopened.**
 
-The Phase 8 certification (PB-006, 2026-07-24) was issued with accepted conditions. Those conditions do not invalidate Phase 8 — they are formally accepted, documented, and resolved by the Phase 9 work described above.
+The Phase 8 certification (PB-006, 2026-07-24) was issued with accepted conditions. Those conditions do not invalidate Phase 8 â€” they are formally accepted, documented, and resolved by the Phase 9 work described above.
 
 Phase 9 is the correct designation for all remaining work. It consists of five sequential sub-phases (9A through 9E) that together constitute the path from 72% complete to an unconditional Version 1.0 release.
 
-**Recommendation:** Begin Phase 9A immediately. It contains four tasks with zero dependencies, and TASK-001 (LazyMotion) resolves the product's only outstanding technical quality condition. Phase 9A can be completed in a single session. Legal (9B) and Product (9C) phases require more content work and can be run in subsequent sessions. The full Phase 9 programme is estimated at 9.5–11 engineering days.
+**Recommendation:** Begin Phase 9A immediately. It contains four tasks with zero dependencies, and TASK-001 (LazyMotion) resolves the product's only outstanding technical quality condition. Phase 9A can be completed in a single session. Legal (9B) and Product (9C) phases require more content work and can be run in subsequent sessions. The full Phase 9 programme is estimated at 9.5â€“11 engineering days.
 
 Upon completion of all 19 tasks and a re-run of PB-001 through PB-006 audits with passing results, the product will be eligible for unconditional Version 1.0 release certification.
 
@@ -707,7 +707,7 @@ Upon completion of all 19 tasks and a re-run of PB-001 through PB-006 audits wit
 
 ---
 
-**Classification:** Master Execution Plan — Version 1.0  
+**Classification:** Master Execution Plan â€” Version 1.0  
 **Authority:** CN-025 Master Constitution  
 **Next Review:** Upon completion of Phase 9A  
 **Archive:** C:\Users\user\Downloads\APEXCODEPRINCIPLE\CASANOVA_V1_COMPLETION_ROADMAP.md

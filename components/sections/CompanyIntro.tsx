@@ -1,4 +1,4 @@
-import Image from 'next/image'
+﻿import Image from 'next/image'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
@@ -26,7 +26,7 @@ function CompanyIntro() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 'var(--space-20)', alignItems: 'center' }}>
 
-          {/* Left — image */}
+          {/* Left - image */}
           <FadeIn direction="right" delay={0.1}>
             <div className="relative rounded-[--radius-lg] overflow-hidden" style={{ aspectRatio: '4 / 5' }}>
               <Image
@@ -44,7 +44,7 @@ function CompanyIntro() {
             </div>
           </FadeIn>
 
-          {/* Right — copy */}
+          {/* Right - copy */}
           <FadeIn direction="left" delay={0.2}>
             <Label color="tertiary" className="block mb-6">
               Who we are
