@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { properties } from '@/lib/data/properties'
 import { collections } from '@/lib/data/collections'
-
-const BASE = 'https://casanova-pied.vercel.app'
+import { BASE_URL as BASE } from '@/lib/seo'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
