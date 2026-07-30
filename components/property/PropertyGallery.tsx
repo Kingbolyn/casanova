@@ -4,13 +4,13 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { m, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import { DUR, EASE } from '@/lib/motion'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 const PanoramaViewer = dynamic(
   () => import('./PanoramaViewer').then((m) => ({ default: m.PanoramaViewer })),
   { ssr: false }
 )
-import { DUR, EASE } from '@/lib/motion'
-import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 
 interface PropertyGalleryProps {
   images:    string[]
@@ -18,48 +18,121 @@ interface PropertyGalleryProps {
   panorama?: string
 }
 
+/* ─── Icon primitives ────────────────────────────────────── */
+
+function ChevronLeft() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M11 4L6 9l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function ChevronRight() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M7 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function CloseIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function Icon360() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <ellipse cx="8" cy="8" rx="7" ry="4" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+      <path d="M8 4v8M4 8h8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
+    </svg>
+  )
+}
+
+/* ─── Style constants ────────────────────────────────────── */
+
+const glassBtn: React.CSSProperties = {
+  borderRadius: '50%',
+  background: 'rgba(0,0,0,0.35)',
+  border: '1px solid rgba(255,255,255,0.14)',
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+  color: 'rgba(255,255,255,0.85)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'background 0.2s, border-color 0.2s',
+  padding: 0,
+  flexShrink: 0,
+}
+
+/* ─── Component ──────────────────────────────────────────── */
+
 function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
   const [active, setActive]       = useState(0)
   const [lightbox, setLightbox]   = useState(false)
   const [immersive, setImmersive] = useState(false)
 
-  const lightboxRef    = useRef<HTMLDivElement>(null)
-  const closeBtnRef    = useRef<HTMLButtonElement>(null)
-  const returnFocus    = useRef<Element | null>(null)
+  const lightboxRef = useRef<HTMLDivElement>(null)
+  const closeBtnRef = useRef<HTMLButtonElement>(null)
+  const returnFocus = useRef<Element | null>(null)
+  const touchStartX = useRef(0)
 
   useFocusTrap(lightboxRef, lightbox)
 
+  /* Body scroll lock + focus management */
   useEffect(() => {
     if (lightbox) {
       returnFocus.current = document.activeElement
-      setTimeout(() => closeBtnRef.current?.focus(), 50)
+      document.body.style.overflow = 'hidden'
+      setTimeout(() => closeBtnRef.current?.focus(), 80)
     } else {
+      document.body.style.overflow = ''
       if (returnFocus.current instanceof HTMLElement) returnFocus.current.focus()
       returnFocus.current = null
     }
+    return () => { document.body.style.overflow = '' }
   }, [lightbox])
 
   const prev = useCallback(() => setActive((i) => (i - 1 + images.length) % images.length), [images.length])
   const next = useCallback(() => setActive((i) => (i + 1) % images.length), [images.length])
 
-  const handleKey = useCallback((e: React.KeyboardEvent) => {
+  const handleLightboxKey = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'ArrowLeft')  { e.preventDefault(); prev() }
     if (e.key === 'ArrowRight') { e.preventDefault(); next() }
     if (e.key === 'Escape')     setLightbox(false)
-    if (e.key === 'Enter')      setLightbox(true)
   }, [prev, next])
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const delta = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(delta) > 50) delta > 0 ? next() : prev()
+  }, [prev, next])
+
+  /* ── Main hero image ── */
   return (
     <>
-      {/* Main image */}
       <div
         className="relative overflow-hidden"
         style={{ aspectRatio: '16/9', backgroundColor: 'var(--color-surface-secondary)', cursor: 'zoom-in' }}
         onClick={() => setLightbox(true)}
         role="button"
         tabIndex={0}
-        aria-label={`View gallery for ${title}`}
-        onKeyDown={handleKey}
+        aria-label={`Open photo gallery for ${title}`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setLightbox(true) }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); prev() }
+          if (e.key === 'ArrowRight') { e.preventDefault(); next() }
+        }}
       >
         <AnimatePresence mode="wait">
           <m.div
@@ -72,7 +145,7 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
           >
             <Image
               src={images[active]}
-              alt={`${title}, image ${active + 1}`}
+              alt={`${title}, photo ${active + 1} of ${images.length}`}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 60vw"
@@ -81,40 +154,24 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
           </m.div>
         </AnimatePresence>
 
-        {/* Navigation arrows */}
+        {/* Arrows */}
         {images.length > 1 && (
           <>
             <button
               onClick={(e) => { e.stopPropagation(); prev() }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
-              style={{
-                width: '40px', height: '40px',
-                backgroundColor: 'rgba(0,0,0,0.45)',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1.25rem',
-                backdropFilter: 'blur(4px)',
-              }}
-              aria-label="Previous image"
+              className="absolute left-3 top-1/2 -translate-y-1/2"
+              style={{ ...glassBtn, width: '40px', height: '40px' }}
+              aria-label="Previous photo"
             >
-              ‹
+              <ChevronLeft />
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); next() }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
-              style={{
-                width: '40px', height: '40px',
-                backgroundColor: 'rgba(0,0,0,0.45)',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '1.25rem',
-                backdropFilter: 'blur(4px)',
-              }}
-              aria-label="Next image"
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              style={{ ...glassBtn, width: '40px', height: '40px' }}
+              aria-label="Next photo"
             >
-              ›
+              <ChevronRight />
             </button>
           </>
         )}
@@ -123,62 +180,70 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
         <div
           className="absolute bottom-4 right-4"
           style={{
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            color: '#fff',
-            fontSize: '0.7rem',
-            letterSpacing: '0.1em',
-            padding: '0.25rem 0.625rem',
-            backdropFilter: 'blur(4px)',
+            fontSize: 'var(--text-xs)',
+            letterSpacing: 'var(--tracking-widest)',
+            color: 'rgba(255,255,255,0.7)',
+            background: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            padding: '0.2rem 0.6rem',
           }}
         >
           {active + 1} / {images.length}
         </div>
 
-        {/* Immersive view trigger */}
+        {/* 360° trigger */}
         {panorama && (
           <button
             onClick={(e) => { e.stopPropagation(); setImmersive(true) }}
             className="absolute bottom-4 left-4 flex items-center gap-2"
             style={{
-              backgroundColor: 'rgba(0,0,0,0.55)',
+              background: 'rgba(0,0,0,0.5)',
+              border: '1px solid rgba(255,255,255,0.16)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
               color: '#fff',
-              border: '1px solid rgba(255,255,255,0.18)',
               cursor: 'pointer',
               padding: '0.4rem 0.875rem',
-              backdropFilter: 'blur(6px)',
               fontSize: 'var(--text-xs)',
               letterSpacing: 'var(--tracking-widest)',
-              transition: 'border-color 0.2s, background 0.2s',
+              transition: 'background 0.2s, border-color 0.2s',
             }}
             aria-label="Enter 360° immersive view"
           >
-            {/* 360 icon */}
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <ellipse cx="8" cy="8" rx="7" ry="4" stroke="currentColor" strokeWidth="1.2" />
-              <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-              <path d="M8 4v8M4 8h8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
-            </svg>
+            <Icon360 />
             360° VIEW
           </button>
         )}
       </div>
 
-      {/* Thumbnails */}
+      {/* ── Thumbnail strip ── */}
       {images.length > 1 && (
-        <div className="grid gap-2 mt-2" style={{ gridTemplateColumns: `repeat(${Math.min(images.length, 4)}, 1fr)` }}>
+        <div
+          className="flex gap-1.5 mt-2"
+          style={{ overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: '2px' }}
+          role="list"
+          aria-label="Gallery thumbnails"
+        >
           {images.map((src, i) => (
             <button
               key={i}
+              role="listitem"
               onClick={() => setActive(i)}
-              className="relative overflow-hidden"
+              className="relative flex-shrink-0"
               style={{
-                aspectRatio: '4/3',
-                border: i === active ? '2px solid var(--color-accent-base)' : '2px solid transparent',
+                width: '72px',
+                height: '54px',
+                overflow: 'hidden',
                 padding: 0,
                 cursor: 'pointer',
                 backgroundColor: 'var(--color-surface-secondary)',
+                border: i === active
+                  ? '1.5px solid var(--color-accent-base)'
+                  : '1.5px solid transparent',
+                transition: 'border-color 0.2s',
               }}
-              aria-label={`View image ${i + 1}`}
+              aria-label={`Photo ${i + 1}`}
               aria-pressed={i === active}
             >
               <Image
@@ -186,88 +251,176 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
                 alt={`${title} thumbnail ${i + 1}`}
                 fill
                 className="object-cover"
-                sizes="200px"
+                sizes="72px"
               />
               {i !== active && (
-                <div className="absolute inset-0" style={{ backgroundColor: 'rgba(255,255,255,0.25)' }} />
+                <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.28)' }} />
               )}
             </button>
           ))}
         </div>
       )}
 
-      {/* Lightbox */}
+      {/* ── Lightbox ── */}
       <AnimatePresence>
         {lightbox && (
           <m.div
             ref={lightboxRef}
-            className="fixed inset-0 flex items-center justify-center"
-            style={{ zIndex: 'var(--z-modal)', backgroundColor: 'rgba(0,0,0,0.92)' }}
+            className="fixed inset-0 flex flex-col items-center justify-center"
+            style={{ zIndex: 'var(--z-modal)', backgroundColor: 'rgba(0,0,0,0.95)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: EASE.standard }}
             onClick={() => setLightbox(false)}
-            onKeyDown={handleKey}
+            onKeyDown={handleLightboxKey}
             role="dialog"
-            aria-label={`Image gallery for ${title}`}
+            aria-label={`Photo gallery for ${title}`}
             aria-modal="true"
           >
+
+            {/* Close */}
             <button
               ref={closeBtnRef}
               onClick={() => setLightbox(false)}
-              className="absolute top-6 right-6"
-              style={{ color: '#fff', background: 'none', border: 'none', fontSize: '2rem', cursor: 'pointer', lineHeight: 1 }}
-              aria-label="Close lightbox"
+              className="absolute flex items-center justify-center"
+              style={{
+                ...glassBtn,
+                width: '48px',
+                height: '48px',
+                top: '20px',
+                right: '20px',
+                position: 'absolute',
+                zIndex: 20,
+              }}
+              aria-label="Close gallery"
             >
-              ×
+              <CloseIcon />
             </button>
 
+            {/* Image container — arrows anchored inside, swipe gestures here */}
             <AnimatePresence mode="wait">
               <m.div
                 key={active}
-                className="relative"
-                style={{ width: '90vw', maxWidth: '1200px', maxHeight: '85vh', aspectRatio: '16/9' }}
-                initial={{ opacity: 0, scale: 0.96 }}
+                style={{
+                  position: 'relative',
+                  width: '92vw',
+                  maxWidth: '1400px',
+                  height: '78vh',
+                  flexShrink: 0,
+                }}
+                initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: DUR.standard, ease: EASE.standard }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.3, ease: EASE.entrance }}
                 onClick={(e) => e.stopPropagation()}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 <Image
                   src={images[active]}
-                  alt={`${title}, image ${active + 1}`}
+                  alt={`${title}, photo ${active + 1} of ${images.length}`}
                   fill
                   className="object-contain"
-                  sizes="90vw"
+                  sizes="92vw"
+                  priority
                 />
+
+                {/* Prev arrow — anchored inside the image container */}
+                {images.length > 1 && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); prev() }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2"
+                    style={{ ...glassBtn, width: '48px', height: '48px' }}
+                    aria-label="Previous photo"
+                  >
+                    <ChevronLeft />
+                  </button>
+                )}
+
+                {/* Next arrow — anchored inside the image container */}
+                {images.length > 1 && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); next() }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    style={{ ...glassBtn, width: '48px', height: '48px' }}
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight />
+                  </button>
+                )}
               </m.div>
             </AnimatePresence>
 
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={(e) => { e.stopPropagation(); prev() }}
-                  className="absolute left-6 top-1/2 -translate-y-1/2"
-                  style={{ color: '#fff', background: 'none', border: 'none', fontSize: '3rem', cursor: 'pointer', lineHeight: 1 }}
-                  aria-label="Previous image"
+            {/* Counter + thumbnails — beneath the image */}
+            <m.div
+              className="flex flex-col items-center"
+              style={{ gap: '0.875rem', marginTop: '1.125rem', zIndex: 10 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, delay: 0.18, ease: EASE.standard }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'var(--text-xs)',
+                  letterSpacing: 'var(--tracking-widest)',
+                  color: 'rgba(255,255,255,0.38)',
+                  lineHeight: 1,
+                }}
+              >
+                {active + 1} / {images.length}
+              </p>
+
+              {images.length > 1 && (
+                <div
+                  className="flex gap-1.5"
+                  style={{ overflowX: 'auto', scrollbarWidth: 'none', maxWidth: 'min(92vw, 1400px)', paddingBottom: '2px' }}
+                  role="list"
+                  aria-label="Photo thumbnails"
                 >
-                  ‹
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); next() }}
-                  className="absolute right-6 top-1/2 -translate-y-1/2"
-                  style={{ color: '#fff', background: 'none', border: 'none', fontSize: '3rem', cursor: 'pointer', lineHeight: 1 }}
-                  aria-label="Next image"
-                >
-                  ›
-                </button>
-              </>
-            )}
+                  {images.map((src, i) => (
+                    <button
+                      key={i}
+                      role="listitem"
+                      onClick={(e) => { e.stopPropagation(); setActive(i) }}
+                      className="relative flex-shrink-0"
+                      style={{
+                        width: '56px',
+                        height: '42px',
+                        overflow: 'hidden',
+                        padding: 0,
+                        cursor: 'pointer',
+                        backgroundColor: 'rgba(255,255,255,0.04)',
+                        border: i === active
+                          ? '1.5px solid var(--color-accent-base)'
+                          : '1.5px solid rgba(255,255,255,0.10)',
+                        opacity: i === active ? 1 : 0.52,
+                        transition: 'border-color 0.2s, opacity 0.2s',
+                      }}
+                      aria-label={`Photo ${i + 1}`}
+                      aria-pressed={i === active}
+                    >
+                      <Image
+                        src={src}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        sizes="56px"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </m.div>
+
           </m.div>
         )}
       </AnimatePresence>
 
-      {/* Panorama viewer */}
+      {/* ── Panorama viewer ── */}
       <AnimatePresence>
         {immersive && panorama && (
           <PanoramaViewer
