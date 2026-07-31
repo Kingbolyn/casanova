@@ -9,6 +9,7 @@ import { EnquiryForm } from '@/components/property/EnquiryForm'
 import { RelatedProperties } from '@/components/property/RelatedProperties'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { JsonLd } from '@/components/seo/JsonLd'
+import Link from 'next/link'
 import { BASE_URL, canonical } from '@/lib/seo'
 import { properties } from '@/lib/data/properties'
 
@@ -129,7 +130,13 @@ export default async function PropertyPage({ params }: Props) {
                 className="block mb-3"
                 style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: 'var(--tracking-widest)' }}
               >
-                {location.neighbourhood} · {location.city} · {property.type}
+                <Link
+                  href={`/neighbourhoods/${location.neighbourhood.toLowerCase().replace(/\s+/g, '-')}`}
+                  style={{ color: 'inherit', textDecoration: 'none' }}
+                >
+                  {location.neighbourhood}
+                </Link>
+                {' · '}{location.city} · {property.type}
               </Label>
               <Heading as={1} size="h1" color="inverse" className="mb-3">
                 {property.title}

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { properties } from '@/lib/data/properties'
 import { collections } from '@/lib/data/collections'
+import { neighbourhoods } from '@/lib/data/neighbourhoods'
 import { BASE_URL as BASE } from '@/lib/seo'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -29,5 +30,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority:        0.7,
   }))
 
-  return [...staticRoutes, ...propertyRoutes, ...collectionRoutes]
+  const neighbourhoodRoutes: MetadataRoute.Sitemap = neighbourhoods.map((n) => ({
+    url:             `${BASE}/neighbourhoods/${n.slug}`,
+    lastModified:    new Date(),
+    changeFrequency: 'monthly' as const,
+    priority:        0.8,
+  }))
+
+  const neighbourhoodIndex: MetadataRoute.Sitemap = [{
+    url:             `${BASE}/neighbourhoods`,
+    lastModified:    new Date(),
+    changeFrequency: 'monthly' as const,
+    priority:        0.7,
+  }]
+
+  return [...staticRoutes, ...propertyRoutes, ...collectionRoutes, ...neighbourhoodIndex, ...neighbourhoodRoutes]
 }

@@ -108,9 +108,9 @@ export function LocationDiscovery({ activeNeighbourhood, propertyCounts, onSelec
                   {n.name}
                 </p>
 
-                {/* Lifestyle highlights */}
+                {/* Lifestyle chips from atAGlance */}
                 <div className="flex flex-wrap gap-1 mb-3">
-                  {n.lifestyle.slice(0, 2).map((l) => (
+                  {[n.atAGlance.security, n.atAGlance.lifestyleRating].map((l) => (
                     <span
                       key={l}
                       style={{
@@ -128,13 +128,10 @@ export function LocationDiscovery({ activeNeighbourhood, propertyCounts, onSelec
                   ))}
                 </div>
 
-                {/* Count + style */}
+                {/* Count */}
                 <div className="flex items-center justify-between">
                   <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-accent-base)', letterSpacing: 'var(--tracking-wide)', fontFamily: 'var(--font-body)' }}>
                     {count} {count === 1 ? 'residence' : 'residences'}
-                  </p>
-                  <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.3)', letterSpacing: 'var(--tracking-wide)', fontFamily: 'var(--font-body)' }}>
-                    {n.architecturalStyle}
                   </p>
                 </div>
               </div>
