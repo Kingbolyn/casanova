@@ -1,40 +1,155 @@
 import Link from 'next/link'
-import { primaryNav } from '@/lib/data/navigation'
 import { Label, Caption } from '@/components/ui/Typography'
 
-const legalLinks = [
-  { label: 'Privacy Policy',    href: '/privacy'     },
-  { label: 'Terms of Service',  href: '/terms'       },
-  { label: 'Cookie Policy',     href: '/cookies'     },
+/* ─── Data ───────────────────────────────────────────────────────── */
+
+const exploreLinks = [
+  { label: 'All Properties',  href: '/properties'    },
+  { label: 'Collections',     href: '/collections'   },
+  { label: 'Neighbourhoods',  href: '/neighbourhoods' },
+  { label: 'Search',          href: '/search'        },
 ]
 
-const contactDetails = [
-  { label: 'hello@casanova.com' },
-  { label: '+1 (555) 000-0000'  },
-  { label: 'Lagos, Nigeria'     },
+const neighbourhoodLinks = [
+  { label: 'Victoria Island', href: '/neighbourhoods/victoria-island' },
+  { label: 'Ikoyi',           href: '/neighbourhoods/ikoyi'           },
+  { label: 'Banana Island',   href: '/neighbourhoods/banana-island'   },
+  { label: 'Lekki',           href: '/neighbourhoods/lekki'           },
+  { label: 'Maitama',         href: '/neighbourhoods/maitama'         },
+  { label: 'Asokoro',         href: '/neighbourhoods/asokoro'         },
 ]
+
+const companyLinks = [
+  { label: 'About',           href: '/about'   },
+  { label: 'Contact',         href: '/contact' },
+  { label: 'Privacy Policy',  href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms'  },
+  { label: 'Cookie Policy',   href: '/cookies' },
+]
+
+const legalLinks = [
+  { label: 'Privacy Policy',   href: '/privacy' },
+  { label: 'Terms of Service', href: '/terms'   },
+  { label: 'Cookie Policy',    href: '/cookies' },
+]
+
+/* ─── Column component ───────────────────────────────────────────── */
+
+interface FooterColumnProps {
+  heading: string
+  links: Array<{ label: string; href: string }>
+}
+
+function FooterColumn({ heading, links }: FooterColumnProps) {
+  return (
+    <div>
+      <Label
+        className="block mb-5"
+        style={{
+          color:          'rgba(255,255,255,0.35)',
+          letterSpacing:  '0.14em',
+          fontSize:       'var(--type-xs)',
+        }}
+      >
+        {heading}
+      </Label>
+      <ul className="flex flex-col list-none" style={{ gap: '0.875rem' }} role="list">
+        {links.map((item) => (
+          <li key={item.href}>
+            <Link href={item.href} className="footer-link-nav">
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────── */
 
 function Footer() {
   return (
     <footer
       style={{
         backgroundColor: 'var(--color-primary-base)',
-        color: 'var(--color-text-inverse)',
+        color:           'var(--color-text-inverse)',
       }}
       aria-label="Site footer"
     >
-      {/* Main footer */}
+
+      {/* ── Pre-footer CTA strip ──────────────────────────────────── */}
+      <div
+        style={{
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          padding:      'clamp(3rem, 6vw, 5rem) 0',
+        }}
+      >
+        <div className="container-content">
+          <div
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+            style={{ gap: 'var(--space-8)' }}
+          >
+            <div>
+              <p
+                style={{
+                  fontFamily:    'var(--font-display)',
+                  fontSize:      'clamp(1.5rem, 3vw, 2.25rem)',
+                  fontWeight:    300,
+                  letterSpacing: 'var(--tracking-tight)',
+                  color:         'var(--color-text-inverse)',
+                  lineHeight:    1.2,
+                  marginBottom:  '0.5rem',
+                }}
+              >
+                Ready to find your property?
+              </p>
+              <p
+                style={{
+                  fontSize:  'var(--type-small)',
+                  color:     'rgba(255,255,255,0.45)',
+                  lineHeight: 1.6,
+                }}
+              >
+                An advisor responds within one business day.
+              </p>
+            </div>
+            <div
+              className="flex flex-col sm:flex-row"
+              style={{ gap: 'var(--space-3)', flexShrink: 0 }}
+            >
+              <Link
+                href="/properties"
+                className="footer-cta-secondary"
+              >
+                Browse Properties
+              </Link>
+              <Link
+                href="/contact"
+                className="footer-cta-primary"
+              >
+                Speak with an Advisor
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Main grid ─────────────────────────────────────────────── */}
       <div className="container-content section-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-12)' }}>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr]"
+          style={{ gap: 'clamp(2.5rem, 5vw, 3.5rem)' }}
+        >
 
           {/* Brand */}
-          <div className="lg:col-span-2">
+          <div>
             <Link
               href="/"
-              className="font-display font-light block mb-6"
+              className="font-display font-light block mb-5"
               style={{
-                fontSize: 'var(--type-h3)',
-                color: 'var(--color-text-inverse)',
+                fontSize:      'var(--type-h3)',
+                color:         'var(--color-text-inverse)',
                 letterSpacing: 'var(--tracking-tight)',
               }}
               aria-label="CasaNova Home"
@@ -44,75 +159,91 @@ function Footer() {
             <p
               className="font-body mb-8"
               style={{
-                fontSize: 'var(--type-base)',
-                lineHeight: 'var(--leading-relaxed)',
-                color: 'rgba(255,255,255,0.55)',
-                maxWidth: '36ch',
+                fontSize:   'var(--type-small)',
+                lineHeight: 1.8,
+                color:      'rgba(255,255,255,0.45)',
+                maxWidth:   '34ch',
               }}
             >
-              Property discovery begins with emotion, not transaction. We help you find not just a house, but a home that fits your life.
+              Property discovery begins with emotion, not transaction.
+              We help you find not just a house, but a home that fits your life.
             </p>
+
+            {/* Contact details */}
+            <ul className="flex flex-col list-none" style={{ gap: '0.625rem' }} role="list">
+              <li>
+                <a
+                  href="mailto:hello@casanova.ng"
+                  className="footer-contact-link"
+                  aria-label="Email CasaNova"
+                >
+                  hello@casanova.ng
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+2348000000000"
+                  className="footer-contact-link"
+                  aria-label="Call CasaNova"
+                >
+                  +234 (0) 800 000 0000
+                </a>
+              </li>
+              <li>
+                <span
+                  style={{
+                    fontSize: 'var(--type-xs)',
+                    color:    'rgba(255,255,255,0.35)',
+                    fontFamily: 'var(--font-body)',
+                  }}
+                >
+                  Lagos &amp; Abuja, Nigeria
+                </span>
+              </li>
+            </ul>
+
             {/* Accent line */}
-            <div style={{ width: '40px', height: '1px', backgroundColor: 'var(--color-accent-base)' }} />
+            <div
+              style={{
+                width:           '32px',
+                height:          '1px',
+                backgroundColor: 'var(--color-accent-base)',
+                marginTop:       'var(--space-8)',
+              }}
+              aria-hidden="true"
+            />
           </div>
 
-          {/* Navigation */}
-          <div>
-            <Label color="tertiary" className="block mb-6" style={{ color: 'rgba(255,255,255,0.4)' }}>
-              Navigate
-            </Label>
-            <ul className="flex flex-col gap-4 list-none" role="list">
-              {primaryNav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="font-body footer-link-nav"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Explore */}
+          <FooterColumn heading="Explore"        links={exploreLinks}      />
 
-          {/* Contact */}
-          <div>
-            <Label color="tertiary" className="block mb-6" style={{ color: 'rgba(255,255,255,0.4)' }}>
-              Contact
-            </Label>
-            <ul className="flex flex-col gap-4 list-none" role="list">
-              {contactDetails.map((item) => (
-                <li key={item.label}>
-                  <span
-                    className="font-body"
-                    style={{ fontSize: 'var(--type-small)', color: 'rgba(255,255,255,0.6)' }}
-                  >
-                    {item.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Neighbourhoods */}
+          <FooterColumn heading="Neighbourhoods" links={neighbourhoodLinks} />
+
+          {/* Company */}
+          <FooterColumn heading="Company"        links={companyLinks}      />
+
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+      {/* ── Bottom bar ────────────────────────────────────────────── */}
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="container-content">
           <div
-            className="flex flex-col sm:flex-row items-center justify-between gap-4"
-            style={{ paddingBlock: 'var(--space-6)' }}
+            className="flex flex-col sm:flex-row items-center justify-between"
+            style={{ paddingBlock: 'var(--space-6)', gap: 'var(--space-4)' }}
           >
             <Caption style={{ color: 'rgba(255,255,255,0.55)' }}>
               © 2026 CasaNova. All rights reserved.
             </Caption>
-            <ul className="flex items-center gap-6 list-none" role="list">
+            <ul
+              className="flex flex-wrap items-center justify-center list-none"
+              style={{ gap: 'var(--space-6)' }}
+              role="list"
+            >
               {legalLinks.map((item) => (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="font-body footer-link-legal"
-                  >
+                  <Link href={item.href} className="footer-link-legal">
                     {item.label}
                   </Link>
                 </li>
@@ -121,6 +252,7 @@ function Footer() {
           </div>
         </div>
       </div>
+
     </footer>
   )
 }

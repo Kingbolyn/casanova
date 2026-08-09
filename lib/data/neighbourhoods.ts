@@ -130,7 +130,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'lekki',         name: 'Lekki',         city: 'Lagos' },
     ],
     seo: {
-      metaTitle:       'Victoria Island, Lagos | CasaNova',
+      metaTitle:       'Victoria Island, Lagos',
       metaDescription: "Where Lagos does business and decides to stay. Discover premium residences on Victoria Island, the city's most connected and prestigious address.",
       ogImage:         'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&q=80',
     },
@@ -199,7 +199,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'lekki',           name: 'Lekki',           city: 'Lagos' },
     ],
     seo: {
-      metaTitle:       'Ikoyi, Lagos | CasaNova',
+      metaTitle:       'Ikoyi, Lagos',
       metaDescription: "Old money, new standards, quiet excellence. Explore premium residences in Ikoyi, Lagos's most discreet and distinguished residential address.",
       ogImage:         'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80',
     },
@@ -267,7 +267,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'victoria-island', name: 'Victoria Island', city: 'Lagos' },
     ],
     seo: {
-      metaTitle:       'Banana Island, Lagos | CasaNova',
+      metaTitle:       'Banana Island, Lagos',
       metaDescription: "Lagos's most private address. Discover ultra-premium residences on Banana Island, West Africa's most exclusive residential enclave.",
       ogImage:         'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=1200&q=80',
     },
@@ -334,7 +334,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'ikoyi',           name: 'Ikoyi',           city: 'Lagos' },
     ],
     seo: {
-      metaTitle:       'Lekki, Lagos | CasaNova',
+      metaTitle:       'Lekki, Lagos',
       metaDescription: "The city's next chapter, already written. Discover modern premium residences in Lekki, Lagos's fastest-growing luxury address on the Atlantic coast.",
       ogImage:         'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200&q=80',
     },
@@ -401,7 +401,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'asokoro', name: 'Asokoro', city: 'Abuja' },
     ],
     seo: {
-      metaTitle:       'Maitama, Abuja | CasaNova',
+      metaTitle:       'Maitama, Abuja',
       metaDescription: "Abuja at its most considered. Discover established premium residences in Maitama, the federal capital's most prestigious and serene residential address.",
       ogImage:         'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&q=80',
     },
@@ -468,7 +468,7 @@ export const neighbourhoods: Neighbourhood[] = [
       { slug: 'maitama', name: 'Maitama', city: 'Abuja' },
     ],
     seo: {
-      metaTitle:       'Asokoro, Abuja | CasaNova',
+      metaTitle:       'Asokoro, Abuja',
       metaDescription: 'The address power returns to at the end of the day. Discover apex exclusive residences in Asokoro, the most prestigious and private address in Nigeria\'s capital.',
       ogImage:         'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&q=80',
     },

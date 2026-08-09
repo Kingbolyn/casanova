@@ -219,46 +219,45 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
 
       {/* ── Thumbnail strip ── */}
       {images.length > 1 && (
-        <div
-          className="flex gap-1.5 mt-2"
+        <ul
+          className="flex gap-1.5 mt-2 list-none"
           style={{ overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: '2px' }}
-          role="list"
           aria-label="Gallery thumbnails"
         >
           {images.map((src, i) => (
-            <button
-              key={i}
-              role="listitem"
-              onClick={() => setActive(i)}
-              className="relative flex-shrink-0"
-              style={{
-                width: '72px',
-                height: '54px',
-                overflow: 'hidden',
-                padding: 0,
-                cursor: 'pointer',
-                backgroundColor: 'var(--color-surface-secondary)',
-                border: i === active
-                  ? '1.5px solid var(--color-accent-base)'
-                  : '1.5px solid transparent',
-                transition: 'border-color 0.2s',
-              }}
-              aria-label={`Photo ${i + 1}`}
-              aria-pressed={i === active}
-            >
-              <Image
-                src={src}
-                alt={`${title} thumbnail ${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="72px"
-              />
-              {i !== active && (
-                <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.28)' }} />
-              )}
-            </button>
+            <li key={i} style={{ flexShrink: 0 }}>
+              <button
+                onClick={() => setActive(i)}
+                className="relative block"
+                style={{
+                  width: '72px',
+                  height: '54px',
+                  overflow: 'hidden',
+                  padding: 0,
+                  cursor: 'pointer',
+                  backgroundColor: 'var(--color-surface-secondary)',
+                  border: i === active
+                    ? '1.5px solid var(--color-accent-base)'
+                    : '1.5px solid transparent',
+                  transition: 'border-color 0.2s',
+                }}
+                aria-label={`Photo ${i + 1}`}
+                aria-pressed={i === active}
+              >
+                <Image
+                  src={src}
+                  alt={`${title} thumbnail ${i + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="72px"
+                />
+                {i !== active && (
+                  <div className="absolute inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.28)' }} />
+                )}
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {/* ── Lightbox ── */}
@@ -375,44 +374,43 @@ function PropertyGallery({ images, title, panorama }: PropertyGalleryProps) {
               </p>
 
               {images.length > 1 && (
-                <div
-                  className="flex gap-1.5"
+                <ul
+                  className="flex gap-1.5 list-none"
                   style={{ overflowX: 'auto', scrollbarWidth: 'none', maxWidth: 'min(92vw, 1400px)', paddingBottom: '2px' }}
-                  role="list"
                   aria-label="Photo thumbnails"
                 >
                   {images.map((src, i) => (
-                    <button
-                      key={i}
-                      role="listitem"
-                      onClick={(e) => { e.stopPropagation(); setActive(i) }}
-                      className="relative flex-shrink-0"
-                      style={{
-                        width: '56px',
-                        height: '42px',
-                        overflow: 'hidden',
-                        padding: 0,
-                        cursor: 'pointer',
-                        backgroundColor: 'rgba(255,255,255,0.04)',
-                        border: i === active
-                          ? '1.5px solid var(--color-accent-base)'
-                          : '1.5px solid rgba(255,255,255,0.10)',
-                        opacity: i === active ? 1 : 0.52,
-                        transition: 'border-color 0.2s, opacity 0.2s',
-                      }}
-                      aria-label={`Photo ${i + 1}`}
-                      aria-pressed={i === active}
-                    >
-                      <Image
-                        src={src}
-                        alt=""
-                        fill
-                        className="object-cover"
-                        sizes="56px"
-                      />
-                    </button>
+                    <li key={i} style={{ flexShrink: 0 }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setActive(i) }}
+                        className="relative block"
+                        style={{
+                          width: '56px',
+                          height: '42px',
+                          overflow: 'hidden',
+                          padding: 0,
+                          cursor: 'pointer',
+                          backgroundColor: 'rgba(255,255,255,0.04)',
+                          border: i === active
+                            ? '1.5px solid var(--color-accent-base)'
+                            : '1.5px solid rgba(255,255,255,0.10)',
+                          opacity: i === active ? 1 : 0.52,
+                          transition: 'border-color 0.2s, opacity 0.2s',
+                        }}
+                        aria-label={`Photo ${i + 1}`}
+                        aria-pressed={i === active}
+                      >
+                        <Image
+                          src={src}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </m.div>
 

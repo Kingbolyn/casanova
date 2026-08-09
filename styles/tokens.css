@@ -20,6 +20,7 @@
   --color-surface-off-white:   #F9F8F6;   /* warm parchment - primary bg        */
   --color-surface-light:       #F2F0ED;   /* section separation                 */
   --color-surface-muted:       #E8E5E1;   /* subtle dividers, card bg           */
+  --color-surface-elevated:    #FFFFFF;   /* cards and chips lifted above surface */
 
   /* ----------------------------------------------------------
      COLOR - ACCENT
@@ -291,7 +292,9 @@
   --color-surface-primary:   var(--color-surface-off-white);
   --color-surface-secondary: var(--color-surface-light);
   --color-text-muted:        var(--color-text-tertiary);
-  --color-text-subtle:       var(--color-text-disabled);
+  /* NOTE: --color-text-disabled (#ABABAB) is WCAG-exempt for truly disabled UI.
+     --color-text-subtle maps to tertiary (#737373, 4.74:1 on white) for visible content. */
+  --color-text-subtle:       var(--color-text-tertiary);
 
   /* Typography aliases - --text-* → --type-* */
   --text-xs:    var(--type-caption);    /* 12px */

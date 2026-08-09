@@ -1,7 +1,8 @@
 ﻿'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
+import { useFocusTrap } from '@/lib/hooks/useFocusTrap'
 import { PropertyFilters, type FilterState } from './PropertyFilters'
 
 interface FilterModalProps {
@@ -14,6 +15,11 @@ interface FilterModalProps {
 }
 
 export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, total }: FilterModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  /* Trap focus inside the panel while it is open */
+  useFocusTrap(panelRef, open)
+
   /* Lock scroll */
   useEffect(() => {
     if (!open) return
@@ -47,6 +53,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
 
           {/* Panel - slides up from bottom */}
           <m.div
+            ref={panelRef}
             className="fixed bottom-0 left-0 right-0"
             style={{
               zIndex:          151,

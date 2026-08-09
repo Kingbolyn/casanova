@@ -56,7 +56,7 @@ function NeighbourhoodSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: 'var(--grid-gap-md)' }}>
             {neighbourhoods.map((n) => (
               <StaggerItem key={n.slug}>
-                <Link href={`/properties?neighbourhood=${n.slug}`} className="group block">
+                <Link href={`/neighbourhoods/${n.slug}`} className="group block">
                   <article>
                     {/* Image */}
                     <div

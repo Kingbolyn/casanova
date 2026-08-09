@@ -7,7 +7,7 @@ import type { PropertyType, PropertyStatus } from '@/lib/types'
 
 /* ─── Types ─────────────────────────────────────────────── */
 
-export type SortOption = 'recommended' | 'newest' | 'price-asc' | 'price-desc' | 'largest' | 'exclusive'
+export type SortOption = 'recommended' | 'newest' | 'price-asc' | 'price-desc' | 'largest'
 
 export interface FilterState {
   query:         string
@@ -63,7 +63,6 @@ const SORTS: { value: SortOption; label: string }[] = [
   { value: 'price-asc',   label: 'Price: Low to High' },
   { value: 'price-desc',  label: 'Price: High to Low' },
   { value: 'largest',     label: 'Largest Living Space' },
-  { value: 'exclusive',   label: 'Most Exclusive' },
 ]
 
 const COLLECTIONS = [
@@ -108,23 +107,112 @@ function NeighbourhoodSelect({
   const [open, setOpen]     = useState(false)
   const [query, setQuery]   = useState('')
   const ref                 = useRef<HTMLDivElement>(null)
+  const triggerRef          = useRef<HTMLButtonElement>(null)
+  const optionsRef          = useRef<HTMLDivElement>(null)
 
-  const filtered = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()))
-  const label    = value === 'all' ? 'All Neighbourhoods' : value
+  const filtered   = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()))
+  const label      = value === 'all' ? 'All Neighbourhoods' : value
+  const showSearch = options.length > 5
 
+  /* Close on outside click */
   useEffect(() => {
     const close = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+        setQuery('')
+      }
     }
     document.addEventListener('mousedown', close)
     return () => document.removeEventListener('mousedown', close)
   }, [])
 
+  /* Return focus to trigger and close */
+  const closeAndReturn = () => {
+    setOpen(false)
+    setQuery('')
+    requestAnimationFrame(() => triggerRef.current?.focus())
+  }
+
+  /* Select an option, close, return focus */
+  const selectOption = (v: string) => {
+    onChange(v)
+    closeAndReturn()
+  }
+
+  /* Trigger keydown: ArrowDown opens and moves focus into list */
+  const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!open) { setOpen(true); setQuery('') }
+      // Defer so the listbox is mounted before we try to focus into it
+      requestAnimationFrame(() => {
+        if (showSearch) {
+          ref.current?.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
+        } else {
+          optionsRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
+        }
+      })
+    } else if (e.key === 'Escape') {
+      setOpen(false)
+    }
+  }
+
+  /* Search input keydown: ArrowDown enters option list, Escape closes */
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      optionsRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      closeAndReturn()
+    }
+  }
+
+  /* Option button keydown: arrow navigation, Escape */
+  const handleOptionKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    index: number,
+    total: number,
+  ) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
+      buttons?.[Math.min(index + 1, total - 1)]?.focus()
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (index === 0) {
+        if (showSearch) {
+          ref.current?.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
+        } else {
+          closeAndReturn()
+        }
+      } else {
+        const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
+        buttons?.[index - 1]?.focus()
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      closeAndReturn()
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      optionsRef.current?.querySelector<HTMLButtonElement>('button')?.focus()
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
+      buttons?.[buttons.length - 1]?.focus()
+    }
+  }
+
+  /* All options (including "All Neighbourhoods") */
+  const allOptionValues = ['all', ...filtered]
+
   return (
     <div ref={ref} style={{ position: 'relative', minWidth: '160px' }}>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => { setOpen((o) => !o); setQuery('') }}
+        onKeyDown={handleTriggerKeyDown}
         style={{
           ...selectStyle,
           display:    'flex',
@@ -136,6 +224,7 @@ function NeighbourhoodSelect({
         }}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label={`Neighbourhood: ${label}`}
       >
         <span style={{ flex: 1, textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {label}
@@ -164,12 +253,13 @@ function NeighbourhoodSelect({
               flexDirection:   'column',
             }}
           >
-            {options.length > 5 && (
+            {showSearch && (
               <div style={{ padding: '8px', borderBottom: '1px solid var(--color-border-base)' }}>
                 <input
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
                   placeholder="Search..."
                   autoFocus
                   style={{
@@ -186,31 +276,15 @@ function NeighbourhoodSelect({
                 />
               </div>
             )}
-            <div style={{ overflowY: 'auto', flex: 1 }}>
-              <button
-                type="button"
-                onClick={() => { onChange('all'); setOpen(false) }}
-                style={{
-                  display:         'block',
-                  width:           '100%',
-                  textAlign:       'left',
-                  padding:         '0.5rem 0.875rem',
-                  fontSize:        'var(--text-xs)',
-                  letterSpacing:   'var(--tracking-wide)',
-                  fontFamily:      'var(--font-body)',
-                  color:           value === 'all' ? 'var(--color-accent-base)' : 'var(--color-text-primary)',
-                  backgroundColor: 'transparent',
-                  border:          'none',
-                  cursor:          'pointer',
-                }}
-              >
-                All Neighbourhoods
-              </button>
-              {filtered.map((n) => (
+            <div ref={optionsRef} role="listbox" aria-label="Neighbourhoods" style={{ overflowY: 'auto', flex: 1 }}>
+              {allOptionValues.map((n, i) => (
                 <button
                   key={n}
                   type="button"
-                  onClick={() => { onChange(n); setOpen(false) }}
+                  role="option"
+                  aria-selected={value === n}
+                  onClick={() => selectOption(n)}
+                  onKeyDown={(e) => handleOptionKeyDown(e, i, allOptionValues.length)}
                   style={{
                     display:         'block',
                     width:           '100%',
@@ -225,7 +299,7 @@ function NeighbourhoodSelect({
                     cursor:          'pointer',
                   }}
                 >
-                  {n}
+                  {n === 'all' ? 'All Neighbourhoods' : n}
                 </button>
               ))}
             </div>

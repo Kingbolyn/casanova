@@ -103,6 +103,11 @@ export default async function NeighbourhoodPage({ params }: Props) {
           eyebrow={`${n.city} · Nigeria`}
           heading={n.name}
           tagline={n.tagline}
+          breadcrumb={[
+            { label: 'Home',           href: '/'               },
+            { label: 'Neighbourhoods', href: '/neighbourhoods'  },
+            { label: n.name },
+          ]}
         />
 
         <CharacterSection name={n.name} character={n.character} />

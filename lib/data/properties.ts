@@ -20,6 +20,7 @@ export const properties: Property[] = [
       neighbourhood: 'Victoria Island',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4281, lng: 3.4219 },
     },
     media: {
       hero:     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80',
@@ -59,6 +60,7 @@ export const properties: Property[] = [
       neighbourhood: 'Banana Island',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4698, lng: 3.4343 },
     },
     media: {
       hero:     'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80',
@@ -99,6 +101,7 @@ export const properties: Property[] = [
       neighbourhood: 'Maitama',
       state:         'FCT',
       country:       'Nigeria',
+      coordinates:   { lat: 9.0820, lng: 7.4886 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=80',
@@ -141,6 +144,7 @@ export const properties: Property[] = [
       neighbourhood: 'Ikoyi',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4531, lng: 3.4290 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80',
@@ -180,6 +184,7 @@ export const properties: Property[] = [
       neighbourhood: 'Lekki Phase 1',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4540, lng: 3.5395 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1200&q=80',
@@ -220,6 +225,7 @@ export const properties: Property[] = [
       neighbourhood: 'Asokoro',
       state:         'FCT',
       country:       'Nigeria',
+      coordinates:   { lat: 9.0484, lng: 7.5212 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1558661091-5cc1b64d0dc5?w=1200&q=80',
@@ -260,6 +266,7 @@ export const properties: Property[] = [
       neighbourhood: 'Ikoyi',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4487, lng: 3.4350 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80',
@@ -299,6 +306,7 @@ export const properties: Property[] = [
       neighbourhood: 'Wuse II',
       state:         'FCT',
       country:       'Nigeria',
+      coordinates:   { lat: 9.0760, lng: 7.4892 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1502005097973-6a7082348e28?w=1200&q=80',
@@ -339,6 +347,7 @@ export const properties: Property[] = [
       neighbourhood: 'Victoria Island',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4296, lng: 3.4179 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=1200&q=80',
@@ -378,6 +387,7 @@ export const properties: Property[] = [
       neighbourhood: 'Banana Island',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4688, lng: 3.4368 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80',
@@ -418,6 +428,7 @@ export const properties: Property[] = [
       neighbourhood: 'Lekki Peninsula',
       state:         'Lagos State',
       country:       'Nigeria',
+      coordinates:   { lat: 6.4535, lng: 3.5730 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=80',
@@ -458,6 +469,7 @@ export const properties: Property[] = [
       neighbourhood: 'Old GRA',
       state:         'Rivers State',
       country:       'Nigeria',
+      coordinates:   { lat: 4.8196, lng: 7.0134 },
     },
     media: {
       hero:    'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?w=1200&q=80',

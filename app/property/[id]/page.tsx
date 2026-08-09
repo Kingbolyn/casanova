@@ -9,9 +9,11 @@ import { EnquiryForm } from '@/components/property/EnquiryForm'
 import { RelatedProperties } from '@/components/property/RelatedProperties'
 import { FadeIn } from '@/components/motion/FadeIn'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { Breadcrumb } from '@/components/layout/Breadcrumb'
 import Link from 'next/link'
 import { BASE_URL, canonical } from '@/lib/seo'
 import { properties } from '@/lib/data/properties'
+import { PropertyMap } from '@/components/property/PropertyMap'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -125,6 +127,17 @@ export default async function PropertyPage({ params }: Props) {
         />
         <div className="absolute bottom-0 left-0 right-0 pb-12">
           <Container width="wide">
+            {/* Breadcrumb */}
+            <div className="mb-6">
+              <Breadcrumb
+                variant="light"
+                items={[
+                  { label: 'Home',       href: '/'           },
+                  { label: 'Properties', href: '/properties' },
+                  { label: property.title },
+                ]}
+              />
+            </div>
             <FadeIn direction="up">
               <Label
                 className="block mb-3"
@@ -271,24 +284,36 @@ export default async function PropertyPage({ params }: Props) {
                     <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>{location.country}</p>
                   </div>
 
-                  {/* Map placeholder */}
-                  <div
-                    className="mt-6 flex flex-col items-center justify-center gap-3"
-                    style={{
-                      height: '240px',
-                      backgroundColor: 'var(--color-surface-secondary)',
-                      border: '1px solid var(--color-border-base)',
-                    }}
-                    aria-label={`Map showing location of ${property.title}`}
-                    role="img"
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="var(--color-text-subtle)" />
-                    </svg>
-                    <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-subtle)', letterSpacing: 'var(--tracking-widest)' }}>
-                      {location.neighbourhood}, {location.city}
-                    </p>
-                  </div>
+                  {/* Map — CN-020 */}
+                  {location.coordinates ? (
+                    <div className="mt-6">
+                      <PropertyMap
+                        lat={location.coordinates.lat}
+                        lng={location.coordinates.lng}
+                        title={property.title}
+                        address={`${location.address}, ${location.neighbourhood}, ${location.city}`}
+                      />
+                    </div>
+                  ) : (
+                    /* Fallback: shown only if coordinates are not yet populated */
+                    <div
+                      className="mt-6 flex flex-col items-center justify-center gap-3"
+                      style={{
+                        height: '240px',
+                        backgroundColor: 'var(--color-surface-secondary)',
+                        border: '1px solid var(--color-border-base)',
+                      }}
+                      aria-label={`Map showing location of ${property.title}`}
+                      role="img"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" fill="var(--color-text-subtle)" />
+                      </svg>
+                      <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-subtle)', letterSpacing: 'var(--tracking-widest)' }}>
+                        {location.neighbourhood}, {location.city}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </FadeIn>
             </div>
@@ -298,6 +323,7 @@ export default async function PropertyPage({ params }: Props) {
               <FadeIn direction="up" delay={0.2}>
                 <EnquiryForm
                   propertyTitle={property.title}
+                  propertyId={property.id}
                   priceLabel={property.priceLabel}
                 />
               </FadeIn>

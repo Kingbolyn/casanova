@@ -1,14 +1,16 @@
 import Image from 'next/image'
 import { Container } from '@/components/layout/Container'
 import { FadeIn } from '@/components/motion/FadeIn'
+import { Breadcrumb, type BreadcrumbItem } from '@/components/layout/Breadcrumb'
 
 interface NeighbourhoodHeroProps {
-  variant:   'index' | 'individual'
-  image:     string
-  focalY:    string
-  eyebrow:   string
-  heading:   string
-  tagline?:  string
+  variant:     'index' | 'individual'
+  image:       string
+  focalY:      string
+  eyebrow:     string
+  heading:     string
+  tagline?:    string
+  breadcrumb?: BreadcrumbItem[]
 }
 
 export function NeighbourhoodHero({
@@ -18,6 +20,7 @@ export function NeighbourhoodHero({
   eyebrow,
   heading,
   tagline,
+  breadcrumb,
 }: NeighbourhoodHeroProps) {
   const height = variant === 'index' ? '100svh' : '90svh'
 
@@ -45,6 +48,11 @@ export function NeighbourhoodHero({
       />
       <div className="absolute bottom-0 left-0 right-0 pb-16 lg:pb-24">
         <Container width="wide">
+          {breadcrumb && breadcrumb.length > 0 && (
+            <div className="mb-6">
+              <Breadcrumb variant="light" items={breadcrumb} />
+            </div>
+          )}
           <FadeIn direction="up">
             <p
               className="mb-4"

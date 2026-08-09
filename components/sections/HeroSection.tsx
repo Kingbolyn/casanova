@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { m, useScroll, useTransform } from 'framer-motion'
+import { m, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Label } from '@/components/ui/Typography'
@@ -16,11 +16,13 @@ import { DUR, EASE } from '@/lib/motion'
 const C = { dur: DUR.cinematic, ease: EASE.cinematic } as const
 
 function HeroSection() {
-  const ref = useRef<HTMLElement>(null)
+  const ref            = useRef<HTMLElement>(null)
+  const prefersReduced = useReducedMotion()
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
 
   /* Parallax + scroll-driven fade */
-  const imageY  = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  const imageY  = useTransform(scrollYProgress, [0, 1], ['0%', prefersReduced ? '0%' : '20%'])
   const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0])
 
   /* Ambient drift - very slow horizontal translate on the image */
@@ -39,8 +41,8 @@ function HeroSection() {
         <m.div
           className="absolute inset-0"
           style={{ willChange: 'transform' }}
-          animate={{ x: ['0%', '-1.5%', '0%'] }}
-          transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut' }}
+          animate={prefersReduced ? {} : { x: ['0%', '-1.5%', '0%'] }}
+          transition={prefersReduced ? {} : { duration: 40, repeat: Infinity, ease: 'easeInOut' }}
         >
           <Image
             src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=2000&q=85"
@@ -154,8 +156,8 @@ function HeroSection() {
           <m.span
             className="block"
             style={{ width: '1px', height: '48px', backgroundColor: 'rgba(255,255,255,0.3)' }}
-            animate={{ scaleY: [1, 0.3, 1], opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            animate={prefersReduced ? {} : { scaleY: [1, 0.3, 1], opacity: [0.3, 1, 0.3] }}
+            transition={prefersReduced ? {} : { duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           />
         </m.div>
       </m.div>

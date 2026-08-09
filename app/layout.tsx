@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   alternates: { canonical: BASE_URL },
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'en_NG',
     url: BASE_URL,
     siteName: 'CasaNova',
     title: 'CasaNova: Exceptional Properties',
@@ -84,9 +84,8 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="en-NG"
       className={`${cormorant.variable} ${dmSans.variable}`}
-      suppressHydrationWarning
     >
       <body>
         <MotionProvider>

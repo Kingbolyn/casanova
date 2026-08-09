@@ -6,6 +6,7 @@ import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import { PropertyGrid } from '@/components/property/PropertyGrid'
 import { FadeIn } from '@/components/motion/FadeIn'
+import { Breadcrumb } from '@/components/layout/Breadcrumb'
 import { collections, getPropertiesInCollection } from '@/lib/data/collections'
 import { properties } from '@/lib/data/properties'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -85,6 +86,16 @@ export default async function CollectionDetailPage({ params }: Props) {
         />
         <div className="absolute bottom-0 left-0 right-0 pb-12">
           <Container width="wide">
+            <div className="mb-6">
+              <Breadcrumb
+                variant="light"
+                items={[
+                  { label: 'Home',        href: '/'            },
+                  { label: 'Collections', href: '/collections' },
+                  { label: collection.name },
+                ]}
+              />
+            </div>
             <FadeIn direction="up">
               <Label
                 className="block mb-3"

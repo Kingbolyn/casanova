@@ -151,7 +151,7 @@ function Navbar() {
             {/* Mobile search + toggle */}
             <button
               ref={hamburgerRef}
-              className="flex md:hidden flex-col justify-center items-center gap-1.5 w-10 h-10"
+              className="flex md:hidden flex-col justify-center items-center gap-1.5 w-11 h-11"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
@@ -325,12 +325,56 @@ function Navbar() {
                 </div>
               </nav>
 
+              {/* ── Search trigger ── opens SearchOverlay; never navigates to /search */}
+              <m.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.18 + 0.06 * primaryNav.length, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <button
+                  onClick={() => {
+                    setMobileOpen(false)
+                    // Defer by one frame so the drawer exit animation begins before
+                    // the overlay mounts — prevents two scroll-lock states competing.
+                    requestAnimationFrame(() => setSearchOpen(true))
+                  }}
+                  style={{
+                    display:        'flex',
+                    alignItems:     'center',
+                    gap:            '12px',
+                    padding:        '0 32px',
+                    minHeight:      '68px',
+                    width:          '100%',
+                    fontFamily:     'var(--font-body)',
+                    fontSize:       '11px',
+                    fontWeight:     600,
+                    letterSpacing:  '0.16em',
+                    textTransform:  'uppercase',
+                    color:          'var(--color-text-muted)',
+                    background:     'none',
+                    border:         'none',
+                    borderTop:      '1px solid var(--color-border-subtle)',
+                    borderBottom:   '1px solid var(--color-border-subtle)',
+                    cursor:         'pointer',
+                    textAlign:      'left',
+                    transition:     'color 0.2s',
+                  }}
+                  aria-label="Open property search"
+                >
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M12 12l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                  Search Properties
+                </button>
+              </m.div>
+
               {/* ── CTA ── */}
               <m.div
                 style={{ padding: '32px 32px 0' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.18 + 0.06 * primaryNav.length, duration: 0.35 }}
+                transition={{ delay: 0.18 + 0.06 * (primaryNav.length + 1), duration: 0.35 }}
               >
                 <button
                   onClick={() => { router.push('/contact'); setMobileOpen(false) }}
@@ -354,10 +398,10 @@ function Navbar() {
 
               {/* ── Footer ── */}
               <m.div
-                style={{ padding: '28px 32px 44px' }}
+                style={{ padding: '28px 32px max(44px, env(safe-area-inset-bottom))' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.18 + 0.06 * primaryNav.length + 0.1, duration: 0.35 }}
+                transition={{ delay: 0.18 + 0.06 * (primaryNav.length + 1) + 0.1, duration: 0.35 }}
               >
                 <div
                   style={{
@@ -368,31 +412,9 @@ function Navbar() {
                   }}
                 >
                   <div>hello@casanova.ng</div>
-                  <div>+234 (0) 800 123 4567</div>
+                  <div>+234 (0) 800 000 0000</div>
                 </div>
-                <div style={{ display: 'flex', gap: '16px', marginTop: '18px' }}>
-                  <a
-                    href="#"
-                    aria-label="CasaNova on Instagram"
-                    style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <rect x="2" y="2" width="20" height="20" rx="5" />
-                      <circle cx="12" cy="12" r="4" />
-                      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="CasaNova on LinkedIn"
-                    style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}
-                  >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <rect x="2" y="2" width="20" height="20" rx="3" />
-                      <path d="M7 10v7M7 7.01V7M11 17v-4c0-1.5 1-3 3-3s3 1.5 3 3v4M11 10v7" />
-                    </svg>
-                  </a>
-                </div>
+                {/* Social icons — shown only when profiles are live */}
               </m.div>
 
           </m.div>

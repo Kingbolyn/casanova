@@ -19,8 +19,8 @@ export const organizationSchema = {
   },
   contactPoint: {
     '@type': 'ContactPoint',
-    email: 'hello@casanova.com',
-    telephone: '+234-000-000-0000',
+    email: 'hello@casanova.ng',
+    telephone: '+234 (0) 800 000 0000',
     contactType: 'customer service',
   },
 }

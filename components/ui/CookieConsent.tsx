@@ -38,6 +38,7 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-label="Cookie consent"
+      aria-describedby="cookie-consent-desc"
       aria-live="polite"
       style={{
         position: 'fixed',
@@ -64,6 +65,7 @@ export function CookieConsent() {
       `}</style>
 
       <p
+        id="cookie-consent-desc"
         style={{
           flex: 1,
           margin: 0,

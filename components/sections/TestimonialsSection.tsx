@@ -1,111 +1,79 @@
-'use client'
-
-import { useState } from 'react'
-import { m, AnimatePresence } from 'framer-motion'
 import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
-import { Heading, Label, Caption } from '@/components/ui/Typography'
+import { Heading, Body, Label, Caption } from '@/components/ui/Typography'
 import { FadeIn } from '@/components/motion/FadeIn'
-import { testimonials } from '@/lib/data/testimonials'
+import { StaggerChildren, StaggerItem } from '@/components/motion/StaggerChildren'
+
+const steps = [
+  {
+    number: '01',
+    title:  'Submit your enquiry',
+    body:   'Use the enquiry form on any property page or contact us directly. Tell us what you are looking for and how you would prefer to be reached.',
+  },
+  {
+    number: '02',
+    title:  'Speak with an advisor',
+    body:   'We respond within 24 hours. An advisor will contact you directly — no automated sequences, no call centres. A single person who knows the property and understands your needs.',
+  },
+  {
+    number: '03',
+    title:  'Experience the property',
+    body:   'We arrange a private viewing at a time that suits you. There is no pressure to decide on the day. Our role is to help you understand the property fully, then give you the space to consider it.',
+  },
+]
 
 function TestimonialsSection() {
-  const [active, setActive] = useState(0)
-  const current = testimonials[active]
-
   return (
-    <Section spacing="xl" bg="white" id="testimonials">
-      <Container width="narrow">
-        <FadeIn direction="up" className="mb-16 text-center">
+    <Section spacing="xl" bg="white" id="process">
+      <Container width="content">
+
+        <FadeIn direction="up" className="mb-16">
           <Label color="tertiary" className="block mb-4">
-            Client experiences
+            What to expect
           </Label>
-          <Heading as={2} size="h2">
-            What clients say
+          <Heading as={2} size="h2" style={{ maxWidth: '18ch' }}>
+            From first enquiry to private viewing.
           </Heading>
         </FadeIn>
 
-        {/* Quote */}
-        <div className="relative text-center" style={{ minHeight: '200px' }}>
-          <AnimatePresence mode="wait">
-            <m.div
-              key={current.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              {/* Opening mark */}
-              <p
-                className="font-display font-light mb-6 select-none"
-                style={{ fontSize: '5rem', lineHeight: '0.5', color: 'var(--color-accent-subtle)', userSelect: 'none' }}
-                aria-hidden="true"
-              >
-                &ldquo;
-              </p>
-
-              <blockquote>
+        <StaggerChildren
+          className="grid grid-cols-1 md:grid-cols-3 gap-12"
+          stagger={0.1}
+        >
+          {steps.map((step) => (
+            <StaggerItem key={step.number}>
+              <div style={{ borderTop: '1px solid var(--color-border-subtle)', paddingTop: '2rem' }}>
                 <p
-                  className="font-display font-light mb-10"
+                  className="font-display font-light mb-6"
                   style={{
-                    fontSize: 'var(--type-h4)',
-                    lineHeight: 'var(--leading-snug)',
+                    fontSize: 'var(--type-h2)',
+                    color: 'rgba(201, 169, 110, 0.22)',
+                    lineHeight: 1,
                     letterSpacing: 'var(--tracking-tight)',
-                    color: 'var(--color-text-primary)',
                   }}
+                  aria-hidden="true"
                 >
-                  {current.quote}
+                  {step.number}
                 </p>
-                <footer>
-                  <p
-                    className="font-body font-medium mb-1"
-                    style={{ fontSize: 'var(--type-base)', color: 'var(--color-text-primary)' }}
-                  >
-                    {current.name}
-                  </p>
-                  <Caption color="secondary">{current.role}</Caption>
-                </footer>
-              </blockquote>
-            </m.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Dots */}
-        <div className="flex items-center justify-center gap-3 mt-12" role="tablist" aria-label="Testimonials">
-          {testimonials.map((t, i) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={i === active}
-              aria-label={`Testimonial from ${t.name}`}
-              onClick={() => setActive(i)}
-              style={{
-                minWidth: '24px',
-                minHeight: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-              }}
-            >
-              <span
-                className="transition-all pointer-events-none"
-                aria-hidden="true"
-                style={{
-                  display: 'block',
-                  width: i === active ? '28px' : '8px',
-                  height: '8px',
-                  borderRadius: 'var(--radius-full)',
-                  backgroundColor: i === active ? 'var(--color-accent-base)' : 'var(--color-border-default)',
-                  transitionDuration: 'var(--duration-normal)',
-                  transitionTimingFunction: 'var(--ease-architectural)',
-                }}
-              />
-            </button>
+                <Heading as={3} size="h5" className="mb-4">
+                  {step.title}
+                </Heading>
+                <Body color="secondary" style={{ lineHeight: 1.75 }}>
+                  {step.body}
+                </Body>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerChildren>
+
+        <FadeIn direction="up" delay={0.3}>
+          <div style={{ marginTop: 'var(--space-16)', paddingTop: 'var(--space-10)', borderTop: '1px solid var(--color-border-subtle)' }}>
+            <Caption color="secondary" style={{ lineHeight: 1.7 }}>
+              All enquiries are handled confidentially. We do not share your details with third parties. Response times may vary during peak periods but we commit to replying within one business day.
+            </Caption>
+          </div>
+        </FadeIn>
+
       </Container>
     </Section>
   )

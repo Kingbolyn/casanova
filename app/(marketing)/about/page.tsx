@@ -117,26 +117,14 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Stats strip */}
-      <Section spacing="lg" bg="primary">
-        <Container width="content">
-          <StaggerChildren className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center" stagger={0.08}>
-            {[
-              { value: '340+', label: 'Properties placed' },
-              { value: '$2.4B', label: 'Portfolio value' },
-              { value: '97%', label: 'Client satisfaction' },
-              { value: '8 yrs', label: 'Market experience' },
-            ].map((stat) => (
-              <StaggerItem key={stat.label}>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-3xl)', color: 'var(--color-text-inverse)', fontWeight: 300, marginBottom: '0.5rem' }}>
-                  {stat.value}
-                </p>
-                <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.45)', letterSpacing: 'var(--tracking-widest)', textTransform: 'uppercase' }}>
-                  {stat.label}
-                </p>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
+      {/* Closing statement */}
+      <Section spacing="lg" bg="default">
+        <Container width="narrow">
+          <FadeIn direction="up">
+            <Body size="lg" color="secondary" style={{ lineHeight: 1.8, fontStyle: 'italic' }}>
+              We do not measure success by volume. We measure it by the quality of every client relationship and the permanence of every property we carry. That standard does not require a number beside it.
+            </Body>
+          </FadeIn>
         </Container>
       </Section>
     </>

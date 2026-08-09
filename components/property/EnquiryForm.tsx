@@ -1,16 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/Button'
 import { Heading, Body, Label } from '@/components/ui/Typography'
+import { DUR, EASE } from '@/lib/motion'
 
 interface EnquiryFormProps {
   propertyTitle: string
+  propertyId:    string
   priceLabel:    string
 }
 
-type FormState = 'idle' | 'submitting' | 'success'
+type FormState = 'idle' | 'submitting' | 'success' | 'error'
+
+interface FieldErrors {
+  name?:    string
+  email?:   string
+  phone?:   string
+  message?: string
+  form?:    string
+}
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
@@ -25,18 +35,86 @@ const inputStyle: React.CSSProperties = {
   transition: 'border-color 200ms ease',
 }
 
-function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
-  const [state, setState] = useState<FormState>('idle')
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
+const inputErrorStyle: React.CSSProperties = {
+  ...inputStyle,
+  borderColor: 'var(--color-error-base)',
+}
 
-  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+function EnquiryForm({ propertyTitle, propertyId, priceLabel }: EnquiryFormProps) {
+  const [state, setState]   = useState<FormState>('idle')
+  const [errors, setErrors] = useState<FieldErrors>({})
+  const [form, setForm]     = useState({ name: '', email: '', phone: '', message: '' })
+  const loadedAtRef         = useRef<number>(0)
+  const honeyRef            = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    loadedAtRef.current = Date.now()
+  }, [])
+
+  const set = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((prev) => ({ ...prev, [key]: e.target.value }))
+    setErrors((prev) => { const next = { ...prev }; delete next[key as keyof FieldErrors]; return next })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setErrors({})
     setState('submitting')
-    await new Promise((r) => setTimeout(r, 1200))
-    setState('success')
+
+    // Client pre-validation
+    const clientErrors: FieldErrors = {}
+    if (!form.name.trim())  clientErrors.name  = 'Name is required.'
+    if (!form.email.trim()) clientErrors.email = 'Email address is required.'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim()))
+                            clientErrors.email = 'Please enter a valid email address.'
+
+    if (Object.keys(clientErrors).length) {
+      setErrors(clientErrors)
+      setState('idle')
+      return
+    }
+
+    const payload = {
+      name:          form.name.trim(),
+      email:         form.email.trim(),
+      phone:         form.phone.trim(),
+      message:       form.message.trim(),
+      propertyTitle,
+      propertyId,
+      _honey:        honeyRef.current?.value ?? '',
+      _loadedAt:     loadedAtRef.current,
+    }
+
+    try {
+      const res  = await fetch('/api/enquiry', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      })
+      const data = await res.json() as { success: boolean; errors?: { field: string; message: string }[]; error?: string }
+
+      if (data.success) {
+        setState('success')
+        return
+      }
+
+      if (res.status === 422 && data.errors) {
+        const fieldErrors: FieldErrors = {}
+        for (const { field, message } of data.errors) {
+          fieldErrors[field as keyof FieldErrors] = message
+        }
+        setErrors(fieldErrors)
+        setState('idle')
+        return
+      }
+
+      setErrors({ form: data.error ?? 'Something went wrong. Please try again or contact us directly.' })
+      setState('error')
+
+    } catch {
+      setErrors({ form: 'Network error. Please check your connection and try again.' })
+      setState('error')
+    }
   }
 
   return (
@@ -72,6 +150,7 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
               aria-live="polite"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: DUR.standard, ease: EASE.entrance }}
               className="text-center py-8"
             >
               <div
@@ -92,7 +171,38 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
               className="flex flex-col gap-4"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: DUR.micro, ease: EASE.standard }}
+              aria-busy={state === 'submitting'}
+              noValidate
             >
+              {/* Honeypot */}
+              <input
+                ref={honeyRef}
+                type="text"
+                name="_honey"
+                defaultValue=""
+                tabIndex={-1}
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none' }}
+              />
+
+              {errors.form && (
+                <div
+                  role="alert"
+                  style={{
+                    padding: '0.75rem 1rem',
+                    border: '1px solid var(--color-error-base)',
+                    backgroundColor: 'var(--color-error-light)',
+                    color: 'var(--color-error-base)',
+                    fontSize: 'var(--text-xs)',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {errors.form}
+                </div>
+              )}
+
+              {/* Name */}
               <div>
                 <label
                   htmlFor="enq-name"
@@ -104,15 +214,24 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
                   id="enq-name"
                   type="text"
                   required
+                  aria-required="true"
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? 'enq-err-name' : undefined}
                   value={form.name}
                   onChange={set('name')}
-                  style={inputStyle}
+                  style={errors.name ? inputErrorStyle : inputStyle}
                   placeholder="Your name"
-                  onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-accent-base)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-base)')}
+                  onFocus={(e) => { if (!errors.name) e.currentTarget.style.borderColor = 'var(--color-accent-base)' }}
+                  onBlur={(e)  => { if (!errors.name) e.currentTarget.style.borderColor = 'var(--color-border-base)' }}
                 />
+                {errors.name && (
+                  <p id="enq-err-name" role="alert" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-error-base)', marginTop: '0.25rem' }}>
+                    {errors.name}
+                  </p>
+                )}
               </div>
 
+              {/* Email */}
               <div>
                 <label
                   htmlFor="enq-email"
@@ -124,15 +243,24 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
                   id="enq-email"
                   type="email"
                   required
+                  aria-required="true"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? 'enq-err-email' : undefined}
                   value={form.email}
                   onChange={set('email')}
-                  style={inputStyle}
+                  style={errors.email ? inputErrorStyle : inputStyle}
                   placeholder="you@example.com"
-                  onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-accent-base)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-base)')}
+                  onFocus={(e) => { if (!errors.email) e.currentTarget.style.borderColor = 'var(--color-accent-base)' }}
+                  onBlur={(e)  => { if (!errors.email) e.currentTarget.style.borderColor = 'var(--color-border-base)' }}
                 />
+                {errors.email && (
+                  <p id="enq-err-email" role="alert" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-error-base)', marginTop: '0.25rem' }}>
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
+              {/* Phone */}
               <div>
                 <label
                   htmlFor="enq-phone"
@@ -143,15 +271,23 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
                 <input
                   id="enq-phone"
                   type="tel"
+                  aria-invalid={!!errors.phone}
+                  aria-describedby={errors.phone ? 'enq-err-phone' : undefined}
                   value={form.phone}
                   onChange={set('phone')}
-                  style={inputStyle}
+                  style={errors.phone ? inputErrorStyle : inputStyle}
                   placeholder="+234 000 000 0000"
-                  onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-accent-base)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-base)')}
+                  onFocus={(e) => { if (!errors.phone) e.currentTarget.style.borderColor = 'var(--color-accent-base)' }}
+                  onBlur={(e)  => { if (!errors.phone) e.currentTarget.style.borderColor = 'var(--color-border-base)' }}
                 />
+                {errors.phone && (
+                  <p id="enq-err-phone" role="alert" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-error-base)', marginTop: '0.25rem' }}>
+                    {errors.phone}
+                  </p>
+                )}
               </div>
 
+              {/* Message */}
               <div>
                 <label
                   htmlFor="enq-message"
@@ -165,9 +301,9 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
                   value={form.message}
                   onChange={set('message')}
                   style={{ ...inputStyle, resize: 'vertical', minHeight: '100px' }}
-                  placeholder={`I'm interested in ${propertyTitle}...`}
+                  placeholder={`I'm interested in ${propertyTitle}…`}
                   onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--color-accent-base)')}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--color-border-base)')}
+                  onBlur={(e)  => (e.currentTarget.style.borderColor = 'var(--color-border-base)')}
                 />
               </div>
 
@@ -176,12 +312,13 @@ function EnquiryForm({ propertyTitle, priceLabel }: EnquiryFormProps) {
                 variant="primary"
                 size="lg"
                 loading={state === 'submitting'}
+                disabled={state === 'submitting'}
                 className="w-full mt-2"
               >
-                Send Enquiry
+                {state === 'submitting' ? 'Sending…' : 'Send Enquiry'}
               </Button>
 
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-subtle)', textAlign: 'center', lineHeight: 1.5 }}>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', textAlign: 'center', lineHeight: 1.5 }}>
                 By submitting you agree to our privacy policy. We will not share your details with third parties.
               </p>
             </m.form>

@@ -119,8 +119,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
     switch (filters.sort) {
       case 'price-asc':   result.sort((a, b) => a.price - b.price); break
       case 'price-desc':  result.sort((a, b) => b.price - a.price); break
-      case 'largest':     result.sort((a, b) => b.features.squareFeet - a.features.squareFeet); break
-      case 'exclusive':   result.sort((a, b) => b.price - a.price); break
+      case 'largest':     result.sort((a, b) => (b.features.squareFeet ?? 0) - (a.features.squareFeet ?? 0)); break
       case 'newest':      result.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
       case 'recommended': result.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)); break
     }
@@ -291,7 +290,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mt-6 hidden md:block"
+                className="mt-6"
                 style={{
                   fontFamily:    'var(--font-display)',
                   fontSize:      'var(--text-lg)',

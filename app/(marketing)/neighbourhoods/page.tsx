@@ -12,7 +12,7 @@ import { BASE_URL, canonical } from '@/lib/seo'
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-  title: 'Neighbourhoods | CasaNova',
+  title: 'Neighbourhoods',
   description:
     "Discover Lagos and Abuja's most prestigious residential addresses. Victoria Island, Ikoyi, Banana Island, Lekki, Maitama, and Asokoro, curated by CasaNova.",
   alternates: { canonical: canonical('/neighbourhoods') },

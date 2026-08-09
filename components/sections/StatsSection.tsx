@@ -6,11 +6,23 @@ import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Label, Caption } from '@/components/ui/Typography'
 
-const stats = [
-  { value: '340+',  ariaValue: '340 plus',              label: 'Properties Placed',    note: 'across 12 cities'       },
-  { value: '$2.4B', ariaValue: '2.4 billion dollars',   label: 'Portfolio Value',       note: 'under management'       },
-  { value: '97%',   ariaValue: '97 percent',            label: 'Client Satisfaction',  note: 'verified post-placement' },
-  { value: '8 yrs', ariaValue: '8 years',               label: 'Market Experience',    note: 'in premium real estate'  },
+const pillars = [
+  {
+    title: 'Curated Selection',
+    body:  'Properties chosen for architectural distinction, location quality, and permanent value — not volume.',
+  },
+  {
+    title: 'Editorial Presentation',
+    body:  'Each property experienced before it is evaluated. Photography, copy, and digital experience built for discovery.',
+  },
+  {
+    title: 'Personal Guidance',
+    body:  'An advisor alongside you from first enquiry through to handover. Never anonymous. Always accountable.',
+  },
+  {
+    title: 'Honest Representation',
+    body:  'Every detail verified. Precise descriptions. Clear pricing. No exaggeration, no pressure, no fabricated claims.',
+  },
 ]
 
 function StatsSection() {
@@ -18,19 +30,19 @@ function StatsSection() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <Section spacing="xl" bg="primary" id="stats">
+    <Section spacing="xl" bg="primary" id="pillars">
       <Container>
-        <div ref={ref} role="list" className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-0)' }}>
-          {stats.map((stat, i) => (
+        <div ref={ref} role="list" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-0)' }}>
+          {pillars.map((pillar, i) => (
             <m.div
-              key={stat.label}
+              key={pillar.title}
               role="listitem"
-              className="flex flex-col items-center text-center px-3 py-6 sm:px-6 sm:py-8 relative"
+              className="flex flex-col px-6 py-8 relative"
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              {/* Vertical divider between items */}
+              {/* Vertical divider between items on large screens */}
               {i > 0 && (
                 <span
                   aria-hidden="true"
@@ -39,26 +51,21 @@ function StatsSection() {
                 />
               )}
 
-              <p
-                aria-label={stat.ariaValue}
-                className="font-display font-light mb-2"
-                style={{
-                  fontSize: 'clamp(2.5rem, 4vw, 4rem)',
-                  lineHeight: '1',
-                  color: 'var(--color-accent-base)',
-                  letterSpacing: 'var(--tracking-tight)',
-                }}
-              >
-                {stat.value}
-              </p>
+              {/* Accent line */}
+              <div
+                aria-hidden="true"
+                style={{ width: '24px', height: '1px', backgroundColor: 'var(--color-accent-base)', marginBottom: '1.25rem' }}
+              />
+
               <Label
-                className="block mb-1"
+                className="block mb-3"
                 style={{ color: 'var(--color-text-inverse)', letterSpacing: 'var(--tracking-wider)' }}
               >
-                {stat.label}
+                {pillar.title}
               </Label>
-              <Caption style={{ color: 'rgba(255,255,255,0.4)' }}>
-                {stat.note}
+
+              <Caption style={{ color: 'rgba(255,255,255,0.45)', lineHeight: 1.7 }}>
+                {pillar.body}
               </Caption>
             </m.div>
           ))}
