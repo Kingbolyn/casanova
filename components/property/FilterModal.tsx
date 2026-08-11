@@ -15,10 +15,27 @@ interface FilterModalProps {
 }
 
 export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, total }: FilterModalProps) {
-  const panelRef = useRef<HTMLDivElement>(null)
+  const panelRef    = useRef<HTMLDivElement>(null)
+  const closeRef    = useRef<HTMLButtonElement>(null)
+  const returnFocus = useRef<HTMLElement | null>(null)
 
   /* Trap focus inside the panel while it is open */
   useFocusTrap(panelRef, open)
+
+  /* Move focus into the dialog, then restore it to the opening trigger. */
+  useEffect(() => {
+    if (open) {
+      returnFocus.current = document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null
+
+      const focusTimer = window.setTimeout(() => closeRef.current?.focus(), 80)
+      return () => window.clearTimeout(focusTimer)
+    }
+
+    if (returnFocus.current?.isConnected) returnFocus.current.focus()
+    returnFocus.current = null
+  }, [open])
 
   /* Lock scroll */
   useEffect(() => {
@@ -68,7 +85,7 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
             transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             role="dialog"
             aria-modal="true"
-            aria-label="Filter properties"
+            aria-labelledby="property-filter-dialog-title"
           >
             {/* Handle + header */}
             <div
@@ -94,7 +111,8 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
                 }}
                 aria-hidden="true"
               />
-              <p
+              <h2
+                id="property-filter-dialog-title"
                 style={{
                   fontFamily:    'var(--font-display)',
                   fontSize:      'var(--text-base)',
@@ -105,8 +123,9 @@ export function FilterModal({ open, onClose, filters, onChange, neighbourhoods, 
                 }}
               >
                 Refine your search
-              </p>
+              </h2>
               <button
+                ref={closeRef}
                 onClick={onClose}
                 style={{
                   background: 'none', border: 'none', cursor: 'pointer',
