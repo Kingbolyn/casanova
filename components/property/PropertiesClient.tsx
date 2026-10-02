@@ -7,7 +7,7 @@ import { Section } from '@/components/layout/Section'
 import { Container } from '@/components/layout/Container'
 import { Heading, Body, Label } from '@/components/ui/Typography'
 import { PropertyGrid } from '@/components/property/PropertyGrid'
-import { PropertyFilters, DEFAULT_FILTERS, type FilterState } from '@/components/property/PropertyFilters'
+import { PropertyFilters, DEFAULT_FILTERS, buildActiveChips, type FilterState } from '@/components/property/PropertyFilters'
 import { FilterModal } from '@/components/property/FilterModal'
 import { LocationDiscovery } from '@/components/sections/LocationDiscovery'
 import { FadeIn } from '@/components/motion/FadeIn'
@@ -129,6 +129,7 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
 
   const summary      = resultsSummary(filtered.length, filters)
   const filterCount  = activeFilterCount(filters)
+  const mobileChips  = useMemo(() => buildActiveChips(filters, setFilters), [filters, setFilters])
 
   return (
     <>
@@ -279,6 +280,84 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
                 {filtered.length === 1 ? 'residence' : 'residences'}
               </p>
             </div>
+
+            {/* Active filter chip summary — mobile only */}
+            <AnimatePresence>
+              {mobileChips.length > 0 && (
+                <m.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div
+                    className="flex items-center gap-2 overflow-x-auto"
+                    style={{ scrollbarWidth: 'none', paddingTop: '0.75rem', paddingBottom: '0.125rem' }}
+                    aria-label="Active filters"
+                  >
+                    {mobileChips.map((chip) => (
+                      <span
+                        key={chip.label}
+                        className="inline-flex items-center shrink-0"
+                        style={{
+                          border:          '1px solid var(--color-border-base)',
+                          backgroundColor: 'var(--color-surface-secondary)',
+                          fontSize:        'var(--text-xs)',
+                          letterSpacing:   'var(--tracking-wide)',
+                          color:           'var(--color-text-secondary)',
+                          paddingLeft:     '0.625rem',
+                        }}
+                      >
+                        <span style={{ whiteSpace: 'nowrap' }}>{chip.label}</span>
+                        <button
+                          onClick={chip.onRemove}
+                          style={{
+                            background:     'none',
+                            border:         'none',
+                            cursor:         'pointer',
+                            color:          'var(--color-text-muted)',
+                            lineHeight:     1,
+                            fontSize:       '1.1rem',
+                            minWidth:       '44px',
+                            minHeight:      '36px',
+                            display:        'flex',
+                            alignItems:     'center',
+                            justifyContent: 'center',
+                            padding:        0,
+                          }}
+                          aria-label={`Remove ${chip.label} filter`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                    {mobileChips.length > 1 && (
+                      <button
+                        onClick={() => setFilters(DEFAULT_FILTERS)}
+                        className="shrink-0"
+                        style={{
+                          background:    'none',
+                          border:        'none',
+                          cursor:        'pointer',
+                          fontSize:      'var(--text-xs)',
+                          letterSpacing: 'var(--tracking-wide)',
+                          color:         'var(--color-accent-base)',
+                          whiteSpace:    'nowrap',
+                          minHeight:     '36px',
+                          padding:       '0 0.25rem',
+                          display:       'flex',
+                          alignItems:    'center',
+                        }}
+                        aria-label="Clear all filters"
+                      >
+                        Clear all
+                      </button>
+                    )}
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Conversational summary */}

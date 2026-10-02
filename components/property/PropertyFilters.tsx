@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useId } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { DualRangeSlider } from '@/components/ui/DualRangeSlider'
 import type { PropertyType, PropertyStatus } from '@/lib/types'
@@ -104,11 +104,13 @@ function NeighbourhoodSelect({
   options:  string[]
   onChange: (v: string) => void
 }) {
-  const [open, setOpen]     = useState(false)
-  const [query, setQuery]   = useState('')
-  const ref                 = useRef<HTMLDivElement>(null)
-  const triggerRef          = useRef<HTMLButtonElement>(null)
-  const optionsRef          = useRef<HTMLDivElement>(null)
+  const [open, setOpen]       = useState(false)
+  const [query, setQuery]     = useState('')
+  const [focusedIdx, setFocusedIdx] = useState<number | null>(null)
+  const ref                   = useRef<HTMLDivElement>(null)
+  const triggerRef            = useRef<HTMLButtonElement>(null)
+  const optionsRef            = useRef<HTMLDivElement>(null)
+  const listboxId             = useId()
 
   const filtered   = options.filter((o) => o.toLowerCase().includes(query.toLowerCase()))
   const label      = value === 'all' ? 'All Neighbourhoods' : value
@@ -139,9 +141,9 @@ function NeighbourhoodSelect({
     closeAndReturn()
   }
 
-  /* Trigger keydown: ArrowDown opens and moves focus into list */
+  /* Trigger keydown: ArrowDown / Enter / Space open and move focus into list */
   const handleTriggerKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === 'ArrowDown') {
+    if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       if (!open) { setOpen(true); setQuery('') }
       // Defer so the listbox is mounted before we try to focus into it
@@ -168,7 +170,7 @@ function NeighbourhoodSelect({
     }
   }
 
-  /* Option button keydown: arrow navigation, Escape */
+  /* Option button keydown: arrow navigation with wrap, Escape */
   const handleOptionKeyDown = (
     e: React.KeyboardEvent<HTMLButtonElement>,
     index: number,
@@ -177,19 +179,11 @@ function NeighbourhoodSelect({
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
-      buttons?.[Math.min(index + 1, total - 1)]?.focus()
+      if (buttons?.length) buttons[(index + 1) % total]?.focus()
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      if (index === 0) {
-        if (showSearch) {
-          ref.current?.querySelector<HTMLInputElement>('input[type="search"]')?.focus()
-        } else {
-          closeAndReturn()
-        }
-      } else {
-        const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
-        buttons?.[index - 1]?.focus()
-      }
+      const buttons = optionsRef.current?.querySelectorAll<HTMLButtonElement>('button')
+      if (buttons?.length) buttons[index === 0 ? total - 1 : index - 1]?.focus()
     } else if (e.key === 'Escape') {
       e.preventDefault()
       closeAndReturn()
@@ -224,6 +218,7 @@ function NeighbourhoodSelect({
         }}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={listboxId}
         aria-label={`Neighbourhood: ${label}`}
       >
         <span style={{ flex: 1, textAlign: 'left', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -276,7 +271,7 @@ function NeighbourhoodSelect({
                 />
               </div>
             )}
-            <div ref={optionsRef} role="listbox" aria-label="Neighbourhoods" style={{ overflowY: 'auto', flex: 1 }}>
+            <div ref={optionsRef} id={listboxId} role="listbox" aria-label="Neighbourhoods" style={{ overflowY: 'auto', flex: 1 }}>
               {allOptionValues.map((n, i) => (
                 <button
                   key={n}
@@ -285,6 +280,12 @@ function NeighbourhoodSelect({
                   aria-selected={value === n}
                   onClick={() => selectOption(n)}
                   onKeyDown={(e) => handleOptionKeyDown(e, i, allOptionValues.length)}
+                  onFocus={() => setFocusedIdx(i)}
+                  onBlur={(e) => {
+                    if (!optionsRef.current?.contains(e.relatedTarget as Node)) {
+                      setFocusedIdx(null)
+                    }
+                  }}
                   style={{
                     display:         'block',
                     width:           '100%',
@@ -294,7 +295,9 @@ function NeighbourhoodSelect({
                     letterSpacing:   'var(--tracking-wide)',
                     fontFamily:      'var(--font-body)',
                     color:           value === n ? 'var(--color-accent-base)' : 'var(--color-text-primary)',
-                    backgroundColor: 'transparent',
+                    backgroundColor: focusedIdx === i ? 'var(--color-surface-secondary)' : 'transparent',
+                    outline:         focusedIdx === i ? '2px solid var(--color-accent-base)' : 'none',
+                    outlineOffset:   '-2px',
                     border:          'none',
                     cursor:          'pointer',
                   }}
@@ -393,6 +396,32 @@ function PricePanel({
   )
 }
 
+/* ─── Active chip builder (shared by desktop and mobile) ─── */
+
+export function buildActiveChips(
+  filters: FilterState,
+  onChange: (f: FilterState) => void,
+): { label: string; onRemove: () => void }[] {
+  const set = <K extends keyof FilterState>(key: K, value: FilterState[K]) =>
+    onChange({ ...filters, [key]: value })
+
+  const chips: { label: string; onRemove: () => void }[] = []
+  if (filters.query)                   chips.push({ label: `"${filters.query}"`,                                                                  onRemove: () => set('query', '') })
+  if (filters.type !== 'all')          chips.push({ label: TYPES.find((t) => t.value === filters.type)?.label ?? filters.type,                   onRemove: () => set('type', 'all') })
+  if (filters.status !== 'all')        chips.push({ label: STATUSES.find((s) => s.value === filters.status)?.label ?? filters.status,            onRemove: () => set('status', 'all') })
+  if (filters.neighbourhood !== 'all') chips.push({ label: filters.neighbourhood,                                                                 onRemove: () => set('neighbourhood', 'all') })
+  if (filters.collection !== 'all')    chips.push({ label: COLLECTIONS.find((c) => c.value === filters.collection)?.label ?? filters.collection, onRemove: () => set('collection', 'all') })
+  if (filters.bedrooms !== 'all')      chips.push({ label: `${filters.bedrooms}+ Bedrooms`,                                                      onRemove: () => set('bedrooms', 'all') })
+  if (filters.minPrice > 0 || filters.maxPrice < PRICE_MAX) {
+    const label =
+      filters.minPrice === 0 ? `Under $${(filters.maxPrice / 1000000).toFixed(0)}M`
+      : filters.maxPrice >= PRICE_MAX ? `$${(filters.minPrice / 1000000).toFixed(0)}M+`
+      : `$${(filters.minPrice / 1000000).toFixed(0)}M to $${(filters.maxPrice / 1000000).toFixed(0)}M`
+    chips.push({ label, onRemove: () => onChange({ ...filters, minPrice: 0, maxPrice: PRICE_MAX }) })
+  }
+  return chips
+}
+
 /* ─── Main component ─────────────────────────────────────── */
 
 interface PropertyFiltersProps {
@@ -416,20 +445,7 @@ export function PropertyFilters({ total, filters, onChange, neighbourhoods }: Pr
     filters.minPrice !== 0 ||
     filters.maxPrice < PRICE_MAX
 
-  const activeChips: { label: string; onRemove: () => void }[] = []
-  if (filters.query)                          activeChips.push({ label: `"${filters.query}"`,                                                              onRemove: () => set('query', '') })
-  if (filters.type !== 'all')                 activeChips.push({ label: TYPES.find((t) => t.value === filters.type)?.label ?? filters.type,                onRemove: () => set('type', 'all') })
-  if (filters.status !== 'all')               activeChips.push({ label: STATUSES.find((s) => s.value === filters.status)?.label ?? filters.status,         onRemove: () => set('status', 'all') })
-  if (filters.neighbourhood !== 'all')        activeChips.push({ label: filters.neighbourhood,                                                              onRemove: () => set('neighbourhood', 'all') })
-  if (filters.collection !== 'all')           activeChips.push({ label: COLLECTIONS.find((c) => c.value === filters.collection)?.label ?? filters.collection, onRemove: () => set('collection', 'all') })
-  if (filters.bedrooms !== 'all')             activeChips.push({ label: `${filters.bedrooms}+ Bedrooms`,                                                   onRemove: () => set('bedrooms', 'all') })
-  if (filters.minPrice > 0 || filters.maxPrice < PRICE_MAX) {
-    const label =
-      filters.minPrice === 0 ? `Under $${(filters.maxPrice / 1000000).toFixed(0)}M`
-      : filters.maxPrice >= PRICE_MAX ? `$${(filters.minPrice / 1000000).toFixed(0)}M+`
-      : `$${(filters.minPrice / 1000000).toFixed(0)}M to $${(filters.maxPrice / 1000000).toFixed(0)}M`
-    activeChips.push({ label, onRemove: () => onChange({ ...filters, minPrice: 0, maxPrice: PRICE_MAX }) })
-  }
+  const activeChips = buildActiveChips(filters, onChange)
 
   return (
     <div>
