@@ -50,6 +50,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
 
     const scene    = new THREE.Scene()
     const camera   = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    let fov        = 75
     const renderer = new THREE.WebGLRenderer({ antialias: false })
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -64,12 +65,13 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
     sphere.scale.set(-1, 1, 1)
     scene.add(sphere)
 
-    /* Drag controls */
+    /* Drag + pinch controls */
     const euler      = new THREE.Euler(0, 0, 0, 'YXZ')
     let isDragging   = false
     let autoRotate   = true
     let prevX        = 0
     let prevY        = 0
+    let pinchDist    = 0
 
     const onDown = (e: PointerEvent) => {
       isDragging = true
@@ -90,9 +92,37 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
     }
     const onUp = () => { isDragging = false }
 
+    /* Pinch-to-zoom (touch only) */
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        pinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY,
+        )
+      }
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 2) return
+      e.preventDefault()
+      const newDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY,
+      )
+      if (pinchDist > 0) {
+        fov = Math.max(40, Math.min(100, fov * (pinchDist / newDist)))
+        camera.fov = fov
+        camera.updateProjectionMatrix()
+      }
+      pinchDist = newDist
+    }
+    const onTouchEnd = () => { pinchDist = 0 }
+
     renderer.domElement.addEventListener('pointerdown', onDown)
     renderer.domElement.addEventListener('pointermove', onMove)
     renderer.domElement.addEventListener('pointerup',   onUp)
+    renderer.domElement.addEventListener('touchstart',  onTouchStart, { passive: true })
+    renderer.domElement.addEventListener('touchmove',   onTouchMove,  { passive: false })
+    renderer.domElement.addEventListener('touchend',    onTouchEnd,   { passive: true })
 
     /* Render loop */
     let frameId  = 0
@@ -126,6 +156,9 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
       renderer.domElement.removeEventListener('pointerdown', onDown)
       renderer.domElement.removeEventListener('pointermove', onMove)
       renderer.domElement.removeEventListener('pointerup',   onUp)
+      renderer.domElement.removeEventListener('touchstart',  onTouchStart)
+      renderer.domElement.removeEventListener('touchmove',   onTouchMove)
+      renderer.domElement.removeEventListener('touchend',    onTouchEnd)
       window.removeEventListener('resize', onResize)
       geometry.dispose()
       material.dispose()
@@ -195,7 +228,7 @@ export function PanoramaViewer({ url, title, onClose }: PanoramaViewerProps) {
 
           {/* Drag hint */}
           <p style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wider)', color: 'rgba(255,255,255,0.3)' }}>
-            DRAG TO EXPLORE
+            DRAG · PINCH TO ZOOM
           </p>
         </div>
 
