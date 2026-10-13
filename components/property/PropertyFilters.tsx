@@ -7,7 +7,7 @@ import type { PropertyType, PropertyStatus } from '@/lib/types'
 
 /* ─── Types ─────────────────────────────────────────────── */
 
-export type SortOption = 'recommended' | 'newest' | 'price-asc' | 'price-desc' | 'largest'
+export type SortOption = 'recommended' | 'newest' | 'price-asc' | 'price-desc' | 'largest' | 'exclusive'
 
 export interface FilterState {
   query:         string
@@ -59,6 +59,7 @@ const BEDROOM_OPTIONS = ['all', 1, 2, 3, 4, 5] as const
 
 const SORTS: { value: SortOption; label: string }[] = [
   { value: 'recommended', label: 'Recommended' },
+  { value: 'exclusive',   label: 'Exclusive' },
   { value: 'newest',      label: 'Newest' },
   { value: 'price-asc',   label: 'Price: Low to High' },
   { value: 'price-desc',  label: 'Price: High to Low' },

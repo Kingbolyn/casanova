@@ -122,6 +122,18 @@ function PropertiesClient({ properties }: PropertiesClientProps) {
       case 'largest':     result.sort((a, b) => (b.features.squareFeet ?? 0) - (a.features.squareFeet ?? 0)); break
       case 'newest':      result.sort((a, b) => b.createdAt.localeCompare(a.createdAt)); break
       case 'recommended': result.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)); break
+      // Exclusive: editorially featured properties first; within each tier, newest first.
+      // Criterion: featured=true (CasaNova curated showcase) > featured=false.
+      // Tie-breaker: createdAt descending — newest editorial addition surfaces first.
+      // Distinct from price-desc: price is not a factor; a ₦1.5B featured listing
+      // ranks above a ₦15B non-featured listing.
+      case 'exclusive':
+        result.sort((a, b) => {
+          const tier = (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
+          if (tier !== 0) return tier
+          return b.createdAt.localeCompare(a.createdAt)
+        })
+        break
     }
 
     return result
