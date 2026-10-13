@@ -29,11 +29,11 @@ export const DEFAULT_FILTERS: FilterState = {
   collection:    'all',
   bedrooms:      'all',
   minPrice:      0,
-  maxPrice:      25000000,
+  maxPrice:      20000000000,
   sort:          'recommended',
 }
 
-const PRICE_MAX = 25000000
+const PRICE_MAX = 20000000000
 
 /* ─── Constants ─────────────────────────────────────────── */
 
@@ -339,10 +339,10 @@ function PricePanel({
     minPrice === 0 && maxPrice >= PRICE_MAX
       ? 'Any Price'
       : minPrice === 0
-      ? `Under $${(maxPrice / 1000000).toFixed(0)}M`
+      ? `Under ₦${(maxPrice / 1000000000).toFixed(1)}B`
       : maxPrice >= PRICE_MAX
-      ? `$${(minPrice / 1000000).toFixed(0)}M+`
-      : `$${(minPrice / 1000000).toFixed(0)}M to $${(maxPrice / 1000000).toFixed(0)}M`
+      ? `₦${(minPrice / 1000000000).toFixed(1)}B+`
+      : `₦${(minPrice / 1000000000).toFixed(1)}B to ₦${(maxPrice / 1000000000).toFixed(1)}B`
 
   return (
     <div ref={ref} style={{ position: 'relative', minWidth: '150px' }}>
@@ -384,10 +384,10 @@ function PricePanel({
             <DualRangeSlider
               min={0}
               max={PRICE_MAX}
-              step={500000}
+              step={500000000}
               value={[minPrice, maxPrice]}
               onChange={([lo, hi]) => onChange(lo, hi)}
-              format={(v) => `$${(v / 1000000).toFixed(1)}M`}
+              format={(v) => `₦${(v / 1000000000).toFixed(1)}B`}
             />
           </m.div>
         )}
@@ -414,9 +414,9 @@ export function buildActiveChips(
   if (filters.bedrooms !== 'all')      chips.push({ label: `${filters.bedrooms}+ Bedrooms`,                                                      onRemove: () => set('bedrooms', 'all') })
   if (filters.minPrice > 0 || filters.maxPrice < PRICE_MAX) {
     const label =
-      filters.minPrice === 0 ? `Under $${(filters.maxPrice / 1000000).toFixed(0)}M`
-      : filters.maxPrice >= PRICE_MAX ? `$${(filters.minPrice / 1000000).toFixed(0)}M+`
-      : `$${(filters.minPrice / 1000000).toFixed(0)}M to $${(filters.maxPrice / 1000000).toFixed(0)}M`
+      filters.minPrice === 0 ? `Under ₦${(filters.maxPrice / 1000000000).toFixed(1)}B`
+      : filters.maxPrice >= PRICE_MAX ? `₦${(filters.minPrice / 1000000000).toFixed(1)}B+`
+      : `₦${(filters.minPrice / 1000000000).toFixed(1)}B to ₦${(filters.maxPrice / 1000000000).toFixed(1)}B`
     chips.push({ label, onRemove: () => onChange({ ...filters, minPrice: 0, maxPrice: PRICE_MAX }) })
   }
   return chips

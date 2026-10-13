@@ -14,7 +14,7 @@ import { FadeIn } from '@/components/motion/FadeIn'
 import { collections } from '@/lib/data/collections'
 import type { Property } from '@/lib/types'
 
-const PRICE_MAX = 25000000
+const PRICE_MAX = 20000000000
 
 interface PropertiesClientProps {
   properties: Property[]
