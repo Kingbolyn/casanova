@@ -1,10 +1,9 @@
-﻿'use client'
+'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
 import { m } from 'framer-motion'
 import { Badge } from '@/components/ui/Badge'
-import { Label, Caption } from '@/components/ui/Typography'
 import { cn } from '@/lib/utils/cn'
 import type { Property } from '@/lib/types'
 import { DUR, EASE } from '@/lib/motion'
@@ -15,40 +14,31 @@ interface PropertyCardProps {
   priority?:  boolean
 }
 
-/* ─── Variants - IB-007 Micro (200ms) ───────────────────────────────────── */
+/* ─── Motion variants ────────────────────────────────────── */
 
-const STD:  [number,number,number,number] = EASE.standard
-const ENT:  [number,number,number,number] = EASE.entrance
+const STD: [number,number,number,number] = EASE.standard
+const ENT: [number,number,number,number] = EASE.entrance
 
 const card = {
-  rest:  { y: 0,  transition: { duration: DUR.micro, ease: STD } },
-  hover: { y: -4, transition: { duration: DUR.micro, ease: ENT } },
+  rest:  { y: 0,  transition: { duration: DUR.micro,  ease: STD } },
+  hover: { y: -4, transition: { duration: DUR.micro,  ease: ENT } },
 }
 
 const image = {
-  rest:  { scale: 1,    transition: { duration: DUR.large,  ease: STD } },
-  hover: { scale: 1.04, transition: { duration: DUR.large,  ease: ENT } },
+  rest:  { scale: 1,    transition: { duration: DUR.large, ease: STD } },
+  hover: { scale: 1.04, transition: { duration: DUR.large, ease: ENT } },
 }
 
-const overlay = {
-  rest:  { opacity: 0, transition: { duration: DUR.micro, ease: STD } },
-  hover: { opacity: 1, transition: { duration: DUR.micro, ease: ENT } },
+/* Gradient subtly deepens on hover */
+const veil = {
+  rest:  { opacity: 1,    transition: { duration: DUR.standard, ease: STD } },
+  hover: { opacity: 1.15, transition: { duration: DUR.standard, ease: ENT } },
 }
 
-const price = {
-  rest:  { opacity: 0, y: 8,  transition: { duration: DUR.standard, ease: STD } },
-  hover: { opacity: 1, y: 0,  transition: { duration: DUR.standard, delay: 0.04, ease: ENT } },
-}
-
-const title = {
-  rest:  { color: 'var(--color-text-primary)',   transition: { duration: DUR.micro, ease: STD } },
-  hover: { color: 'var(--color-text-secondary)', transition: { duration: DUR.micro, ease: STD } },
-}
-
-/* ─── Component ──────────────────────────────────────────────────────────── */
+/* ─── Component ──────────────────────────────────────────── */
 
 function PropertyCard({ property, className, priority = false }: PropertyCardProps) {
-  const { slug, title: name, tagline, priceLabel, location, media, features, status, type } = property
+  const { slug, title: name, priceLabel, location, media, features, status, type } = property
 
   const statusLabel: Record<Property['status'], string> = {
     'for-sale':    'For Sale',
@@ -62,8 +52,8 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
     'for-sale':    'accent',
     'for-rent':    'accent',
     'coming-soon': 'outline',
-    'sold':       'success',
-    'off-market': 'outline',
+    'sold':        'success',
+    'off-market':  'outline',
   }
 
   return (
@@ -74,17 +64,13 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
         animate="rest"
         variants={card}
       >
-        {/* ── Image container ── */}
+        {/* Full-bleed image — no white panel below */}
         <div
-          className="relative overflow-hidden rounded-[--radius-lg]"
-          style={{ aspectRatio: '4 / 3' }}
+          className="relative overflow-hidden"
+          style={{ aspectRatio: '4 / 3', borderRadius: 'var(--radius-lg, 0px)' }}
         >
-          {/* Parallax zoom on hover */}
-          <m.div
-            className="absolute inset-0"
-            style={{ position: 'absolute' }}
-            variants={image}
-          >
+          {/* Image zoom on hover */}
+          <m.div className="absolute inset-0" variants={image}>
             <Image
               src={media.hero}
               alt={name}
@@ -95,89 +81,85 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
             />
           </m.div>
 
-          {/* Dark overlay - reveals on hover */}
+          {/* Permanent gradient veil — content always readable */}
           <m.div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }}
-            variants={overlay}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to top, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.12) 60%, transparent 100%)',
+            }}
+            variants={veil}
           />
 
-          {/* Status badge - always visible */}
+          {/* Status badge — top left */}
           <div className="absolute top-4 left-4" style={{ zIndex: 2 }}>
             <Badge variant={statusVariant[status]}>
               {statusLabel[status]}
             </Badge>
           </div>
 
-          {/* Price + location - slides up on hover */}
-          <m.div
-            className="absolute bottom-0 left-0 right-0 p-5"
-            style={{ zIndex: 2 }}
-            variants={price}
-          >
-            <p
-              className="font-display font-light"
-              style={{
-                fontSize: 'var(--type-h4)',
-                color: 'var(--color-text-inverse)',
-                lineHeight: 'var(--leading-none)',
-                letterSpacing: 'var(--tracking-tight)',
-              }}
-            >
-              {priceLabel}
-            </p>
-            <p
-              className="font-body mt-1"
-              style={{
-                fontSize: 'var(--type-small)',
-                color: 'rgba(255,255,255,0.6)',
-                letterSpacing: 'var(--tracking-wide)',
-              }}
-            >
-              {location.neighbourhood}, {location.city}
-            </p>
-          </m.div>
-        </div>
-
-        {/* ── Info ── */}
-        <div className="mt-5 space-y-2">
-          <m.h3
-            className="font-display font-light leading-snug"
-            style={{
-              fontSize: 'var(--type-h5)',
-              letterSpacing: 'var(--tracking-tight)',
-            }}
-            variants={title}
-          >
-            {name}
-          </m.h3>
-
-          <Caption color="tertiary">
-            {location.neighbourhood}, {location.city}
-          </Caption>
-
+          {/* Price — top right */}
           <p
-            className="font-body line-clamp-2"
+            className="absolute top-4 right-4 font-display font-light"
             style={{
-              fontSize: 'var(--type-small)',
-              color: 'var(--color-text-secondary)',
-              lineHeight: 'var(--leading-relaxed)',
+              zIndex:        2,
+              fontSize:      'var(--type-small)',
+              color:         'var(--color-accent-base)',
+              letterSpacing: 'var(--tracking-tight)',
+              lineHeight:    1,
             }}
           >
-            {tagline}
+            {priceLabel}
           </p>
 
-          {/* Specs */}
+          {/* Title + location + specs — always visible at bottom */}
           <div
-            className="flex items-center gap-5 pt-3 border-t"
-            style={{ borderColor: 'var(--color-border-subtle)' }}
+            className="absolute bottom-0 left-0 right-0"
+            style={{ padding: '0 18px 18px', zIndex: 2 }}
           >
-            <Spec label="Bed"    value={features.bedrooms}  />
-            <Spec label="Bath"   value={features.bathrooms} />
-            <Spec label="Garage" value={features.garages}   />
-            <Label className="ml-auto capitalize" color="tertiary">
-              {type}
-            </Label>
+            <p
+              className="font-body"
+              style={{
+                fontSize:      'var(--type-caption)',
+                color:         'rgba(255,255,255,0.5)',
+                letterSpacing: 'var(--tracking-wide)',
+                marginBottom:  '4px',
+              }}
+            >
+              {location.neighbourhood} · {location.city}
+            </p>
+
+            <h3
+              className="font-display font-light"
+              style={{
+                fontSize:      'var(--type-h5)',
+                color:         '#fff',
+                lineHeight:    1.2,
+                letterSpacing: 'var(--tracking-tight)',
+                marginBottom:  '12px',
+              }}
+            >
+              {name}
+            </h3>
+
+            {/* Specs row */}
+            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+              <SpecOverlay label="BED"    value={features.bedrooms}  />
+              <SpecOverlay label="BATH"   value={features.bathrooms} />
+              <SpecOverlay label="GARAGE" value={features.garages}   />
+              <span
+                className="font-body"
+                style={{
+                  marginLeft:    'auto',
+                  fontSize:      '8px',
+                  letterSpacing: '0.14em',
+                  color:         'rgba(255,255,255,0.45)',
+                  paddingBottom: '2px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {type}
+              </span>
+            </div>
           </div>
         </div>
       </m.article>
@@ -185,16 +167,31 @@ function PropertyCard({ property, className, priority = false }: PropertyCardPro
   )
 }
 
-function Spec({ label, value }: { label: string; value: number }) {
+function SpecOverlay({ label, value }: { label: string; value: number }) {
   return (
-    <div className="flex flex-col items-center gap-0.5">
+    <div
+      style={{
+        display:       'flex',
+        flexDirection: 'column',
+        alignItems:    'center',
+        gap:           '2px',
+        paddingRight:  '14px',
+        marginRight:   '14px',
+        borderRight:   '1px solid rgba(255,255,255,0.18)',
+      }}
+    >
       <span
         className="font-display font-light"
-        style={{ fontSize: 'var(--type-h6)', color: 'var(--color-text-primary)' }}
+        style={{ fontSize: 'var(--type-h6)', color: '#fff', lineHeight: 1 }}
       >
         {value}
       </span>
-      <Label color="tertiary">{label}</Label>
+      <span
+        className="font-body"
+        style={{ fontSize: '7px', letterSpacing: '0.14em', color: 'rgba(255,255,255,0.4)' }}
+      >
+        {label}
+      </span>
     </div>
   )
 }
