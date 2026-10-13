@@ -125,7 +125,7 @@ export default async function PropertyPage({ params }: Props) {
           style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)' }}
           aria-hidden="true"
         />
-        <div className="absolute bottom-0 left-0 right-0 pb-12">
+        <div className="absolute bottom-0 left-0 right-0 pb-16">
           <Container width="wide">
             {/* Breadcrumb */}
             <div className="mb-6">
@@ -140,7 +140,7 @@ export default async function PropertyPage({ params }: Props) {
             </div>
             <FadeIn direction="up">
               <Label
-                className="block mb-3"
+                className="block mb-4"
                 style={{ color: 'rgba(255,255,255,0.55)', letterSpacing: 'var(--tracking-widest)' }}
               >
                 <Link
@@ -151,7 +151,7 @@ export default async function PropertyPage({ params }: Props) {
                 </Link>
                 {' · '}{location.city} · {property.type}
               </Label>
-              <Heading as={1} size="h1" color="inverse" className="mb-3">
+              <Heading as={1} size="h1" color="inverse" className="mb-5">
                 {property.title}
               </Heading>
               <p style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--type-h4)', color: 'var(--color-accent-base)', fontWeight: 300 }}>
@@ -201,16 +201,16 @@ export default async function PropertyPage({ params }: Props) {
               {/* Specs */}
               <FadeIn direction="up" delay={0.2}>
                 <div
-                  className="mt-10 pt-8"
+                  className="mt-14 pt-10"
                   style={{ borderTop: '1px solid var(--color-border-base)' }}
                 >
                   <Label
-                    className="block mb-6"
+                    className="block mb-8"
                     style={{ letterSpacing: 'var(--tracking-widest)', color: 'var(--color-text-muted)' }}
                   >
                     Property specifications
                   </Label>
-                  <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
+                  <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-8">
                     {(Object.keys(SPEC_LABELS) as Array<keyof typeof SPEC_LABELS>).map((key) => {
                       const raw = features[key as keyof typeof features]
                       if (raw === undefined) return null
@@ -221,7 +221,7 @@ export default async function PropertyPage({ params }: Props) {
                         : String(raw)
                       return (
                         <div key={key}>
-                          <dt style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                          <dt style={{ fontSize: 'var(--text-xs)', letterSpacing: 'var(--tracking-wide)', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
                             {SPEC_LABELS[key]}
                           </dt>
                           <dd style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-xl)', color: 'var(--color-text-primary)', fontWeight: 300 }}>
@@ -237,11 +237,11 @@ export default async function PropertyPage({ params }: Props) {
               {/* Amenities */}
               <FadeIn direction="up" delay={0.25}>
                 <div
-                  className="mt-10 pt-8"
+                  className="mt-14 pt-10"
                   style={{ borderTop: '1px solid var(--color-border-base)' }}
                 >
                   <Label
-                    className="block mb-6"
+                    className="block mb-8"
                     style={{ letterSpacing: 'var(--tracking-widest)', color: 'var(--color-text-muted)' }}
                   >
                     Amenities & features
@@ -267,11 +267,11 @@ export default async function PropertyPage({ params }: Props) {
               {/* Location */}
               <FadeIn direction="up" delay={0.3}>
                 <div
-                  className="mt-10 pt-8"
+                  className="mt-14 pt-10"
                   style={{ borderTop: '1px solid var(--color-border-base)' }}
                 >
                   <Label
-                    className="block mb-6"
+                    className="block mb-8"
                     style={{ letterSpacing: 'var(--tracking-widest)', color: 'var(--color-text-muted)' }}
                   >
                     Location

@@ -257,7 +257,6 @@ function NeighbourhoodSelect({
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                   placeholder="Search..."
-                  autoFocus
                   style={{
                     width:           '100%',
                     border:          '1px solid var(--color-border-base)',
